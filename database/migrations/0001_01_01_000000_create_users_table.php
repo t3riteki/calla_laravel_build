@@ -15,8 +15,11 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
+            $table->timestamp('email_verified_at')->nullable();                     // allow ang di verified niggas
+            $table->string('password');                                             // should be hidden
+            $table->enum('role',['admin','instructor','learner']);
+            $table->date('birthday')->nullable();                                   // should be hidden
+            $table->string('gender')->nullable();                                   // sa edit user profile nana
             $table->rememberToken();
             $table->timestamps();
         });
