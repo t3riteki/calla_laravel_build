@@ -11,17 +11,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('classroom_module', function (Blueprint $table) {
+        Schema::create('user_progress', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('module_id')->constrained()
+            $table->foreignId('enrolled_user_id')->constrained()
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
-            $table->foreignId('added_by')->constrained('enrolled_users')
+            $table->foreignId('classroom_module_id')->constrained()
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
-            $table->foreignId('classroom_id')->constrained()
+            $table->foreignId('lesson_id')->constrained()
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
+            $table->boolean('is_done');
             $table->timestamps();
         });
     }
@@ -31,6 +32,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('classroom_module');
+        Schema::dropIfExists('user_progress');
     }
 };

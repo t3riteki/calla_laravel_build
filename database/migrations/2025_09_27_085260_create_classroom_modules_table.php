@@ -11,13 +11,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('glossary', function (Blueprint $table) {
+        Schema::create('classroom_modules', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('lesson_id')->constrained()
+            $table->foreignId('module_id')->constrained()
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
-            $table->string('term');
-            $table->text('meaning');
+            $table->foreignId('added_by')->constrained('enrolled_users','id')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
+            $table->foreignId('classroom_id')->constrained()
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -27,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('glossary');
+        Schema::dropIfExists('classroom_modules');
     }
 };
