@@ -1,17 +1,12 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 
+// Home route -> show login page
 Route::get('/', function () {
-    return Inertia::render('welcome');
-})->name('home');
+    return view('layouts.auth.login'); // ✅ correct path
+})->name('login');
 
-Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('dashboard', function () {
-        return Inertia::render('dashboard');
-    })->name('dashboard');
-});
-
-require __DIR__.'/settings.php';
-require __DIR__.'/auth.php';
+// If you don’t have these yet, you can comment them out
+// require __DIR__.'/settings.php';
+// require __DIR__.'/auth.php';
