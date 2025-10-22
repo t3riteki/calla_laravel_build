@@ -2,7 +2,9 @@
 
 namespace App\Policies;
 
+use App\Models\Classroom;
 use App\Models\ClassroomModule;
+use App\Models\EnrolledUser;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
 
@@ -11,7 +13,7 @@ class ClassroomModulePolicy
     /**
      * Determine whether the user can view any models.
      */
-    public function viewAny(User $user): bool
+    public function viewAny(EnrolledUser $enrolledUser): bool
     {
         return false;
     }
@@ -19,7 +21,7 @@ class ClassroomModulePolicy
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, ClassroomModule $classroomModule): bool
+    public function view(EnrolledUser $enrolledUser, ClassroomModule $classroomModule): bool
     {
         return false;
     }
@@ -27,7 +29,7 @@ class ClassroomModulePolicy
     /**
      * Determine whether the user can create models.
      */
-    public function create(User $user): bool
+    public function create(EnrolledUser $enrolledUser, Classroom $classroom,): bool
     {
         return false;
     }
@@ -63,4 +65,13 @@ class ClassroomModulePolicy
     {
         return false;
     }
+
+    private function checkOwner(EnrolledUser $enrolledUser, ClassroomModule $classroomModule){
+        return $enrolledUser->user === $classroomModule->EnrolledUser->user;
+    }
+    private function checkEnrolled(EnrolledUser $enrolledUser, Classroom $classroom ){
+        return $classroom->EnrolledUser->has($enrolledUser);
+    }
+    private function checkRole(){}
+
 }
