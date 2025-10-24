@@ -1,6 +1,8 @@
 <nav class="navbar sticky bg-base-100">
         <div class="navbar-start">
             <a href="/" class="btn btn-ghost text-xl">CALLA</a>
+            <a href="#features" class="hover:text-red-800 text-l pl-3 transition-colors duration-300">Features</a>
+
         </div>
 
         <div class="navbar-end gap-2">

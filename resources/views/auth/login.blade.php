@@ -4,7 +4,7 @@
 
     <main class="flex-1 container mx-auto px-4">
         <div class="hero min-h-[calc(100vh-4rem)]">
-            <div class="hero-content flex-col">
+            <div class="hero-content flex-col -mt-50">
                 <div class="card w-96 bg-base-100">
 
                     <div class="card-body">
@@ -67,14 +67,13 @@
                             </div>
 
                             <div class="divider">or sign in with</div>
-                            <div class="flex flex-col gap-5">
+                            <div class="flex flex-row gap-5 justify-center">
                                 <a href="{{ url('auth/google') }}" class="flex link link-hover items-center justify-center">
-                                    <img class="h-8" src="{{ asset('images/google-icon.png') }}" alt="Login with Google">
-                                    <span class="flex">Google</span>
+                                    <img class="h-11 rounded-lg" src="{{ asset('images/google-icon.png') }}" alt="Login with Google">
+
                                 </a>
                                 <a href="{{ url('auth/facebook') }}" class="flex link link-hover items-center justify-center">
-                                    <img class="h-5" src="{{ asset('images/facebook-icon.png') }}" alt="Login with Facebook">
-                                    <span>Facebook</span>
+                                    <img class="h-8 rounded-lg" src="{{ asset('images/facebook-icon.png') }}" alt="Login with Facebook">
                                 </a>
                             </div>
                         </form>

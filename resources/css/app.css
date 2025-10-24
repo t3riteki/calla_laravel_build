@@ -13,6 +13,7 @@
 
     --animate-fade-out: fade-out 4s ease-in-out forwards;
 
+
     @keyframes fade-out{
         0%, 70%{
             opacity : 1;
@@ -22,5 +23,9 @@
             pointer-events:none;
         }
     }
-}
 
+
+}
+html {
+  scroll-behavior: smooth;
+}
