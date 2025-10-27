@@ -16,15 +16,19 @@ use Illuminate\Support\Facades\Route;
 // Home route -> show login page
 Route::view('/','landing');
 
-Route::view('/login','auth.login')
-->middleware('guest');
-Route::post('/login',Login::class)
-->middleware('guest');
+Route::view('/login', 'auth.login')
+    ->middleware('guest')
+    ->name('login');
 
-Route::view('/register','auth.register')
-->middleware('guest');
-Route::post('/register',Register::class)
-->middleware('guest');
+Route::post('/login', Login::class)
+    ->middleware('guest');
+
+Route::view('/register', 'auth.register')
+    ->middleware('guest')
+    ->name('register');
+
+Route::post('/register', Register::class)
+    ->middleware('guest');
 
 Route::middleware(['auth', 'auth.session'])->group(function () {
 

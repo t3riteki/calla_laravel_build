@@ -1,92 +1,131 @@
 <x-layout>
-    <x-slot:title>Welcome</x-slot:title>
-    <x-navbar class="navbar"></x-navbar>
+    <x-slot:title>Register - CALLA</x-slot:title>
 
-    <main class="flex-1 container mx-auto px-4">
-        <div class="hero min-h-[calc(100vh-4rem)]">
-            <div class="hero-content flex-col">
-                <div class="card w-96 bg-base-100">
+    <!-- NAVBAR -->
+    <x-navbar class="navbar sticky bg-base-100"></x-navbar>
 
-                    <div class="card-body">
-                        <div class="card-title text-center flex">
-                            <div class="flex text-25 items-center">LOGIN</div>
-                        </div>
+    <!-- REGISTRATION SECTION -->
+    <section
+        class="flex flex-col lg:flex-row lg:h-[calc(100vh-64px)] lg:overflow-hidden overflow-auto">
 
-                        <form action="/register" method="POST">
-                            @csrf
+        <!-- LEFT SIDE: Branding / Visual -->
+        <div
+            class="w-full lg:w-1/2 bg-red-900 text-white flex flex-col justify-center items-center px-10 py-12">
+            <h1 class="text-4xl lg:text-5xl font-extrabold mb-4 text-center">
+                Welcome to <span class="text-yellow-300">CALLA</span>
+            </h1>
+            <p class="text-base lg:text-lg text-gray-200 text-center max-w-md">
+                Unlock your potential by learning new languages with our adaptive and interactive platform.
+            </p>
+            <img src="{{ asset('images/logo.png') }}"
+                 alt="Language Learning"
+                 class="mt-8 w-56 lg:w-80 object-contain">
+        </div>
 
-                                <label class="floating-label mb-6">
-                                    <input
-                                    type="email"
-                                    name="email"
-                                    placeholder="Email"
-                                    value="{{ old('email') }}"
-                                    class="input input-bordered @error('password') input-error @enderror"
-                                    required
-                                    autocomplete="username">
-                                    <span>Email</span>
-                                </label>
-                                @error('email')
-                                    <div class="label -mt-4 mb-2">
-                                        <span class="label-text-alt text-error">{{ $message }}</span>
-                                    </div>
-                                @enderror
+        <!-- RIGHT SIDE: Register Form -->
+        <div
+            class="w-full lg:w-1/2 flex items-center justify-center bg-gray-50 p-6">
+            <form action="{{ route('register') }}" method="POST"
+                  class="bg-white rounded-2xl shadow-xl p-8 w-full max-w-sm sm:max-w-md scale-95">
+                @csrf
+                <h2 class="text-2xl lg:text-3xl font-bold text-center text-red-900 mb-6">
+                    Create Your Account
+                </h2>
 
-                                <label class="floating-label mb-6">
-                                    <input
-                                    type="password"
-                                    name="password"
-                                    placeholder="Password"
-                                    class="input input-bordered @error('password') input-error @enderror"
-                                    required>
-                                    <span>Password</span>
-                                </label>
-
-                                @error('password')
-                                    <div class="label -mt-4 mb-2">
-                                        <span class="label-text-alt text-error">{{ $message }}</span>
-                                    </div>
-                                @enderror
-
-                            <!-- Remember Me -->
-                            <div class="form-control flex justify-between mt-4">
-                                <label class="label cursor-pointer justify-start">
-                                    <input type="checkbox"
-                                        name="remember"
-                                        class="checkbox">
-                                    <span class="text-xs">Remember me</span>
-                                </label>
-                                <div><a href="/login" class="link link text-5 items-center">Already have an account?</a></div>
-                            </div>
-
-                            <!-- Submit Button -->
-                            <div class="form-control mt-8">
-                                <button type="submit" class="btn btn-primary btn-sm w-full">
-                                    Sign In
-                                </button>
-                            </div>
-
-                            <div class="divider">or sign in with</div>
-                            <div class="flex flex-col gap-5">
-                                <a href="{{ url('auth/google') }}" class="flex link link-hover items-center justify-center">
-                                    <img class="h-8" src="{{ asset('images/google-icon.png') }}" alt="Login with Google">
-                                    <span class="flex">Google</span>
-                                </a>
-                                <a href="{{ url('auth/facebook') }}" class="flex link link-hover items-center justify-center">
-                                    <img class="h-5" src="{{ asset('images/facebook-icon.png') }}" alt="Login with Facebook">
-                                    <span>Facebook</span>
-                                </a>
-                            </div>
-                        </form>
-                    </div>
+                <!-- Name -->
+                <div class="mb-4">
+                    <label for="name" class="block text-sm font-semibold text-gray-700 mb-1">Full Name</label>
+                    <input
+                        type="text"
+                        id="name"
+                        name="name"
+                        value="{{ old('name') }}"
+                        placeholder="Enter your name"
+                        required
+                        class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-red-700 focus:outline-none">
+                    @error('name')
+                        <p class="text-red-700 text-sm mt-1">{{ $message }}</p>
+                    @enderror
                 </div>
 
-            </div>
+                <!-- Email -->
+                <div class="mb-4">
+                    <label for="email" class="block text-sm font-semibold text-gray-700 mb-1">Email</label>
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        value="{{ old('email') }}"
+                        placeholder="you@example.com"
+                        required
+                        class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-red-700 focus:outline-none">
+                    @error('email')
+                        <p class="text-red-700 text-sm mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <!-- Password -->
+                <div class="mb-4">
+                    <label for="password" class="block text-sm font-semibold text-gray-700 mb-1">Password</label>
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        placeholder="••••••••"
+                        required
+                        class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-red-700 focus:outline-none">
+                    @error('password')
+                        <p class="text-red-700 text-sm mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <!-- Confirm Password -->
+                <div class="mb-5">
+                    <label for="password_confirmation" class="block text-sm font-semibold text-gray-700 mb-1">Confirm Password</label>
+                    <input
+                        type="password"
+                        id="password_confirmation"
+                        name="password_confirmation"
+                        placeholder="••••••••"
+                        required
+                        class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-red-700 focus:outline-none">
+                </div>
+
+                <!-- Submit Button -->
+                <button
+                    type="submit"
+                    class="w-full bg-red-900 text-white font-bold py-2.5 rounded-lg hover:bg-red-800 transition-transform duration-300 hover:scale-105 shadow-md">
+                    Sign Up
+                </button>
+
+                <!-- Divider -->
+                <div class="flex items-center my-4">
+                    <div class="flex-grow border-t border-gray-300"></div>
+                    <span class="mx-2 text-gray-500 text-sm">or</span>
+                    <div class="flex-grow border-t border-gray-300"></div>
+                </div>
+
+                <!-- Social Signup Buttons -->
+                <div class="space-y-2">
+                    <a href="{{ url('/auth/google') }}"
+                       class="w-full flex items-center justify-center gap-2 border border-gray-300 py-2 rounded-lg hover:bg-gray-100 transition">
+                        <img src="https://www.svgrepo.com/show/355037/google.svg" alt="Google" class="w-5 h-5">
+                        <span class="font-medium text-gray-700 text-sm">Sign up with Google</span>
+                    </a>
+
+                    <a href="{{ url('/auth/facebook') }}"
+                       class="w-full flex items-center justify-center gap-2 border border-gray-300 py-2 rounded-lg hover:bg-gray-100 transition">
+                        <img src="https://www.svgrepo.com/show/475647/facebook-color.svg" alt="Facebook" class="w-5 h-5">
+                        <span class="font-medium text-gray-700 text-sm">Sign up with Facebook</span>
+                    </a>
+                </div>
+
+                <!-- Login Redirect -->
+                <p class="text-center text-sm text-gray-600 mt-4">
+                    Already have an account?
+                    <a href="{{ route('login') }}" class="text-red-800 font-semibold hover:underline">Sign in</a>
+                </p>
+            </form>
         </div>
-    </main>
-
+    </section>
 </x-layout>
-
-@push('scripts')
-  <script src="{{ asset('js/login.js') }}"></script>
-@endpush
