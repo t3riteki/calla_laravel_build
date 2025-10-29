@@ -15,6 +15,7 @@ class Register extends Controller
      */
     public function __invoke(RegisterRequest $request)
     {
+        $request->ensureIsNotRateLimited();
         $validated = $request->validated();
 
         $user = User::create([
