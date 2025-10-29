@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\Login;
 use App\Http\Controllers\Auth\Register;
+use App\Http\Controllers\Auth\Logout;
 use App\Http\Controllers\ClassroomController;
 use App\Http\Controllers\ClassroomModuleController;
 use App\Http\Controllers\EnrolledUserController;
@@ -21,16 +22,18 @@ Route::view('/login', 'auth.login')
     ->name('login');
 
 Route::post('/login', Login::class)
-    ->middleware('guest');
-
-Route::view('/register', 'auth.register')
     ->middleware('guest')
     ->name('register');
+
+Route::view('/register', 'auth.register')
+    ->middleware('guest');
 
 Route::post('/register', Register::class)
     ->middleware('guest');
 
 Route::middleware(['auth', 'auth.session'])->group(function () {
+
+    Route::post('/logout', Logout::class);
 
     Route::get('/dashboard', [DashboardController::class, 'index']);
 

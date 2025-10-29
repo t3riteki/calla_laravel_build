@@ -7,7 +7,7 @@
 
     <section
         class="flex flex-col lg:flex-row lg:h-[calc(100vh-64px)] overflow-hidden"
-        x-data="{ step: 'choose', role: '' }">
+        x-data="registerForm()">
 
         <!-- LEFT SIDE -->
         <div class="w-full lg:w-1/2 bg-red-900 text-white flex flex-col justify-center items-center px-10 py-12">
@@ -22,7 +22,6 @@
 
         <!-- RIGHT SIDE -->
         <div
-            x-data="{ step: 'choose', role: '' }"
             class="relative w-full lg:w-1/2 flex items-center justify-center bg-gray-50 p-6 overflow-hidden"
         >
 
@@ -33,6 +32,7 @@
                 >
 
                 <!-- ROLE SELECTION -->
+                @unless (old('role'))
                 <div
                     x-show="step === 'choose'"
                     x-transition:enter="transition ease-out duration-500"
@@ -49,7 +49,7 @@
 
                     <div class="flex flex-col items-center space-y-4 w-full">
                         <button
-                            @click="role = 'learner'; step = 'form'"
+                            @click="selectRole('learner')"
                             class="w-[80%] sm:w-[70%] md:w-[60%] bg-red-50 border border-red-200
                                 text-red-900 font-semibold py-3 rounded-lg
                                 hover:bg-red-100 transition flex items-center justify-center gap-2">
@@ -60,18 +60,18 @@
                         </button>
 
                         <button
-                            @click="role = 'teacher'; step = 'form'"
+                            @click="selectRole('instructor')"
                             class="w-[80%] sm:w-[70%] md:w-[60%] bg-red-50 border border-red-200
                                 text-red-900 font-semibold py-3 rounded-lg
                                 hover:bg-red-100 transition flex items-center justify-center gap-2">
-                            <span>I’m a Teacher</span>
+                            <span>I’m an Instructor</span>
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2"
                                 viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round"
                                 d="M9 5l7 7-7 7"/></svg>
                         </button>
                     </div>
                 </div>
-
+                @endunless
                 <!-- REGISTRATION FORM -->
                 <form
                     x-show="step === 'form'"
@@ -82,14 +82,15 @@
                     x-transition:leave-start="opacity-100 translate-x-0"
                     x-transition:leave-end="opacity-0 translate-x-10"
                     x-cloak
-                    action="{{ route('register') }}"
+
+                    action="/register"
                     method="POST"
+
                     class="absolute inset-0 flex flex-col justify-center bg-white rounded-2xl p-8"
                 >
                     @csrf
-
                     <button type="button"
-                        @click="step = 'choose'"
+                         @click="goBack()"
                         class="text-sm text-gray-600 hover:text-red-800 mb-2 flex items-center gap-1 transition-transform duration-300 hover:translate-x-[-4px]">
                         ← Back
                     </button>
@@ -102,26 +103,58 @@
 
                     <div class="mb-3">
                         <label class="block text-sm font-semibold mb-1">Username</label>
-                        <input type="text" name="uname" required
+                        <input type="text" name="name" value="{{ old('name') }}" required
                             class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-red-700 focus:outline-none">
                     </div>
 
                     <div class="mb-3">
                         <label class="block text-sm font-semibold mb-1">Email</label>
-                        <input type="email" name="email" required
+                        <input type="email" name="email" value ="{{ old('email') }}"required
                             class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-red-700 focus:outline-none">
                     </div>
 
-                    <div class="mb-3">
-                        <label class="block text-sm font-semibold mb-1">Password</label>
-                        <input type="password" name="password" required
-                            class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-red-700 focus:outline-none">
+                    <div class="form-control mb-3">
+                        <label class="block text-sm font-semibold mb-1">
+                            <span class="label-text font-semibold">Password</span>
+                        </label>
+
+                        <input
+                            type="password"
+                            name="password"
+                            required
+                            pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*]).{8,}"
+                            title="Must contain at least one number, one uppercase letter, one lowercase letter, one special character, and be at least 8 characters long."
+                            placeholder="Enter password"
+                            class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-red-700 focus:outline-none
+                                @error('password') input-error @enderror"
+                        >
+
+                        @error('password')
+                            <label class="label">
+                                <span class="label-text-alt text-error">{{ $message }}</span>
+                            </label>
+                        @enderror
                     </div>
 
-                    <div class="mb-5">
-                        <label class="block text-sm font-semibold mb-1">Confirm Password</label>
-                        <input type="password" name="password_confirmation" required
-                            class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-red-700 focus:outline-none">
+                    <div class="form-control mb-5">
+                        <label class="label">
+                            <span class="label-text font-semibold">Confirm Password</span>
+                        </label>
+
+                        <input
+                            type="password"
+                            name="password_confirmation"
+                            required
+                            placeholder="Confirm password"
+                            class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-red-700 focus:outline-none
+                                @error('password_confirmation') input-error @enderror"
+                        >
+
+                        @error('password_confirmation')
+                            <label class="label">
+                                <span class="label-text-alt text-error">{{ $message }}</span>
+                            </label>
+                        @enderror
                     </div>
 
                     <button
@@ -138,4 +171,19 @@
             </div>
         </div>
     </section>
+    <script>
+        function registerForm() {
+            return {
+                role: '{{ old('role') ?? '' }}',
+                step: '{{ old('role') ? 'form' : 'choose' }}',
+                selectRole(selectedRole) {
+                    this.role = selectedRole;
+                    this.step = 'form';
+                },
+                goBack() {
+                    this.step = 'choose';
+                }
+            }
+        }
+    </script>
 </x-layout>
