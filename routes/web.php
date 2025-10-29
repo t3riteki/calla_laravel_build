@@ -10,7 +10,7 @@ use App\Http\Controllers\LessonController;
 use App\Http\Controllers\LogController;
 use App\Http\Controllers\ModuleController;
 use App\Http\Controllers\UserProgressController;
-use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
 
 // Home route -> show login page
@@ -32,10 +32,7 @@ Route::post('/register', Register::class)
 
 Route::middleware(['auth', 'auth.session'])->group(function () {
 
-    Route::get('/dashboard', function(){
-        $user = Auth::user();
-        return view('dashboard', compact(['user' => $user]));
-    });
+    Route::get('/dashboard', [DashboardController::class, 'index']);
 
     Route::resource('/logs', LogController::class);
 
