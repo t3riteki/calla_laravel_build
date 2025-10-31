@@ -185,5 +185,9 @@
                 }
             }
         }
+
+        function validateFormData(){
+
+        }
     </script>
 </x-layout>

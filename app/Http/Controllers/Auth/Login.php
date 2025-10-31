@@ -16,6 +16,6 @@ class Login extends Controller
     {
         $request->authenticate();
         $request->session()->regenerate();
-        return redirect()->intended('/dashboard')->with('success','Welcome Back!');
+        return redirect()->intended('/dashboard');
     }
 }

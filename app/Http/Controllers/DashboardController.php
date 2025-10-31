@@ -25,7 +25,7 @@ class DashboardController extends Controller
                 abort(403,'Unauthorized');
         }
 
-        return view('dashboard', $data) ;
+        return view('dashboard.dashboard', $data) ;
     }
 
     private function adminData(){
