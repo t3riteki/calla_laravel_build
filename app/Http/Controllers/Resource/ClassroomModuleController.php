@@ -1,10 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Resource;
 
+use App\Http\Controllers\Controller;
 use App\Models\ClassroomModule;
 use App\Http\Requests\StoreClassroomModuleRequest;
 use App\Http\Requests\UpdateClassroomModuleRequest;
+
+use Illuminate\Support\Facades\Auth;
 
 class ClassroomModuleController extends Controller
 {
@@ -13,7 +16,9 @@ class ClassroomModuleController extends Controller
      */
     public function index()
     {
-        //
+        $user = Auth::user();
+        $role = $user->role;
+        return view($role.'.classroommodules');
     }
 
     /**

@@ -1,10 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Resource;
 
+use App\Http\Controllers\Controller;
 use App\Models\Glossary;
 use App\Http\Requests\StoreGlossaryRequest;
 use App\Http\Requests\UpdateGlossaryRequest;
+
+use Illuminate\Support\Facades\Auth;
 
 class GlossaryController extends Controller
 {
@@ -13,7 +16,9 @@ class GlossaryController extends Controller
      */
     public function index()
     {
-        //
+        $user = Auth::user();
+        $role = $user->role;
+        return view($role.'.glossaries');
     }
 
     /**

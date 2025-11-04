@@ -50,12 +50,7 @@
           <li class="menu-title">{{ auth()->user()->name }}</li>
           <li><a href="#" class="hover:bg-red-100">Profile</a></li>
           <li><a href="#" class="hover:bg-red-100">Settings</a></li>
-          <li>
-            <form action="/logout" method="POST">
-              @csrf
-              <button type="submit" class="text-red-600 hover:text-red-800 font-semibold">Logout</button>
-            </form>
-          </li>
+          <li><a href="/logout" class="text-red-600 hover:text-red-800 font-semibold">Logout</a></li>
         </ul>
       </div>
 

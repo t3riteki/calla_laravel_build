@@ -1,19 +1,25 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Resource;
 
-use App\Models\UserProgress;
-use App\Http\Requests\StoreUserProgressRequest;
-use App\Http\Requests\UpdateUserProgressRequest;
+use App\Http\Controllers\Controller;
+use App\Models\Classroom;
+use App\Http\Requests\StoreClassroomRequest;
+use App\Http\Requests\UpdateClassroomRequest;
 
-class UserProgressController extends Controller
+use Illuminate\Support\Facades\Auth;
+
+
+class ClassroomController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
+        $user = Auth::user();
+        $role = $user->role;
+        return view($role.'.classrooms');
     }
 
     /**
@@ -27,7 +33,7 @@ class UserProgressController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreUserProgressRequest $request)
+    public function store(StoreClassroomRequest $request)
     {
         //
     }
@@ -35,7 +41,7 @@ class UserProgressController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(UserProgress $userProgress)
+    public function show(Classroom $classroom)
     {
         //
     }
@@ -43,7 +49,7 @@ class UserProgressController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(UserProgress $userProgress)
+    public function edit(Classroom $classroom)
     {
         //
     }
@@ -51,7 +57,7 @@ class UserProgressController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateUserProgressRequest $request, UserProgress $userProgress)
+    public function update(UpdateClassroomRequest $request, Classroom $classroom)
     {
         //
     }
@@ -59,7 +65,7 @@ class UserProgressController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(UserProgress $userProgress)
+    public function destroy(Classroom $classroom)
     {
         //
     }

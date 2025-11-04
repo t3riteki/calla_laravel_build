@@ -1,19 +1,24 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Resource;
 
-use App\Models\EnrolledUser;
-use App\Http\Requests\StoreEnrolledUserRequest;
-use App\Http\Requests\UpdateEnrolledUserRequest;
+use App\Http\Controllers\Controller;
+use App\Models\Lesson;
+use App\Http\Requests\StoreLessonRequest;
+use App\Http\Requests\UpdateLessonRequest;
 
-class EnrolledUserController extends Controller
+use Illuminate\Support\Facades\Auth;
+
+class LessonController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
+        $user = Auth::user();
+        $role = $user->role;
+        return view($role.'.lessons');
     }
 
     /**
@@ -27,7 +32,7 @@ class EnrolledUserController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreEnrolledUserRequest $request)
+    public function store(StoreLessonRequest $request)
     {
         //
     }
@@ -35,7 +40,7 @@ class EnrolledUserController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(EnrolledUser $enrolledUser)
+    public function show(Lesson $lesson)
     {
         //
     }
@@ -43,7 +48,7 @@ class EnrolledUserController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(EnrolledUser $enrolledUser)
+    public function edit(Lesson $lesson)
     {
         //
     }
@@ -51,7 +56,7 @@ class EnrolledUserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateEnrolledUserRequest $request, EnrolledUser $enrolledUser)
+    public function update(UpdateLessonRequest $request, Lesson $lesson)
     {
         //
     }
@@ -59,7 +64,7 @@ class EnrolledUserController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(EnrolledUser $enrolledUser)
+    public function destroy(Lesson $lesson)
     {
         //
     }

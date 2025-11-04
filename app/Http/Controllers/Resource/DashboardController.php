@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Resource;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
@@ -9,8 +10,8 @@ class DashboardController extends Controller
     // View
     public function index(){
         $user = Auth::user();
-
-        switch($user->role){
+        $role = $user->role;
+        switch($role){
             case 'admin':
                 $data = $this->adminData();
                 break;
@@ -25,7 +26,7 @@ class DashboardController extends Controller
                 abort(403,'Unauthorized');
         }
 
-        return view('dashboard.dashboard', $data) ;
+        return view($role. '.dashboard', $data);
     }
 
     private function adminData(){

@@ -1,19 +1,24 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Resource;
 
-use App\Models\Lesson;
-use App\Http\Requests\StoreLessonRequest;
-use App\Http\Requests\UpdateLessonRequest;
+use App\Http\Controllers\Controller;
+use App\Models\Log;
+use App\Http\Requests\StoreLogRequest;
+use App\Http\Requests\UpdateLogRequest;
 
-class LessonController extends Controller
+use Illuminate\Support\Facades\Auth;
+
+class LogController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
+        $user = Auth::user();
+        $role = $user->role;
+        return view($role.'.logs');
     }
 
     /**
@@ -27,7 +32,7 @@ class LessonController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreLessonRequest $request)
+    public function store(StoreLogRequest $request)
     {
         //
     }
@@ -35,7 +40,7 @@ class LessonController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Lesson $lesson)
+    public function show(Log $log)
     {
         //
     }
@@ -43,7 +48,7 @@ class LessonController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Lesson $lesson)
+    public function edit(Log $log)
     {
         //
     }
@@ -51,7 +56,7 @@ class LessonController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateLessonRequest $request, Lesson $lesson)
+    public function update(UpdateLogRequest $request, Log $log)
     {
         //
     }
@@ -59,7 +64,7 @@ class LessonController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Lesson $lesson)
+    public function destroy(Log $log)
     {
         //
     }

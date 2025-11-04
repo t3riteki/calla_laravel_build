@@ -1,10 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Resource;
 
+use App\Http\Controllers\Controller;
 use App\Models\Module;
 use App\Http\Requests\StoreModuleRequest;
 use App\Http\Requests\UpdateModuleRequest;
+
+use Illuminate\Support\Facades\Auth;
 
 class ModuleController extends Controller
 {
@@ -13,7 +16,9 @@ class ModuleController extends Controller
      */
     public function index()
     {
-        //
+        $user = Auth::user();
+        $role = $user->role;
+        return view($role.'.modules');
     }
 
     /**
