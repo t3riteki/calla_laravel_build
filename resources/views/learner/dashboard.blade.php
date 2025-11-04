@@ -1,5 +1,5 @@
 <x-layout>
-    <x-slot:title>Teacher Dashboard - CALLA</x-slot:title>
+    <x-slot:title>Learner Dashboard - CALLA</x-slot:title>
 
     <!-- NAVBAR -->
     <x-navbar />
