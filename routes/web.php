@@ -15,7 +15,8 @@ use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
 
 // Home route -> show login page
-Route::view('/','landing');
+Route::view('/','landing')
+->name('landing');
 
 Route::view('/login', 'auth.login')
     ->middleware('guest')

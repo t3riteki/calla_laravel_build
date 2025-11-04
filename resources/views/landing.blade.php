@@ -1,8 +1,6 @@
-<x-layout>
+<x-layout class="px-6">
     <x-slot:title>Welcome</x-slot:title>
-    <x-navbar
-        id="about"
-        class="navbar"></x-navbar>
+    <x-navbar/>
 
     @if (session('success'))
         <x-toast :message="session('success')" />
