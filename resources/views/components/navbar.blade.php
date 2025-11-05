@@ -11,18 +11,6 @@
     </a>
   </div>
 
-  <!-- CENTER (only for authenticated users) -->
-  @auth
-    @if(!Route::is('landing'))
-        <div class="navbar-center hidden md:flex">
-            <label class="input input-bordered flex items-center gap-2 w-150">
-            <i class="ri-search-line text-gray-500"></i>
-            <input type="text" placeholder="Search classes, students, modules..." class="grow" />
-            </label>
-        </div>
-    @endif
-  @endauth
-
   <!-- RIGHT SIDE -->
   <div class="navbar-end gap-2">
     @if (Route::is('landing'))
@@ -36,6 +24,18 @@
         @endauth
       </ul>
     @endif
+
+    <!-- CENTER (only for authenticated users) -->
+    @auth
+        @if(!Route::is('landing'))
+            <div class="navbar-center hidden md:flex">
+                <label class="input input-bordered flex items-center gap-2 w-150">
+                <i class="ri-search-line text-gray-500"></i>
+                <input type="text" placeholder="Search classes, students, modules..." class="grow" />
+                </label>
+            </div>
+        @endif
+    @endauth
 
     @auth
       <!-- Profile Dropdown -->

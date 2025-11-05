@@ -13,13 +13,14 @@
 
         <!-- MAIN CONTENT -->
         <main
+            id="about"
             class="flex flex-col lg:flex-row items-center justify-center flex-grow
-                    min-h-[95vh] px-6 md:px-12 lg:px-20 gap-10
+                    min-h-[100vh] px-6 md:px-12 lg:px-20 gap-10
                     bg-gradient-to-r from-red-100 via-white to-red-200">
 
 
             <!-- LEFT: Text section -->
-            <div class="w-full lg:w-5/12 text-center lg:text-left flex flex-col pr-10">
+            <div class="w-full lg:w-5/12 text-center lg:text-left flex flex-col pr-10 mt-15 sm:mt-0">
                 <h1 class="text-3xl sm:text-4xl md:text-4xl font-bold mb-6">
                     Welcome to CALLA — the Content Adaptive Language Learning App!
                 </h1>

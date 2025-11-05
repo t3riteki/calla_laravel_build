@@ -6,11 +6,11 @@
     <x-navbar class="navbar sticky bg-base-100"></x-navbar>
 
     <section
-        class="flex flex-col lg:flex-row lg:h-[calc(100vh-64px)] overflow-hidden"
+        class="min-h-[100vh] flex flex-col lg:flex-row lg:h-[calc(100vh-64px)] overflow-hidden"
         x-data="registerForm()">
 
         <!-- LEFT SIDE -->
-        <div class="w-full lg:w-1/2 bg-red-900 text-white flex flex-col justify-center items-center px-10 py-12">
+        <div class="w-full lg:w-1/2 bg-red-900 text-white flex flex-col justify-center items-center px-10 py-12 mt-15 sm:mt-0">
             <h1 class="text-4xl lg:text-5xl font-extrabold mb-4 text-center">
                 Welcome to <span class="text-yellow-300">CALLA</span>
             </h1>

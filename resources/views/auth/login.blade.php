@@ -37,7 +37,7 @@
                             @enderror
 
                             <!-- Password -->
-                            <label class="floating-label mb-6">
+                            <label class="floating-label">
                                 <input
                                     type="password"
                                     name="password"
@@ -51,6 +51,13 @@
                                     <span class="label-text-alt text-error">{{ $message }}</span>
                                 </div>
                             @enderror
+
+                            <!-- Forgot Password -->
+                            <div class="text-right mb-6">
+                                <a href="" class="text-xs text-red-800 font-semibold hover:underline">
+                                    Forgot password?
+                                </a>
+                            </div>
 
                             <!-- Remember Me + Register Link -->
                             <div class="form-control flex justify-between mt-4">
