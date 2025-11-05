@@ -102,14 +102,14 @@
                     <input type="hidden" name="role" :value="role">
 
                     <div class="mb-3">
-                        <label class="block text-sm font-semibold mb-1">Username</label>
-                        <input type="text" name="name" value="{{ old('name') }}" required
+                        <label class="block text-sm font-semibold mb-1" >Username</label>
+                        <input type="text" name="name" value="{{ old('name') }}" required placeholder="Username"
                             class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-red-700 focus:outline-none">
                     </div>
 
                     <div class="mb-3">
                         <label class="block text-sm font-semibold mb-1">Email</label>
-                        <input type="email" name="email" value ="{{ old('email') }}"required
+                        <input type="email" name="email" value ="{{ old('email') }}"required placeholder="Email"
                             class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-red-700 focus:outline-none">
                     </div>
 
@@ -123,17 +123,16 @@
                             name="password"
                             required
                             pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*]).{8,}"
-                            title="Must contain at least one number, one uppercase letter, one lowercase letter, one special character, and be at least 8 characters long."
-                            placeholder="Enter password"
-                            class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-red-700 focus:outline-none
+                            placeholder="Password"
+                            class="input w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-red-700 focus:outline-none
                                 @error('password') input-error @enderror"
                         >
-
-                        @error('password')
-                            <label class="label">
-                                <span class="label-text-alt text-error">{{ $message }}</span>
-                            </label>
-                        @enderror
+                            <p class="label text-xs px-0.5">
+                            Must be more than 8 characters, including
+                            <br/>At least one number
+                            <br/>At least one lowercase letter
+                            <br/>At least one uppercase letter
+                            </p>
                     </div>
 
                     <div class="form-control mb-5">
@@ -184,10 +183,6 @@
                     this.step = 'choose';
                 }
             }
-        }
-
-        function validateFormData(){
-
         }
     </script>
 </x-layout>
