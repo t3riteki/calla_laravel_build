@@ -52,6 +52,10 @@ Route::get('/profile', function () {
     return view('instructor.profile');
 })->middleware('auth')->name('profile');
 
+Route::get('/instructor/settings', function () {
+    return view('instructor.settings');
+})->middleware('auth')->name('instructor.settings');
+
 // If you don’t have these yet, you can comment them out
 // require __DIR__.'/settings.php';
 // require __DIR__.'/auth.php';

@@ -25,7 +25,7 @@
                     <div class="hero-content flex flex-col lg:flex-row lg:items-center lg:justify-between gap-10 lg:gap-20 w-full">
                         <div>
                             <h2 class="text-5xl font-bold">Dashboard Overview</h2>
-                            <p class="py-6 opacity-80">Welcome {{ auth()->user()->role }}, here's everything so far ^_^</p>
+                            <p class="py-6 opacity-80">Welcome {{ auth()->user()->role }}, here's everything so far learner ^_^</p>
                         </div>
 
                         <!-- DaisyUI Stats -->

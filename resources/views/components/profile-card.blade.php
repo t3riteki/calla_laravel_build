@@ -21,7 +21,9 @@
             <p class="mt-1 text-sm text-gray-500">{{ ucfirst($role ?? 'User') }}</p>
 
             <div class="mt-4 flex justify-center md:justify-start gap-3">
-                <button class="btn btn-sm bg-red-700 text-white hover:bg-red-800 transition">Edit Profile</button>
+                <button onclick="openEditModal()" class="btn btn-sm bg-red-700 text-white hover:bg-red-800 transition">
+                    Edit Profile
+                </button>
                 <button class="btn btn-sm btn-outline border-red-700 text-red-700 hover:bg-red-100">Change Password</button>
             </div>
         </div>
@@ -35,12 +37,41 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div class="p-4 bg-gray-50 rounded-lg border">
                 <p class="text-sm text-gray-500">Account Created</p>
-                {{-- <p class="font-medium text-gray-700">{{ $created_at }}</p> --}}
+                {{-- Example static value — replace with dynamic value later --}}
+                <p class="font-medium text-gray-700">{{ $created_at ?? '07/17/2004'}}</p>
             </div>
 
             <div class="p-4 bg-gray-50 rounded-lg border">
                 <p class="text-sm text-gray-500">Last Updated</p>
-                {{-- <p class="font-medium text-gray-700">{{ $updated_at }}</p> --}}
+                <p class="font-medium text-gray-700">{{ $updated_at ?? '11/06/2025'}}</p>
+            </div>
+
+            <div class="p-4 bg-gray-50 rounded-lg border">
+                <p class="text-sm text-gray-500">Birthdate</p>
+                <p class="font-medium text-gray-700">
+                    {{ $birthdate ?? 'No Birthdate' }}
+                </p>
+            </div>
+
+            <div class="p-4 bg-gray-50 rounded-lg border">
+                <p class="text-sm text-gray-500">Gender</p>
+                <p class="font-medium text-gray-700">
+                    {{ ucfirst($gender ?? 'Not specified') }}
+                </p>
+            </div>
+
+            <div class="p-4 bg-gray-50 rounded-lg border">
+                <p class="text-sm text-gray-500">Contact Number</p>
+                <p class="font-medium text-gray-700">
+                    {{ $contact_number ?? 'Not provided' }}
+                </p>
+            </div>
+
+            <div class="p-4 bg-gray-50 rounded-lg border">
+                <p class="text-sm text-gray-500">Address</p>
+                <p class="font-medium text-gray-700">
+                    {{ $address ?? 'Not provided' }}
+                </p>
             </div>
         </div>
     </div>
