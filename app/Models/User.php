@@ -24,6 +24,7 @@ class User extends Authenticatable
         'password',
         'role',
         'birthday',
+        'gender',
     ];
 
     /**
@@ -55,12 +56,12 @@ class User extends Authenticatable
 
     public function Classroom(): HasMany
     {
-        return $this->hasMany(Classroom::class);
+        return $this->hasMany(Classroom::class,'owner_id');
     }
 
     public function Module(): HasMany
     {
-        return $this->hasMany(Module::class);
+        return $this->hasMany(Module::class,'owner_id');
     }
 
     public function Log(): HasMany{

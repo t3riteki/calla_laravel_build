@@ -2,6 +2,9 @@
 
 namespace Database\Factories;
 
+use App\Models\Classroom;
+use App\Models\Module;
+use App\Models\EnrolledUser;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,7 +20,9 @@ class ClassroomModuleFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'classroom_id' => Classroom::inRandomOrder()->first()?->id ?? Classroom::factory(),
+            'module_id' => Module::inRandomOrder()->first()?->id,
+            'added_by' => null,
         ];
     }
 }

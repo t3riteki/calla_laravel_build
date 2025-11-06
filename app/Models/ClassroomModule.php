@@ -48,7 +48,7 @@ class ClassroomModule extends Model
         return $this->belongsTo(Classroom::class);
     }
     public function EnrolledUser():BelongsTo{
-        return $this->belongsTo(EnrolledUser::class);
+        return $this->belongsTo(EnrolledUser::class,'added_by');
     }
     public function Module():BelongsTo{
         return $this->belongsTo(Module::class);

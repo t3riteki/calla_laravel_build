@@ -14,27 +14,14 @@ class ModuleSeeder extends Seeder
      */
     public function run(): void
     {
-         // Fetch all users
-        $users = User::all();
+        $instructors = User::where('role','instructor')->get();
 
-        if ($users->isEmpty()) {
-            $this->command->warn('⚠️ No users found. Please seed users first.');
-            return;
-        }
+        $instructors->each(
+            function($instructor){
+            $instructor->module()->saveMany(
+                Module::factory(5)->make(['owner_id'=>$instructor->id])
+            );
+        });
 
-        // Create between 10–20 random modules
-        $moduleCount = rand(10, 20);
-
-        for ($i = 0; $i < $moduleCount; $i++) {
-            $randomUser = $users->random();
-
-            Module::create([
-                'owner_id' => $randomUser->id,
-                'name' => 'Module ' . Str::title(fake()->words(2, true)),
-                'description' => fake()->paragraph(3),
-            ]);
-        }
-
-        $this->command->info("✅ Created {$moduleCount} random modules for existing users.");
     }
 }

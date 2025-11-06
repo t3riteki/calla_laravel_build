@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\User;
+use App\Models\Classroom;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,7 +19,7 @@ class EnrolledUserFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'classroom_id' => Classroom::inRandomOrder()->first()?->id ?? Classroom::factory(),
         ];
     }
 }

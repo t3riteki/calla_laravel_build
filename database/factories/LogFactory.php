@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -16,8 +17,9 @@ class LogFactory extends Factory
      */
     public function definition(): array
     {
-        return [
-            //
+         return [
+            'user_id' => User::inRandomOrder()->first()?->id ?? User::factory(),
+            'action' => $this->faker->sentence(),
         ];
     }
 }

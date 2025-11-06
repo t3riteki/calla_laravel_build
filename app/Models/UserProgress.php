@@ -42,7 +42,7 @@ class UserProgress extends Model
     }
 
     public function EnrolledUser():BelongsTo{
-        return $this->belongsTo(EnrolledUser::class);
+        return $this->belongsTo(EnrolledUser::class,);
     }
     public function ClassroomModule():BelongsTo{
         return $this->belongsTo(ClassroomModule::class);

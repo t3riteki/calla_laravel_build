@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Lesson;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,7 +18,9 @@ class GlossaryFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'lesson_id' => Lesson::inRandomOrder()->first()?->id ?? Lesson::factory(),
+            'term' => ucfirst($this->faker->word()),
+            'meaning' => $this->faker->sentence(10),
         ];
     }
 }
