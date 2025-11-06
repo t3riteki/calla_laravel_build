@@ -48,7 +48,7 @@
         <ul tabindex="0"
             class="menu menu-sm dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52">
           <li class="menu-title">{{ auth()->user()->name }}</li>
-          <li><a href="#" class="hover:bg-red-100">Profile</a></li>
+          <li><a href="{{ route('profile') }}" class="hover:bg-red-100">Profile</a></li>
           <li><a href="#" class="hover:bg-red-100">Settings</a></li>
           <li><a href="/logout" class="text-red-600 hover:text-red-800 font-semibold">Logout</a></li>
         </ul>

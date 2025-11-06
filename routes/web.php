@@ -47,6 +47,11 @@ Route::middleware(['auth', 'auth.session'])->group(function () {
     Route::resource('/glossary', GlossaryController::class);
 });
 
+
+Route::get('/profile', function () {
+    return view('instructor.profile');
+})->middleware('auth')->name('profile');
+
 // If you don’t have these yet, you can comment them out
 // require __DIR__.'/settings.php';
 // require __DIR__.'/auth.php';
