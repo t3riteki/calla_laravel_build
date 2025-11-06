@@ -36,7 +36,7 @@ Route::post('/register', Register::class)
 
 Route::middleware(['auth', 'auth.session'])->group(function () {
     Route::get('/logout', Logout::class);
-
+    Route::get('/dashboard', [DashboardController::class, 'index']);
     Route::resource('/logs', LogController::class);
     Route::resource('/enrolleduser', EnrolledUserController::class);
     Route::resource('/classrooms', ClassroomController::class);
@@ -55,8 +55,6 @@ Route::get('/profile', function () {
 Route::get('/settings', function () {
     return view('settings');
 })->name('settings')->middleware('auth');
-
-Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
 // If you don’t have these yet, you can comment them out
 // require __DIR__.'/settings.php';
