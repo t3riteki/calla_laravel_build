@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Resource;
 
 use App\Http\Controllers\Controller;
+use App\Models\Classroom;
+use App\Models\Module;
 use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
@@ -26,7 +28,7 @@ class DashboardController extends Controller
                 abort(403,'Unauthorized');
         }
 
-        return view($role. '.dashboard', $data);
+        return view($role. '.dashboard', ['data'=>$data]);
     }
 
     private function adminData(){
@@ -35,9 +37,34 @@ class DashboardController extends Controller
         ];
     }
     private function instructorData($user){
-        return [
+        $modules = Module::with('User')
+        ->where('owner_id',auth()->id())
+        ->withCount('ClassroomModule')
+        ->latest()
+        ->take(5)
+        ->get();
 
-        ];
+        $module_count = Module::with('User')
+        ->where('owner_id',auth()->id())
+        ->count();
+
+        $classrooms = Classroom::with('User')
+        ->where('owner_id', auth()->id())
+        ->withCount([
+            'EnrolledUser as enrollee_count'=>function($query){
+                $query->where('role','learner');
+            }
+        ])
+        ->latest()
+        ->take(5)
+        ->get();
+
+        $classroom_count = Classroom::with('User')
+        ->where('owner_id', auth()->id())
+        ->count();
+
+        $data = ['modules'=>$modules,'module_count'=>$module_count, 'classrooms'=>$classrooms,'classroom_count'=>$classroom_count];
+        return $data;
     }
     private function learnerData($user){
         return [
