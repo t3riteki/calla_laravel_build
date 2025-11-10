@@ -1,8 +1,8 @@
 <div class="max-w-3xl mx-auto bg-white rounded-2xl shadow-lg border border-gray-100 p-8 relative">
-    {{-- <a href="{{ auth()->user()->role === 'instructor' ? route('instructor.dashboard') : route('student.dashboard') }}"
+    <a href="/dashboard"
        class="absolute top-6 right-6 btn btn-sm bg-gradient-to-r from-red-700 to-red-800 text-white border-none hover:opacity-90 transition">
         ← Back to Dashboard
-    </a> --}}
+    </a>
 
     <div class="mb-6">
         <h2 class="text-2xl font-bold text-gray-800">Settings</h2>
@@ -70,7 +70,7 @@
             </div>
         @endif
 
-        <div class="flex justify-end">
+        <div class="flex justify-between">
             <button class="btn bg-red-700 hover:bg-red-800 text-white px-6 rounded-lg">
                 Save Changes
             </button>

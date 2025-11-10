@@ -16,8 +16,16 @@
 </head>
 
 <body class="min-h-screen flex flex-col bg-base-200 font-sans">
+    <x-navbar/>
 
-    {{ $slot }}
+    @if(session('success'))
+        <x-toast :message="session('success')" />
+    @endif
+
+    <div class="pt-16">
+        {{ $slot }}
+    </div>
+
 
     <script src="{{ asset('js/app.tsx') }}"></script>
     @stack('scripts')

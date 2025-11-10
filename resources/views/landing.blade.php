@@ -1,10 +1,5 @@
 <x-layout class="px-6">
     <x-slot:title>Welcome</x-slot:title>
-    <x-navbar/>
-
-    @if (session('success'))
-        <x-toast :message="session('success')" />
-    @endif
 
     <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
 

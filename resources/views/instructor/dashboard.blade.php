@@ -1,13 +1,6 @@
 <x-layout>
     <x-slot:title>Instructor Dashboard - CALLA</x-slot:title>
 
-    <!-- NAVBAR -->
-    <x-navbar />
-
-    @if(session('success'))
-        <x-toast :message="session('success')" />
-    @endif
-
     <!-- DASHBOARD CONTAINER -->
     <div class="flex flex-col lg:flex-row min-h-screen bg-white pt-15 transition-all duration-300">
 

@@ -1,6 +1,5 @@
 <x-layout>
     <x-slot:title>Login - CALLA</x-slot:title>
-    <x-navbar class="navbar"></x-navbar>
 
     <main class="flex-1 bg-red-900 w-full flex items-center justify-center">
         <div class="hero w-full">

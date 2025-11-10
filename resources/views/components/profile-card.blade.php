@@ -1,10 +1,10 @@
 <div class="max-w-3xl mx-auto bg-white rounded-2xl shadow-lg border border-gray-100 p-8 relative">
 
     <!-- 🔙 Back Button -->
-    {{-- <a href="{{ route('instructor.dashboard') }}"
+    <a href="/dashboard"
        class="absolute top-6 right-6 btn btn-sm bg-gradient-to-r from-red-700 to-red-800 text-white border-none hover:opacity-90 transition-all duration-200">
         ← Back to Dashboard
-    </a> --}}
+    </a>
 
     <div class="flex flex-col md:flex-row items-center gap-6 mt-4">
         <!-- Avatar -->
@@ -73,6 +73,8 @@
                     {{ $address ?? 'Not provided' }}
                 </p>
             </div>
+
+
         </div>
     </div>
 </div>

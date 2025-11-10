@@ -3,8 +3,6 @@
 <x-layout>
     <x-slot:title>Register - CALLA</x-slot:title>
 
-    <x-navbar class="navbar sticky bg-base-100"></x-navbar>
-
     <section
         class="min-h-[100vh] flex flex-col lg:flex-row lg:h-[calc(100vh-64px)] overflow-hidden"
         x-data="registerForm()">

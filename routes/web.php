@@ -35,8 +35,20 @@ Route::post('/register', Register::class)
     ->middleware('guest');
 
 Route::middleware(['auth', 'auth.session'])->group(function () {
+
+    // Navbar Routes
     Route::get('/logout', Logout::class);
     Route::get('/dashboard', [DashboardController::class, 'index']);
+
+    Route::get('/profile', function () {
+        return view(auth()->user()->role.'.profile');
+    });
+
+    Route::get('/settings', function () {
+        return view(auth()->user()->role.'.settings');
+    });
+
+    // Resource Routes
     Route::resource('/logs', LogController::class);
     Route::resource('/enrolleduser', EnrolledUserController::class);
     Route::resource('/classrooms', ClassroomController::class);
@@ -46,15 +58,6 @@ Route::middleware(['auth', 'auth.session'])->group(function () {
     Route::resource('/lessons', LessonController::class);
     Route::resource('/glossary', GlossaryController::class);
 });
-
-
-Route::get('/profile', function () {
-    return view('instructor.profile');
-})->middleware('auth')->name('profile');
-
-Route::get('/settings', function () {
-    return view('instructor.settings');
-})->name('settings');
 
 // If you don’t have these yet, you can comment them out
 // require __DIR__.'/settings.php';

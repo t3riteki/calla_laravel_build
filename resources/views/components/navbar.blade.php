@@ -3,12 +3,16 @@
 
   <!-- LEFT SIDE -->
   <div class="navbar-start px-4.5">
-    <a href="/" class="flex flex-row ">
+    @auth
+    <a href="/dashboard" class="flex flex-row ">
         <div class="text-2xl font-bold text-red-900 transition-colors duration-300 hover:scale-105">CALLA</div>
-        @auth
-            <div class="text-1xl font-italic text-red-300 mx-1 self-end">{{ auth()->user()->role }}</div>
-        @endauth
+        <div class="text-1xl font-italic text-red-300 mx-1 self-end">{{ auth()->user()->role }}</div>
     </a>
+
+    @else
+    <div class="text-2xl font-bold text-red-900 transition-colors duration-300 hover:scale-105">CALLA</div>
+    @endauth
+
   </div>
 
   <!-- RIGHT SIDE -->
@@ -48,8 +52,8 @@
         <ul tabindex="0"
             class="menu menu-sm dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52">
           <li class="menu-title">{{ auth()->user()->name }}</li>
-          <li><a href="{{ route('profile') }}" class="hover:bg-red-100">Profile</a></li>
-          <li><a href="{{ route('settings') }}" class="hover:bg-red-100">Settings</a></li>
+          <li><a href="/profile" class="hover:bg-red-100">Profile</a></li>
+          <li><a href="/settings" class="hover:bg-red-100">Settings</a></li>
           <li><a href="/logout" class="text-red-600 hover:text-red-800 font-semibold">Logout</a></li>
         </ul>
       </div>

@@ -1,6 +1,5 @@
 <x-layout>
     <x-slot:title>My Profile</x-slot:title>
-    <x-navbar />
 
     <main class="min-h-screen bg-gradient-to-br from-red-50 via-white to-red-100 py-12 px-6 mt-15">
         <x-profile-card
