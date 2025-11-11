@@ -1,7 +1,7 @@
 <x-layout>
     <x-slot:title>Login - CALLA</x-slot:title>
 
-    <main class="flex-1 bg-red-900 w-full flex items-center justify-center">
+    <main class="flex-1 bg-red-900 w-full flex items-center justify-center h-screen">
         <div class="hero w-full">
             <div class="hero-content flex-col text-center">
                 <div class="card w-96 bg-white shadow-2xl rounded-2xl">

@@ -15,7 +15,7 @@ class ClassroomModulePolicy
      */
     public function viewAny(EnrolledUser $enrolledUser): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -23,7 +23,7 @@ class ClassroomModulePolicy
      */
     public function view(EnrolledUser $enrolledUser, ClassroomModule $classroomModule): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -31,7 +31,7 @@ class ClassroomModulePolicy
      */
     public function create(EnrolledUser $enrolledUser, Classroom $classroom,): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -39,7 +39,7 @@ class ClassroomModulePolicy
      */
     public function update(User $user, ClassroomModule $classroomModule): bool
     {
-        return false;
+        return true;
     }
 
     /**

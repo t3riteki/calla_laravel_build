@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\Login;
 use App\Http\Controllers\Auth\Register;
 use App\Http\Controllers\Auth\Logout;
+use App\Http\Controllers\Auth\ProfileController;
 
 use App\Http\Controllers\Resource\ClassroomController;
 use App\Http\Controllers\Resource\ClassroomModuleController;
@@ -13,7 +14,7 @@ use App\Http\Controllers\Resource\LogController;
 use App\Http\Controllers\Resource\ModuleController;
 use App\Http\Controllers\Resource\UserProgressController;
 use App\Http\Controllers\Resource\DashboardController;
-
+use App\Http\Controllers\SearchController;
 use Illuminate\Support\Facades\Route;
 
 // Home route -> show login page
@@ -40,13 +41,13 @@ Route::middleware(['auth', 'auth.session'])->group(function () {
     Route::get('/logout', Logout::class);
     Route::get('/dashboard', [DashboardController::class, 'index']);
 
-    Route::get('/profile', function () {
-        return view(auth()->user()->role.'.profile');
-    });
+    Route::resource('/profile', ProfileController::class);
 
-    Route::get('/settings', function () {
+    Route::post('/settings', function () {
         return view(auth()->user()->role.'.settings');
     });
+
+    Route::post('/search', [SearchController::class, 'search']);
 
     // Resource Routes
     Route::resource('/logs', LogController::class);

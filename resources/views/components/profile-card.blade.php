@@ -38,42 +38,27 @@
             <div class="p-4 bg-gray-50 rounded-lg border">
                 <p class="text-sm text-gray-500">Account Created</p>
                 {{-- Example static value — replace with dynamic value later --}}
-                <p class="font-medium text-gray-700">{{ $created_at ?? '07/17/2004'}}</p>
+                <p class="font-medium text-gray-700">{{ auth()->user()->created_at}}</p>
             </div>
 
             <div class="p-4 bg-gray-50 rounded-lg border">
                 <p class="text-sm text-gray-500">Last Updated</p>
-                <p class="font-medium text-gray-700">{{ $updated_at ?? '11/06/2025'}}</p>
+                <p class="font-medium text-gray-700">{{ auth()->user()->updated_at}}</p>
             </div>
 
             <div class="p-4 bg-gray-50 rounded-lg border">
                 <p class="text-sm text-gray-500">Birthdate</p>
                 <p class="font-medium text-gray-700">
-                    {{ $birthdate ?? 'No Birthdate' }}
+                    {{ auth()->user()->birthday ?? 'Not Specified' }}
                 </p>
             </div>
 
             <div class="p-4 bg-gray-50 rounded-lg border">
                 <p class="text-sm text-gray-500">Gender</p>
                 <p class="font-medium text-gray-700">
-                    {{ ucfirst($gender ?? 'Not specified') }}
+                    {{ ucfirst(auth()->user()->gender ?? 'Not Specified') }}
                 </p>
             </div>
-
-            <div class="p-4 bg-gray-50 rounded-lg border">
-                <p class="text-sm text-gray-500">Contact Number</p>
-                <p class="font-medium text-gray-700">
-                    {{ $contact_number ?? 'Not provided' }}
-                </p>
-            </div>
-
-            <div class="p-4 bg-gray-50 rounded-lg border">
-                <p class="text-sm text-gray-500">Address</p>
-                <p class="font-medium text-gray-700">
-                    {{ $address ?? 'Not provided' }}
-                </p>
-            </div>
-
 
         </div>
     </div>
