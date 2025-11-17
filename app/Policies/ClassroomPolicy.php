@@ -21,7 +21,7 @@ class ClassroomPolicy
      */
     public function view(User $user, Classroom $classroom): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -29,7 +29,7 @@ class ClassroomPolicy
      */
     public function create(User $user): bool
     {
-        return false;
+        return ($user->role === 'instructor');
     }
 
     /**
@@ -37,7 +37,7 @@ class ClassroomPolicy
      */
     public function update(User $user, Classroom $classroom): bool
     {
-        return false;
+        return ($classroom->owner_id === $user->id);
     }
 
     /**
@@ -45,7 +45,7 @@ class ClassroomPolicy
      */
     public function delete(User $user, Classroom $classroom): bool
     {
-        return false;
+        return ($classroom->owner_id === $user->id || $user->role === 'admin');
     }
 
     /**
@@ -53,7 +53,7 @@ class ClassroomPolicy
      */
     public function restore(User $user, Classroom $classroom): bool
     {
-        return false;
+        return ($classroom->owner_id === $user->id || $user->role === 'admin');
     }
 
     /**
@@ -61,6 +61,6 @@ class ClassroomPolicy
      */
     public function forceDelete(User $user, Classroom $classroom): bool
     {
-        return false;
+        return ($classroom->owner_id === $user->id || $user->role === 'admin');
     }
 }

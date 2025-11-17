@@ -7,10 +7,12 @@ use App\Models\EnrolledUser;
 use App\Http\Requests\StoreEnrolledUserRequest;
 use App\Http\Requests\UpdateEnrolledUserRequest;
 
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Facades\Auth;
 
 class EnrolledUserController extends Controller
 {
+    use AuthorizesRequests;
     /**
      * Display a listing of the resource.
      */
@@ -34,7 +36,14 @@ class EnrolledUserController extends Controller
      */
     public function store(StoreEnrolledUserRequest $request)
     {
-        //
+        $user = Auth::User();
+        $this->authorize('create',$user);
+        $validated = $request->validated();
+
+        $enrollment = $user->EnrolledUser()->create($validated);
+
+        return redirect($user->role.'.dashboard');
+
     }
 
     /**
@@ -66,6 +75,9 @@ class EnrolledUserController extends Controller
      */
     public function destroy(EnrolledUser $enrolledUser)
     {
-        //
+        $user = Auth::user();
+        $this->authorize('delete',$user);
+        $enrolledUser->delete();
+        return redirect($user->role.'.dashboard');
     }
 }

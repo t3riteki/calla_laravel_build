@@ -22,7 +22,8 @@ class StoreEnrolledUserRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'user_id'=>'required|exists|string',
+            'classroom_id'=>'required|exists|string'
         ];
     }
 }

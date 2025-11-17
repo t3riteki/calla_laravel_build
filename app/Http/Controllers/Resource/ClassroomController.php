@@ -6,12 +6,13 @@ use App\Http\Controllers\Controller;
 use App\Models\Classroom;
 use App\Http\Requests\StoreClassroomRequest;
 use App\Http\Requests\UpdateClassroomRequest;
-
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Facades\Auth;
 
 
 class ClassroomController extends Controller
 {
+    use AuthorizesRequests;
     /**
      * Display a listing of the resource.
      */
@@ -27,7 +28,7 @@ class ClassroomController extends Controller
      */
     public function create()
     {
-        //
+
     }
 
     /**
@@ -35,7 +36,16 @@ class ClassroomController extends Controller
      */
     public function store(StoreClassroomRequest $request)
     {
-        //
+        $user = Auth::User();
+        $this->authorize('create',$user);
+        $validated = $request->validated();
+        $classroom = $user->Classroom()->create($validated);
+
+        $classroom->EnrolledUser()->create([
+            'user_id' => $user->id,
+        ]);
+
+        return redirect($user->role.'.dashboard');
     }
 
     /**
@@ -43,7 +53,8 @@ class ClassroomController extends Controller
      */
     public function show(Classroom $classroom)
     {
-        //
+        $user = Auth::user();
+        return view($user->role.'.viewClassroom',compact('classroom'));
     }
 
     /**
@@ -51,7 +62,9 @@ class ClassroomController extends Controller
      */
     public function edit(Classroom $classroom)
     {
-        //
+        $user = Auth::user();
+        $this->authorize('update',$user);
+
     }
 
     /**
@@ -59,7 +72,12 @@ class ClassroomController extends Controller
      */
     public function update(UpdateClassroomRequest $request, Classroom $classroom)
     {
-        //
+        $user = Auth::user();
+        $this->authorize('update',$user);
+        $validated= $request->validated();
+        $classroom->update($validated);
+
+        return redirect($user->role.'.dashboard');
     }
 
     /**
@@ -67,6 +85,9 @@ class ClassroomController extends Controller
      */
     public function destroy(Classroom $classroom)
     {
-        //
+        $user = Auth::user();
+        $this->authorize('delete',$user);
+        $classroom->delete();
+        return redirect($user->role.'.dashboard');
     }
 }

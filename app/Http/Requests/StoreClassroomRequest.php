@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreClassroomRequest extends FormRequest
@@ -22,7 +23,10 @@ class StoreClassroomRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'name'=>'required|string|unique:classroom,name,except',
+            'description'=>'nullable|string|max:255',
+            'owner_id'=>'required|string',
+            'code'=>'nullable|string|max:255'
         ];
     }
 }

@@ -21,6 +21,7 @@ class ClassroomFactory extends Factory
             'owner_id' => User::where('role', 'instructor')->inRandomOrder()->first()?->id ?? User::factory()->create(['role' => 'instructor'])->id,
             'name' => 'Class ' . $this->faker->word(),
             'description' => $this->faker->sentence(8),
+            'code' => $this->faker->password()
         ];
     }
 }

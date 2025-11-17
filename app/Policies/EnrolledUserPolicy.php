@@ -21,7 +21,7 @@ class EnrolledUserPolicy
      */
     public function view(User $user, EnrolledUser $enrolledUser): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -29,7 +29,7 @@ class EnrolledUserPolicy
      */
     public function create(User $user): bool
     {
-        return false;
+        return in_array($user->role,['instructor','student'],true);
     }
 
     /**
@@ -37,7 +37,7 @@ class EnrolledUserPolicy
      */
     public function update(User $user, EnrolledUser $enrolledUser): bool
     {
-        return false;
+        return ($user->id === $enrolledUser->user_id);
     }
 
     /**
@@ -45,7 +45,7 @@ class EnrolledUserPolicy
      */
     public function delete(User $user, EnrolledUser $enrolledUser): bool
     {
-        return false;
+       return ($user->id === $enrolledUser->user_id);
     }
 
     /**
@@ -53,7 +53,7 @@ class EnrolledUserPolicy
      */
     public function restore(User $user, EnrolledUser $enrolledUser): bool
     {
-        return false;
+        return ($user->id === $enrolledUser->user_id);
     }
 
     /**
@@ -61,6 +61,6 @@ class EnrolledUserPolicy
      */
     public function forceDelete(User $user, EnrolledUser $enrolledUser): bool
     {
-        return false;
+        return ($user->id === $enrolledUser->user_id);
     }
 }

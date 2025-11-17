@@ -20,7 +20,8 @@ class Classroom extends Model
     protected $fillable = [
         'name',
         'description',
-        'owner_id'
+        'owner_id',
+        'code'
     ];
 
     /**

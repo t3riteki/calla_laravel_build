@@ -22,7 +22,9 @@ class UpdateClassroomRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'name'=>'required|string|unique:classroom,name,'.$this->classroom->id,
+            'description'=>'nullable|string|max:255',
+            'code'=>'nullable|string|max:255'
         ];
     }
 }

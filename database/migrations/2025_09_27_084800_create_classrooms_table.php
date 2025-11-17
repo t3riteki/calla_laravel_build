@@ -18,6 +18,7 @@ return new class extends Migration
                 ->onDelete('set null');
             $table->string('name');
             $table->text('description');
+            $table->text('code');
             $table->timestamps();
         });
     }
