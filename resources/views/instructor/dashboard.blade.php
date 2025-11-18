@@ -78,7 +78,7 @@
                                                     View
                                                 </a>
                                                 <a href="{{ route('classrooms.edit', $classroom->id) }}"
-                                                class="btn btn-link text-red-700 no-underline hover:underline">
+                                                class="btn btn-link text-blue-500  no-underline hover:underline">
                                                     Edit
                                                 </a>
                                             </td>
@@ -127,8 +127,8 @@
                                                     View
                                                 </a>
                                                 <a href="{{ route('modules.edit', $module->id) }}"
-                                                class="btn btn-link text-red-700 no-underline hover:underline">
-                                                    edit
+                                                class="btn btn-link text-blue-500 no-underline hover:underline">
+                                                    Edit
                                                 </a>
                                             </td>
                                         </tr>

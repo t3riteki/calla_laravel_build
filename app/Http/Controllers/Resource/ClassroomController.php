@@ -50,6 +50,7 @@ class ClassroomController extends Controller
     public function store(StoreClassroomRequest $request)
     {
         $user = Auth::User();
+        $this->authorize('create', Classroom::class);
         $validated = $request->validated();
         $validated['owner_id'] = $user->id;
         $classroom = $user->Classroom()->create($validated);
@@ -58,7 +59,7 @@ class ClassroomController extends Controller
             'user_id' => $user->id,
         ]);
 
-        return view($this->index());
+        return redirect()->back();
     }
 
     /**
@@ -91,7 +92,7 @@ class ClassroomController extends Controller
         $validated= $request->validated();
         $classroom->update($validated);
 
-        return view($this->index());
+        return redirect()->back();
     }
 
     /**
@@ -102,6 +103,6 @@ class ClassroomController extends Controller
         $user = Auth::user();
         $this->authorize('delete',$classroom);
         $classroom->delete();
-        return view($this->index());
+        return redirect()->back();
     }
 }

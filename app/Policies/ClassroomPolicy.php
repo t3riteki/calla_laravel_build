@@ -37,7 +37,7 @@ class ClassroomPolicy
      */
     public function update(User $user, Classroom $classroom): bool
     {
-        return ($classroom->owner_id === $user->id);
+        return $classroom->User()->is($user);
     }
 
     /**

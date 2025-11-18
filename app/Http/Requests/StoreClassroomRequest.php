@@ -15,7 +15,7 @@ class StoreClassroomRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return auth()->user()->can('create', Classroom::class);
+        return true;
     }
 
     /**

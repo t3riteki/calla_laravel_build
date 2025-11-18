@@ -97,7 +97,7 @@
                         </div>
 
                         <div class="overflow-x-auto mt-4">
-                            <table class="table table-zebra w-full">
+                            <table class="table table-zebra text-center w-full">
                                 <thead>
                                     <tr>
                                         <th>Class Name</th>

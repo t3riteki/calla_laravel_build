@@ -75,7 +75,7 @@
 
                         <!-- Table -->
                         <div class="overflow-x-auto mt-4">
-                            <table class="table table-zebra w-full text-sm sm:text-base">
+                            <table class="table text-center table-zebra w-full text-sm sm:text-base">
                                 <thead>
                                     <tr>
                                         <th>Student Name</th>
@@ -120,7 +120,7 @@
 
                         <!-- Table -->
                         <div class="overflow-x-auto mt-4">
-                            <table class="table table-zebra w-full text-sm sm:text-base">
+                            <table class="table text-center table-zebra w-full text-sm sm:text-base">
                                 <thead>
                                     <tr>
                                         <th>Title</th>
@@ -137,7 +137,7 @@
                                             <td>{{ $classmodule->module->created_at->format('M d, Y') }}</td>
                                             <td class="space-x-2">
                                                 <button class="text-red-700 hover:underline">View</button>
-                                                <button class="text-gray-500 hover:underline">Edit</button>
+                                                <button class="text-blue-500  hover:underline">Edit</button>
                                             </td>
                                         </tr>
                                     @endforeach

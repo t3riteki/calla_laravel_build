@@ -3,6 +3,8 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use App\Models\Classroom;
+use App\Models\User;
 
 class UpdateClassroomRequest extends FormRequest
 {
@@ -11,7 +13,7 @@ class UpdateClassroomRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +24,7 @@ class UpdateClassroomRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name'=>'required|string|unique:classroom,name,'.$this->classroom->id,
+            'name'=>'nullable|string|unique:classrooms,name,'.$this->classroom->id,
             'description'=>'nullable|string|max:255',
             'code'=>'nullable|string|max:255'
         ];
