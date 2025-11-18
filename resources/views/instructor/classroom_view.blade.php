@@ -13,38 +13,50 @@
 
             <!-- 🏫 CLASSROOM HEADER -->
             <section class="mb-10">
-                <div class="hero rounded-2xl bg-gradient-to-r from-red-900 via-red-700 to-red-600 text-white p-6 sm:p-8 md:p-10">
-                    <div class="hero-content flex flex-col lg:flex-row lg:items-center lg:justify-between w-full gap-6">
+            <div class="hero rounded-2xl bg-gradient-to-r from-red-900 via-red-700 to-red-600 text-white p-6 sm:p-8 md:p-10">
+                <div class="hero-content flex flex-col lg:flex-row lg:items-center lg:justify-between w-full gap-6">
 
-                        <div>
-                            <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold">
-                                {{ $classroom->name }}
-                            </h2>
-                            <p class="py-4 text-sm sm:text-base opacity-80 max-w-xl">
-                                {{ $classroom->description }}
-                            </p>
+                    <div>
+                        <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold">
+                            {{ $classroom->name }}
+                        </h2>
+                        <p class="py-4 text-sm sm:text-base opacity-80 max-w-xl">
+                            {{ $classroom->description }}
+                        </p>
+                        <p class="inline-block px-3 py-1 bg-red-100 text-red-700 rounded-lg text-sm font-medium">
+                            Code: {{ $classroom->code }}
+                        </p>
+                    </div>
+
+                    <!-- Stats & Back Button-->
+                        <div class="flex flex-col gap-4">
+                    <!-- Back Button above stats -->
+                    <a href="{{ route('classrooms.index') }}"
+                    class="btn btn-sm bg-gradient-to-r from-red-800 to-red-700 text-white hover:opacity-90">
+                        ← Back to Classrooms
+                    </a>
+
+                    <!-- Stats -->
+                    <div class="stats stats-vertical sm:stats-horizontal shadow mt-4">
+                        <div class="stat bg-white/10 text-white backdrop-blur-md">
+                            <div class="stat-title text-gray-200">Students</div>
+                            <div class="stat-value text-white text-3xl">
+                                {{ $classroom->EnrolledUser->where('user.role','learner')->count() }}
+                            </div>
                         </div>
 
-                        <!-- Stats -->
-                        <div class="stats stats-vertical sm:stats-horizontal shadow mt-4 lg:mt-0">
-                            <div class="stat bg-white/10 text-white backdrop-blur-md">
-                                <div class="stat-title text-gray-200">Students</div>
-                                <div class="stat-value text-white text-3xl">
-                                    {{ $classroom->EnrolledUser->where('user.role','learner')->count() }}
-                                </div>
-                            </div>
-
-                            <div class="stat bg-white/10 text-white backdrop-blur-md">
-                                <div class="stat-title text-gray-200">Modules</div>
-                                <div class="stat-value text-white text-3xl">
-                                    {{ $classroom->ClassroomModule->count() }}
-                                </div>
+                        <div class="stat bg-white/10 text-white backdrop-blur-md">
+                            <div class="stat-title text-gray-200">Modules</div>
+                            <div class="stat-value text-white text-3xl">
+                                {{ $classroom->ClassroomModule->count() }}
                             </div>
                         </div>
-
                     </div>
                 </div>
-            </section>
+
+                </div>
+            </div>
+        </section>
 
             <!-- 👨‍🎓 STUDENT LIST -->
             <section class="mb-10">
@@ -68,20 +80,19 @@
                                     <tr>
                                         <th>Student Name</th>
                                         <th>Email</th>
-                                        <th>Status</th>
                                         <th>Joined</th>
                                         <th>Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                   @foreach ($classroom->EnrolledUser as $enrollment)
+                                   @foreach ($classroom->EnrolledUser->where('user.role','learner') as $enrollment)
                                         <tr>
                                             <td>{{ $enrollment->user->name }}</td>
                                             <td>{{ $enrollment->user->email }}</td>
                                             <td>{{ $enrollment->user->created_at->format('M d, Y') }}</td>
                                             <td class="space-x-2">
                                                 <button class="text-red-700 hover:underline">View</button>
-                                                <button class="text-gray-500 hover:underline">Remove</button>
+                                                <button class="text-blue-500 hover:underline">Remove</button>
                                             </td>
                                         </tr>
                                     @endforeach
