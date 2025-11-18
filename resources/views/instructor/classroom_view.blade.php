@@ -1,7 +1,7 @@
 <x-layout>
     <x-slot:title>{{ $classroom->name }} - Classroom View</x-slot:title>
 
-    <div class="flex flex-col lg:flex-row min-h-screen bg-white pt-15 transition-all duration-300">
+    <div class="flex flex-col lg:flex-row min-h-screen bg-white transition-all duration-300">
 
         <!-- SIDEBAR -->
         <x-sidebar />
@@ -75,12 +75,14 @@
 
                         <!-- Table -->
                         <div class="overflow-x-auto mt-4">
-                            <table class="table text-center table-zebra w-full text-sm sm:text-base">
+                            <table class="table table-zebra w-full text-sm sm:text-base">
                                 <thead>
                                     <tr>
                                         <th>Student Name</th>
                                         <th>Email</th>
+                                        <th>Status</th>
                                         <th>Joined</th>
+                                        <th>Progress</th>
                                         <th>Actions</th>
                                     </tr>
                                 </thead>
@@ -120,7 +122,7 @@
 
                         <!-- Table -->
                         <div class="overflow-x-auto mt-4">
-                            <table class="table text-center table-zebra w-full text-sm sm:text-base">
+                            <table class="table table-zebra w-full text-sm sm:text-base">
                                 <thead>
                                     <tr>
                                         <th>Title</th>
@@ -137,7 +139,7 @@
                                             <td>{{ $classmodule->module->created_at->format('M d, Y') }}</td>
                                             <td class="space-x-2">
                                                 <button class="text-red-700 hover:underline">View</button>
-                                                <button class="text-blue-500  hover:underline">Edit</button>
+                                                <button class="text-gray-500 hover:underline">Edit</button>
                                             </td>
                                         </tr>
                                     @endforeach

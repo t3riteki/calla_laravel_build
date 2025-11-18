@@ -2,7 +2,7 @@
     <x-slot:title>Instructor Dashboard - CALLA</x-slot:title>
 
     <!-- DASHBOARD CONTAINER -->
-    <div class="flex flex-col lg:flex-row min-h-screen bg-white pt-15 transition-all duration-300">
+    <div class="flex flex-col lg:flex-row min-h-screen bg-white transition-all duration-300">
 
         <!-- SIDEBAR -->
         <x-sidebar />
@@ -77,10 +77,79 @@
                                                 class="btn btn-link text-red-700 no-underline hover:underline">
                                                     View
                                                 </a>
-                                                <a href="{{ route('classrooms.edit', $classroom->id) }}"
-                                                class="btn btn-link text-blue-500  no-underline hover:underline">
+
+                                                <!-- Edit Button triggers modal -->
+                                                <button onclick="document.getElementById('editClassModal-{{ $classroom->id }}').showModal()"
+                                                    class="btn btn-link text-blue-500 no-underline hover:underline">
                                                     Edit
-                                                </a>
+                                                </button>
+
+                                                <!-- Edit Modal -->
+                                                <dialog id="editClassModal-{{ $classroom->id }}" class="modal">
+                                                    <div class="modal-box max-w-lg bg-white/95 backdrop-blur-md rounded-2xl shadow-lg border border-gray-100">
+                                                        <div class="flex justify-between items-center mb-4">
+                                                            <h3 class="text-lg font-semibold text-gray-800 flex items-center gap-2">
+                                                                <span class="text-red-800 text-xl">✏️</span> Edit Class
+                                                            </h3>
+                                                            <form method="dialog">
+                                                                <button class="btn btn-sm btn-circle btn-ghost text-gray-500 hover:text-red-700">✕</button>
+                                                            </form>
+                                                        </div>
+
+                                                        <!-- EDIT FORM -->
+                                                        <form method="POST" action="{{ route('classrooms.update', $classroom->id) }}" class="space-y-4">
+                                                            @csrf
+                                                            @method('PUT')
+
+                                                            <!-- Class Name -->
+                                                            <div class="form-control">
+                                                                <label class="label">
+                                                                    <span class="label-text text-sm font-semibold text-gray-600">Class Name</span>
+                                                                </label>
+                                                                <input type="text" name="name" value="{{ $classroom->name }}"
+                                                                    class="input input-bordered w-full focus:ring-2 focus:ring-red-700 rounded-lg" required>
+                                                            </div>
+
+                                                            <!-- Description -->
+                                                            <div class="form-control">
+                                                                <label class="label">
+                                                                    <span class="label-text text-sm font-semibold text-gray-600">Description</span>
+                                                                </label>
+                                                                <textarea name="description"
+                                                                    class="textarea textarea-bordered w-full h-24 resize-none focus:ring-2 focus:ring-red-700 rounded-lg"
+                                                                    required>{{ $classroom->description }}</textarea>
+                                                            </div>
+
+                                                            <!-- Class Code -->
+                                                            <div class="form-control">
+                                                                <label class="label">
+                                                                    <span class="label-text text-sm font-semibold text-gray-600">Class Code</span>
+                                                                </label>
+                                                                <div class="relative">
+                                                                    <input type="text" name="code" value="{{ $classroom->code }}"
+                                                                        class="input input-bordered w-full focus:ring-2 focus:ring-red-700 rounded-lg">
+
+                                                                    <button type="button"
+                                                                            class="btn btn-sm bg-red-700 text-white hover:bg-red-600 absolute right-1 top-1/2
+                                                                                transform -translate-y-1/2 rounded-full px-3 py-1 text-xs"
+                                                                            onclick="generateEditCode('{{ $classroom->id }}')">
+                                                                        Auto
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+
+                                                            <!-- ACTION BUTTONS -->
+                                                            <div class="modal-action flex justify-end gap-3 mt-6">
+                                                                <button type="button" class="btn btn-ghost text-gray-600 hover:bg-gray-100"
+                                                                    onclick="document.getElementById('editClassModal-{{ $classroom->id }}').close()">Cancel</button>
+                                                                <button type="submit"
+                                                                    class="btn bg-gradient-to-r from-red-800 to-red-700 text-white hover:opacity-90 transition px-6">
+                                                                    Save Changes
+                                                                </button>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </dialog>
                                             </td>
                                         </tr>
                                     @endforeach

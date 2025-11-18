@@ -2,12 +2,12 @@
     <x-slot:title>Instructor Dashboard - CALLA</x-slot:title>
 
     <!-- DASHBOARD CONTAINER -->
-    <div class="flex min-h-screen bg-white pt-15">
+    <div class="flex flex-col lg:flex-row min-h-screen bg-white transition-all duration-300">
 
         <!-- SIDEBAR -->
         <x-sidebar />
 
-        <main class="flex-1 ml-64 p-8 overflow-y-auto">
+        <main class="flex-1 p-4 sm:p-6 md:p-8 overflow-y-auto lg:ml-64 md:ml-56 sm:ml-0 transition-all duration-300">
             <!-- 🏫 CLASS LIST -->
             <section class="mb-10">
                 <div class="card bg-base-100 shadow-lg border">
@@ -96,12 +96,12 @@
                             </dialog>
                         </div>
 
-                        <div class="overflow-x-auto mt-4">
+                        <div class="max-h-96 overflow-y-auto mt-4">
                             <table class="table table-zebra text-center w-full">
                                 <thead>
                                     <tr>
                                         <th>Class Name</th>
-                                        <th>Subject</th>
+                                        <th>Description</th>
                                         <th>Students</th>
                                         <th>Actions</th>
                                     </tr>
