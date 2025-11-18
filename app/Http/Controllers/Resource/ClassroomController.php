@@ -19,8 +19,21 @@ class ClassroomController extends Controller
     public function index()
     {
         $user = Auth::user();
-        $role = $user->role;
-        return view($role.'.classrooms');
+
+        // Get ALL classrooms owned by this instructor
+        $classrooms = Classroom::with('User')
+            ->where('owner_id', $user->id)
+            ->withCount([
+                'EnrolledUser as enrollee_count' => function ($query) {
+                    $query->where('role', 'learner');
+                }
+            ])
+            ->latest()
+            ->get();
+
+        return view($user->role . '.classrooms', [
+            'classrooms' => $classrooms
+        ]);
     }
 
     /**

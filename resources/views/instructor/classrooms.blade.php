@@ -20,7 +20,6 @@
                                 + New Class
                             </button>
 
-                            <!-- Modern Modal -->
                             <dialog id="newClassModal" class="modal">
                                 <div class="modal-box max-w-lg bg-white/95 backdrop-blur-md rounded-2xl shadow-lg border border-gray-100">
                                     <div class="flex justify-between items-center mb-4">
@@ -33,7 +32,7 @@
                                     </div>
 
                                     <!-- FORM -->
-                                    {{-- <form method="POST" action="{{ route('instructor.classes.store') }}" class="space-y-4"> --}}
+                                    <form method="POST" action="{{ route('instructor.classes.store') }}" class="space-y-4">
                                         @csrf
 
                                         <!-- Class Name -->
@@ -69,19 +68,25 @@
                                             <label class="label">
                                                 <span class="label-text text-sm font-semibold text-gray-600">Class Code</span>
                                             </label>
+
                                             <div class="relative">
                                                 <!-- Input Field for Class Code -->
-                                                <input type="text" name="class_code" id="class_code" placeholder="e.g., ENG101-A"
-                                                    class="input input-bordered w-full focus:ring-2 focus:ring-red-700 rounded-lg" readonly>
+                                                <input
+                                                    type="text"
+                                                    name="class_code"
+                                                    id="class_code"
+                                                    placeholder="Enter or auto-generate a code"
+                                                    class="input input-bordered w-full focus:ring-2 focus:ring-red-700 rounded-lg"
+                                                >
 
                                                 <!-- Auto Generate Button -->
-                                                <button type="button" id="generateClassCode"
-                                                   class="btn btn-sm bg-red-700 text-white hover:bg-red-600 absolute right-1 top-1/2 transform -translate-y-1/2 rounded-full px-3 py-1 text-xs"
-                                                    onclick="()">
-                                                    Auto Generate
+                                                <button
+                                                    type="button"
+                                                    id="generateClassCode"
+                                                    class="btn btn-sm bg-red-700 text-white hover:bg-red-600 absolute right-1 top-1/2
+                                                        transform -translate-y-1/2 rounded-full px-3 py-1 text-xs">
+                                                    Auto
                                                 </button>
-
-
                                             </div>
                                         </div>
 
@@ -109,23 +114,29 @@
                                         <th>Actions</th>
                                     </tr>
                                 </thead>
+
                                 <tbody>
-                                    <tr>
-                                        <td>Class 2A</td>
-                                        <td>English Basics</td>
-                                        <td>25</td>
-                                        <td>
-                                            <button class="btn btn-link text-red-700 no-underline hover:underline">View</button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>Class 3B</td>
-                                        <td>Reading Skills</td>
-                                        <td>30</td>
-                                        <td>
-                                            <button class="btn btn-link text-red-700 no-underline hover:underline">View</button>
-                                        </td>
-                                    </tr>
+                                    @foreach ($classrooms as $classroom)
+                                        <tr>
+                                            <td>{{ $classroom->name }}</td>
+
+                                            {{-- Subject (truncate like your original) --}}
+                                            <td class="max-w-[150px] truncate">
+                                                {{ $classroom->description }}
+                                            </td>
+
+                                            {{-- Student Count --}}
+                                            <td>{{ $classroom->enrollee_count }}</td>
+
+                                            {{-- Actions --}}
+                                            <td>
+                                                <a href="{{ route('classrooms.show', $classroom->id) }}"
+                                                class="btn btn-link text-red-700 no-underline hover:underline">
+                                                    View
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    @endforeach
                                 </tbody>
                             </table>
                         </div>
