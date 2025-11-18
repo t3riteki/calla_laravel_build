@@ -2,8 +2,11 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Classroom;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Support\Facades\Log;
 
 class StoreClassroomRequest extends FormRequest
 {
@@ -12,7 +15,7 @@ class StoreClassroomRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return auth()->user()->can('create', Classroom::class);
     }
 
     /**
@@ -23,10 +26,21 @@ class StoreClassroomRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name'=>'required|string|unique:classroom,name,except',
+            'name'=>'required|string|unique:classrooms,name',
             'description'=>'nullable|string|max:255',
-            'owner_id'=>'required|string',
             'code'=>'nullable|string|max:255'
         ];
     }
+
+    protected function failedValidation(Validator $validator)
+{
+    // Log the error messages
+    Log::error('Validation failed', [
+        'errors' => $validator->errors()->toArray(),
+        'input' => $this->all(),   // optional: log the submitted data
+        'user_id' => auth()->id(),
+    ]);
+
+    parent::failedValidation($validator);
+}
 }

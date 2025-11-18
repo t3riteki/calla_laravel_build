@@ -50,15 +50,15 @@ class ClassroomController extends Controller
     public function store(StoreClassroomRequest $request)
     {
         $user = Auth::User();
-        $this->authorize('create',$user);
         $validated = $request->validated();
+        $validated['owner_id'] = $user->id;
         $classroom = $user->Classroom()->create($validated);
 
         $classroom->EnrolledUser()->create([
             'user_id' => $user->id,
         ]);
 
-        return redirect($user->role.'.dashboard');
+        return view($user->role.'.classrooms');
     }
 
     /**
@@ -67,7 +67,8 @@ class ClassroomController extends Controller
     public function show(Classroom $classroom)
     {
         $user = Auth::user();
-        return view($user->role.'.viewClassroom',compact('classroom'));
+        $this->authorize('view',$classroom);
+        return view($user->role.'.classroom_view',compact('classroom'));
     }
 
     /**
@@ -76,7 +77,7 @@ class ClassroomController extends Controller
     public function edit(Classroom $classroom)
     {
         $user = Auth::user();
-        $this->authorize('update',$user);
+        $this->authorize('update',$classroom);
 
     }
 
@@ -86,11 +87,11 @@ class ClassroomController extends Controller
     public function update(UpdateClassroomRequest $request, Classroom $classroom)
     {
         $user = Auth::user();
-        $this->authorize('update',$user);
+        $this->authorize('update',$classroom);
         $validated= $request->validated();
         $classroom->update($validated);
 
-        return redirect($user->role.'.dashboard');
+        return view($user->role.'.classrooms');
     }
 
     /**
@@ -99,8 +100,8 @@ class ClassroomController extends Controller
     public function destroy(Classroom $classroom)
     {
         $user = Auth::user();
-        $this->authorize('delete',$user);
+        $this->authorize('delete',$classroom);
         $classroom->delete();
-        return redirect($user->role.'.dashboard');
+        return view($user->role.'.classrooms');
     }
 }

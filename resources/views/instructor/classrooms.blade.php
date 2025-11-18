@@ -32,7 +32,7 @@
                                     </div>
 
                                     <!-- FORM -->
-                                    <form method="POST" action="{{ route('instructor.classes.store') }}" class="space-y-4">
+                                    <form method="POST" action="{{ route('classrooms.store') }}" class="space-y-4">
                                         @csrf
 
                                         <!-- Class Name -->
@@ -73,7 +73,7 @@
                                                 <!-- Input Field for Class Code -->
                                                 <input
                                                     type="text"
-                                                    name="class_code"
+                                                    name="code"
                                                     id="class_code"
                                                     placeholder="Enter or auto-generate a code"
                                                     class="input input-bordered w-full focus:ring-2 focus:ring-red-700 rounded-lg"
@@ -84,7 +84,8 @@
                                                     type="button"
                                                     id="generateClassCode"
                                                     class="btn btn-sm bg-red-700 text-white hover:bg-red-600 absolute right-1 top-1/2
-                                                        transform -translate-y-1/2 rounded-full px-3 py-1 text-xs">
+                                                        transform -translate-y-1/2 rounded-full px-3 py-1 text-xs"
+                                                    onclick="generateCode()">
                                                     Auto
                                                 </button>
                                             </div>
@@ -145,4 +146,10 @@
             </section>
         </main>
     </div>
+    <script>
+        function generateCode(){
+            let code = 'ILOVELATINAS1!';
+            document.getElementById('class_code').value = code;
+        }
+    </script>
 </x-layout>

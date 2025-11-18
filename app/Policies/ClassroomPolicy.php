@@ -21,7 +21,7 @@ class ClassroomPolicy
      */
     public function view(User $user, Classroom $classroom): bool
     {
-        return true;
+        return ($user->role === 'instructor'||$user->role === 'student');
     }
 
     /**

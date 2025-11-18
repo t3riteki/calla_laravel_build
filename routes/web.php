@@ -58,11 +58,6 @@ use Illuminate\Support\Facades\Route;
         Route::resource('/modules', ModuleController::class);
         Route::resource('/lessons', LessonController::class);
         Route::resource('/glossary', GlossaryController::class);
-
-        // instuctor specific routes
-        Route::prefix('instructor')->name('instructor.')->middleware(['auth'])->group(function () {
-            Route::resource('classes', ClassroomController::class);
-        });
     });
 
 // If you don’t have these yet, you can comment them out

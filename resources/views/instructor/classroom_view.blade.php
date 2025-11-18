@@ -30,14 +30,14 @@
                             <div class="stat bg-white/10 text-white backdrop-blur-md">
                                 <div class="stat-title text-gray-200">Students</div>
                                 <div class="stat-value text-white text-3xl">
-                                    {{ $classroom->students_count }}
+                                    {{ $classroom->EnrolledUser->where('user.role','learner')->count() }}
                                 </div>
                             </div>
 
                             <div class="stat bg-white/10 text-white backdrop-blur-md">
                                 <div class="stat-title text-gray-200">Modules</div>
                                 <div class="stat-value text-white text-3xl">
-                                    {{ $classroom->modules_count }}
+                                    {{ $classroom->ClassroomModule->count() }}
                                 </div>
                             </div>
                         </div>
@@ -74,16 +74,11 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($classroom->students as $student)
+                                   @foreach ($classroom->EnrolledUser as $enrollment)
                                         <tr>
-                                            <td>{{ $student->name }}</td>
-                                            <td>{{ $student->email }}</td>
-                                            <td>
-                                                <span class="badge {{ $student->pivot->status === 'active' ? 'badge-success' : 'badge-error' }}">
-                                                    {{ ucfirst($student->pivot->status) }}
-                                                </span>
-                                            </td>
-                                            <td>{{ $student->pivot->created_at->format('M d, Y') }}</td>
+                                            <td>{{ $enrollment->user->name }}</td>
+                                            <td>{{ $enrollment->user->email }}</td>
+                                            <td>{{ $enrollment->user->created_at->format('M d, Y') }}</td>
                                             <td class="space-x-2">
                                                 <button class="text-red-700 hover:underline">View</button>
                                                 <button class="text-gray-500 hover:underline">Remove</button>
@@ -124,11 +119,11 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($classroom->modules as $module)
+                                    @foreach ($classroom->ClassroomModule as $classmodule)
                                         <tr>
-                                            <td>{{ $module->name }}</td>
-                                            <td class="max-w-[200px] truncate">{{ $module->description }}</td>
-                                            <td>{{ $module->created_at->format('M d, Y') }}</td>
+                                            <td>{{ $classmodule->module->name }}</td>
+                                            <td class="max-w-[200px] truncate">{{ $classmodule->module->description }}</td>
+                                            <td>{{ $classmodule->module->created_at->format('M d, Y') }}</td>
                                             <td class="space-x-2">
                                                 <button class="text-red-700 hover:underline">View</button>
                                                 <button class="text-gray-500 hover:underline">Edit</button>
@@ -152,7 +147,7 @@
         <div class="modal-box max-w-md bg-white rounded-xl shadow-xl p-6">
             <h3 class="font-bold text-lg mb-4">Add Student</h3>
 
-            <form method="POST" action="{{ route('classroom.addStudent', $classroom->id) }}" class="space-y-4">
+            <form method="POST" action="{{ route('enrolleduser.store', $classroom->id) }}" class="space-y-4">
                 @csrf
 
                 <div class="form-control">
