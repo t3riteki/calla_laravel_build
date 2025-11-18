@@ -55,7 +55,7 @@
                         </div>
 
                         <div class="overflow-x-auto mt-4">
-                            <table class="table table-zebra w-full text-sm sm:text-base">
+                            <table class="table table-zebra w-full text-center text-sm sm:text-base">
                                 <thead>
                                     <tr>
                                         <th>Class Name</th>
@@ -70,11 +70,17 @@
                                         <tr>
                                             <td>{{ $classroom->name }}</td>
                                             <td class="max-w-[150px] truncate">{{ $classroom->description }}</td>
-                                            <td>{{ $classroom->enrollee_count }}</td>
+                                            <td>{{ $classroom->EnrolledUser->where('user.role','learner')->count() }}</td>
                                             <td>{{ $classroom->created_at }}</td>
                                             <td class="py-3 px-4 space-x-2">
-                                                <button class="text-red-700 hover:underline">View</button>
-                                                <button class="text-gray-500 hover:underline">Edit</button>
+                                                <a href="{{ route('classrooms.show', $classroom->id) }}"
+                                                class="btn btn-link text-red-700 no-underline hover:underline">
+                                                    View
+                                                </a>
+                                                <a href="{{ route('classrooms.edit', $classroom->id) }}"
+                                                class="btn btn-link text-red-700 no-underline hover:underline">
+                                                    Edit
+                                                </a>
                                             </td>
                                         </tr>
                                     @endforeach
@@ -97,7 +103,7 @@
                         </div>
 
                         <div class="overflow-x-auto mt-4">
-                            <table class="table table-zebra w-full text-sm sm:text-base">
+                            <table class="table table-zebra w-full text-center text-sm sm:text-base">
                                 <thead>
                                     <tr>
                                         <th>Module Title</th>
@@ -109,14 +115,20 @@
                                 </thead>
                                 <tbody>
                                     @foreach ($data['modules'] as $module)
-                                        <tr>
+                                        <tr class="align-center">
                                             <td>{{ $module->name }}</td>
                                             <td class="max-w-[150px] truncate">{{ $module->description }}</td>
-                                            <td>{{ $module->ClassroomModule_count }}</td>
+                                            <td>{{ $module->ClassroomModule->count() }}</td>
                                             <td>{{ $module->created_at }}</td>
                                             <td class="py-3 px-4 space-x-2">
-                                                <button class="text-red-700 hover:underline">View</button>
-                                                <button class="text-gray-500 hover:underline">Edit</button>
+                                                <a href="{{ route('modules.show', $module->id) }}"
+                                                class="btn btn-link text-red-700 no-underline hover:underline">
+                                                    View
+                                                </a>
+                                                <a href="{{ route('modules.edit', $module->id) }}"
+                                                class="btn btn-link text-red-700 no-underline hover:underline">
+                                                    edit
+                                                </a>
                                             </td>
                                         </tr>
                                     @endforeach

@@ -127,7 +127,7 @@
                                             </td>
 
                                             {{-- Student Count --}}
-                                            <td>{{ $classroom->enrollee_count }}</td>
+                                            <td>{{ $classroom->EnrolledUser->where('user.role','learner')->count() }}</td>
 
                                             {{-- Actions --}}
                                             <td>
@@ -148,7 +148,7 @@
     </div>
     <script>
         function generateCode(){
-            let code = 'ILOVELATINAS1!';
+            let code = Math.random().toString(36).substring(2,10).toUpperCase();
             document.getElementById('class_code').value = code;
         }
     </script>
