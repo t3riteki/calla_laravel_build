@@ -73,12 +73,13 @@
                                             <td>{{ $classroom->enrollee_count }}</td>
                                             <td>{{ $classroom->created_at }}</td>
                                             <td class="py-3 px-4 space-x-2">
-                                                <button class="text-red-700 hover:underline">View</button>
-                                                <button class="text-gray-500 hover:underline">Edit</button>
+                                                <button class="text-red-700 font-semibold hover:underline">View</button>
+                                                <button class="text-blue-500 font-semibold hover:underline">Edit</button>
                                             </td>
                                         </tr>
                                     @endforeach
                                 </tbody>
+
                             </table>
                         </div>
                     </div>

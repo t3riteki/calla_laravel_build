@@ -127,9 +127,9 @@
                                                     View
                                                 </a>
 
-                                                 <!-- Edit Button triggers modal -->
+                                                <!-- Edit Button triggers modal -->
                                                 <button onclick="document.getElementById('editClassModal-{{ $classroom->id }}').showModal()"
-                                                    class="btn btn-link text-blue-700 no-underline hover:underline">
+                                                    class="btn btn-link text-blue-500 no-underline hover:underline">
                                                     Edit
                                                 </button>
 

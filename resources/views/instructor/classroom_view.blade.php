@@ -85,14 +85,14 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                   @foreach ($classroom->EnrolledUser as $enrollment)
+                                   @foreach ($classroom->EnrolledUser->where('user.role','learner') as $enrollment)
                                         <tr>
                                             <td>{{ $enrollment->user->name }}</td>
                                             <td>{{ $enrollment->user->email }}</td>
                                             <td>{{ $enrollment->user->created_at->format('M d, Y') }}</td>
                                             <td class="space-x-2">
                                                 <button class="text-red-700 hover:underline">View</button>
-                                                <button class="text-gray-500 hover:underline">Remove</button>
+                                                <button class="text-blue-500 hover:underline">Remove</button>
                                             </td>
                                         </tr>
                                     @endforeach

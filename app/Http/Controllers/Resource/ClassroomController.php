@@ -58,7 +58,7 @@ class ClassroomController extends Controller
             'user_id' => $user->id,
         ]);
 
-        return view($user->role.'.classrooms');
+        return view($this->index());
     }
 
     /**
@@ -91,7 +91,7 @@ class ClassroomController extends Controller
         $validated= $request->validated();
         $classroom->update($validated);
 
-        return view($user->role.'.classrooms');
+        return view($this->index());
     }
 
     /**
@@ -102,6 +102,6 @@ class ClassroomController extends Controller
         $user = Auth::user();
         $this->authorize('delete',$classroom);
         $classroom->delete();
-        return view($user->role.'.classrooms');
+        return view($this->index());
     }
 }
