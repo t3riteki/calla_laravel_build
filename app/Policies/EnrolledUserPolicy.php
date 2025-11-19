@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\Models\Classroom;
 use App\Models\EnrolledUser;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
@@ -45,7 +46,8 @@ class EnrolledUserPolicy
      */
     public function delete(User $user, EnrolledUser $enrolledUser): bool
     {
-       return ($user->id === $enrolledUser->user_id);
+        $classroom = $enrolledUser->classroom;
+        return ($user->id === $enrolledUser->user_id || $classroom->owner_id === $user->id);
     }
 
     /**

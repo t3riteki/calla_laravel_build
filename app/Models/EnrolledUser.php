@@ -42,16 +42,16 @@ class EnrolledUser extends Model
         ];
     }
 
-    public function User():BelongsTo{
+    public function user():BelongsTo{
         return $this->belongsTo(User::class);
     }
-    public function Classroom():BelongsTo{
-        return $this->belongsTo(Classroom::class);
+    public function classroom():BelongsTo{
+        return $this->belongsTo(Classroom::class, 'classroom_id');
     }
-    public function UserProgress():HasMany{
+    public function userProgress():HasMany{
         return $this->hasMany(UserProgress::class);
     }
-    public function ClassroomModule():HasMany{
+    public function classroomModule():HasMany{
         return $this->hasMany(ClassroomModule::class);
     }
 }

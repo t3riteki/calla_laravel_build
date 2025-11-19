@@ -40,7 +40,7 @@ class Glossary extends Model
 
         ];
     }
-    public function Lesson():BelongsTo{
+    public function lesson():BelongsTo{
         return $this->belongsTo(Lesson::class);
     }
 }

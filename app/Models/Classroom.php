@@ -45,15 +45,15 @@ class Classroom extends Model
         ];
     }
 
-    public function User():BelongsTo{
+    public function user():BelongsTo{
         return $this->belongsTo(User::class,'owner_id');
     }
 
-    public function ClassroomModule():HasMany{
+    public function classroomModule():HasMany{
         return $this->hasMany(ClassroomModule::class);
     }
 
-    public function EnrolledUser():HasMany{
+    public function enrolledUser():HasMany{
         return $this->hasMany(EnrolledUser::class);
     }
 }

@@ -54,21 +54,21 @@ class User extends Authenticatable
 
     //Relationships
 
-    public function Classroom(): HasMany
+    public function classroom(): HasMany
     {
         return $this->hasMany(Classroom::class,'owner_id');
     }
 
-    public function Module(): HasMany
+    public function module(): HasMany
     {
         return $this->hasMany(Module::class,'owner_id');
     }
 
-    public function Log(): HasMany{
+    public function log(): HasMany{
         return $this->hasMany(Log::class);
     }
 
-    public function EnrolledUser(): HasMany{
+    public function enrolledUser(): HasMany{
         return $this->hasMany(EnrolledUser::class);
     }
 }

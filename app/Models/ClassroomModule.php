@@ -44,16 +44,16 @@ class ClassroomModule extends Model
         ];
     }
 
-    public function Classroom():BelongsTo{
+    public function classroom():BelongsTo{
         return $this->belongsTo(Classroom::class);
     }
-    public function EnrolledUser():BelongsTo{
+    public function enrolledUser():BelongsTo{
         return $this->belongsTo(EnrolledUser::class,'added_by');
     }
-    public function Module():BelongsTo{
+    public function module():BelongsTo{
         return $this->belongsTo(Module::class);
     }
-    public function UserProgress():HasMany{
+    public function userProgress():HasMany{
         return $this->hasMany(UserProgress::class);
     }
 }

@@ -103,6 +103,7 @@ class ClassroomController extends Controller
         $user = Auth::user();
         $this->authorize('delete',$classroom);
         $classroom->delete();
+
         return redirect()->back();
     }
 }

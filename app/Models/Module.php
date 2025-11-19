@@ -41,13 +41,13 @@ class Module extends Model
 
         ];
     }
-    public function User():BelongsTo{
+    public function user():BelongsTo{
         return $this->belongsTo(User::class, 'owner_id');
     }
-    public function Lesson():HasMany{
+    public function lesson():HasMany{
         return $this->hasMany(Lesson::class);
     }
-    public function ClassroomModule():HasMany{
+    public function classroomModule():HasMany{
         return $this->hasMany(ClassroomModule::class);
     }
 }

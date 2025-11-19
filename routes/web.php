@@ -14,6 +14,7 @@ use App\Http\Controllers\Resource\LogController;
 use App\Http\Controllers\Resource\ModuleController;
 use App\Http\Controllers\Resource\UserProgressController;
 use App\Http\Controllers\Resource\DashboardController;
+use App\Http\Controllers\Resource\UserController;
 use App\Http\Controllers\SearchController;
 use Illuminate\Support\Facades\Route;
 
@@ -27,7 +28,7 @@ use Illuminate\Support\Facades\Route;
 
     Route::post('/login', Login::class)
         ->middleware('guest')
-        ->name('register');
+        ->name('login');
 
     Route::view('/register', 'auth.register')
         ->middleware('guest');
@@ -58,6 +59,7 @@ use Illuminate\Support\Facades\Route;
         Route::resource('/modules', ModuleController::class);
         Route::resource('/lessons', LessonController::class);
         Route::resource('/glossary', GlossaryController::class);
+        Route::resource('/user', UserController::class);
     });
 
 // If you don’t have these yet, you can comment them out

@@ -18,7 +18,7 @@ class Lesson extends Model
      * @var list<string>
      */
     protected $fillable = [
-        'module_id','name','desc'
+        'module_id','name','description'
     ];
 
     /**
@@ -41,13 +41,13 @@ class Lesson extends Model
 
         ];
     }
-    public function Module():BelongsTo{
+    public function module():BelongsTo{
         return $this->belongsTo(Module::class);
     }
-    public function UserProgress():HasMany{
+    public function userProgress():HasMany{
         return $this->hasMany(UserProgress::class);
     }
-    public function Glossary():HasMany{
+    public function glossary():HasMany{
         return $this->hasMany(Glossary::class);
     }
 }

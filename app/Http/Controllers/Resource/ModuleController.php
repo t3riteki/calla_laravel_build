@@ -7,18 +7,27 @@ use App\Models\Module;
 use App\Http\Requests\StoreModuleRequest;
 use App\Http\Requests\UpdateModuleRequest;
 
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Facades\Auth;
 
 class ModuleController extends Controller
 {
+    use AuthorizesRequests;
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
         $user = Auth::user();
-        $role = $user->role;
-        return view($role.'.modules');
+        $modules = Module::with('User')
+            ->where('owner_id', $user->id)
+            ->withCount('ClassroomModule')
+            ->latest()
+            ->get();
+
+        return view($user->role . '.modules', [
+            'modules' => $modules
+        ]);
     }
 
     /**
@@ -34,7 +43,14 @@ class ModuleController extends Controller
      */
     public function store(StoreModuleRequest $request)
     {
-        //
+        $user = Auth::User();
+        $this->authorize('create', Module::class);
+        $validated = $request->validated();
+        $validated['owner_id'] = $user->id;
+
+        $module = $user->Module()->create($validated);
+
+        return redirect()->back();
     }
 
     /**
@@ -42,7 +58,9 @@ class ModuleController extends Controller
      */
     public function show(Module $module)
     {
-        //
+        $user = Auth::user();
+        $this->authorize('view',$module);
+        return view($user->role.'.module_view',compact('module'));
     }
 
     /**
@@ -58,7 +76,12 @@ class ModuleController extends Controller
      */
     public function update(UpdateModuleRequest $request, Module $module)
     {
-        //
+        $user = Auth::user();
+        $this->authorize('update',$module);
+        $validated= $request->validated();
+        $module->update($validated);
+
+        return redirect()->back();
     }
 
     /**
@@ -66,6 +89,10 @@ class ModuleController extends Controller
      */
     public function destroy(Module $module)
     {
-        //
+        $user = Auth::user();
+        $this->authorize('delete',$module);
+        $module->delete();
+
+        return redirect()->back();
     }
 }

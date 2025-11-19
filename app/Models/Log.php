@@ -41,7 +41,7 @@ class Log extends Model
 
         ];
     }
-    public function User():BelongsTo{
+    public function user():BelongsTo{
         return $this->belongsTo(User::class);
     }
 }

@@ -22,7 +22,8 @@ class StoreModuleRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'name'=>'required|string|max:50',
+            'description'=>'nullable|string|max:255'
         ];
     }
 }

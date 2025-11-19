@@ -31,9 +31,6 @@
                     <a href="/modules" class="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-red-50 hover:text-red-800 transition">
                         <i class="ri-book-2-line text-lg"></i> Modules
                     </a>
-                    <a href="/dashboard" class="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-red-50 hover:text-red-800 transition">
-                        <i class="ri-restaurant-line text-lg"></i> Saging Delata
-                    </a>
                 </div>
                 @break
 

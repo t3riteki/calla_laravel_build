@@ -7,6 +7,7 @@ use App\Models\ClassroomModule;
 use App\Models\EnrolledUser;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
+use Illuminate\Support\Facades\Log;
 
 class ClassroomModulePolicy
 {
@@ -47,7 +48,8 @@ class ClassroomModulePolicy
      */
     public function delete(User $user, ClassroomModule $classroomModule): bool
     {
-        return false;
+
+        return $user->id === $classroomModule->classroom->owner_id;
     }
 
     /**

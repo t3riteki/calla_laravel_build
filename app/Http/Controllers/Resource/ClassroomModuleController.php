@@ -7,10 +7,13 @@ use App\Models\ClassroomModule;
 use App\Http\Requests\StoreClassroomModuleRequest;
 use App\Http\Requests\UpdateClassroomModuleRequest;
 
+use Illuminate\Foundation\Auth\Access\Authorizable;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Facades\Auth;
 
 class ClassroomModuleController extends Controller
 {
+    use AuthorizesRequests;
     /**
      * Display a listing of the resource.
      */
@@ -64,8 +67,13 @@ class ClassroomModuleController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(ClassroomModule $classroomModule)
+    public function destroy(ClassroomModule $classroommodule)
     {
-        //
+
+        $this->authorize('delete', $classroommodule);
+
+        $classroommodule->delete();
+
+        return back()->with('success', 'Module removed successfully');
     }
 }
