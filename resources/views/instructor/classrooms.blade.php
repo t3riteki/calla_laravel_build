@@ -1,3 +1,5 @@
+ <link href="https://cdn.jsdelivr.net/npm/remixicon/fonts/remixicon.css" rel="stylesheet">
+
  <x-layout>
     <x-slot:title>Instructor Classrooms - CALLA</x-slot:title>
 
@@ -96,7 +98,7 @@
                             </dialog>
                         </div>
 
-                        <div class="max-h-96 overflow-y-auto mt-4">
+                        <div class="max-h-96 mt-4 overflow-x-auto overflow-y-visible">
                             <table class="table table-zebra text-center w-full">
                                 <thead>
                                     <tr>
@@ -199,7 +201,54 @@
                                                         </form>
                                                     </div>
                                                 </dialog>
-                                                </a>
+
+                                                <button onclick="document.getElementById('deleteConfirmModal-{{ $classroom->id }}').showModal()"
+                                                        class="btn btn-link text-red-500 no-underline hover:underline">
+                                                    Delete
+                                                </button>
+
+                                                <dialog id="deleteConfirmModal-{{ $classroom->id }}" class="modal">
+                                                    <div class="modal-box bg-white rounded-2xl shadow-xl border border-red-100">
+
+                                                        <!-- Modal Title -->
+                                                        <h3 class="text-xl font-semibold text-red-700 flex items-center gap-2">
+                                                            <i class="ri-error-warning-line text-2xl"></i>
+                                                            Confirm Delete
+                                                        </h3>
+
+                                                        <!-- Message -->
+                                                        <p class="mt-3 text-gray-600 leading-relaxed">
+                                                            You are about to delete the classroom
+                                                            <span class="font-semibold text-gray-800">"{{ $classroom->name }}"</span>.
+                                                            <br>This action <strong class="text-red-600">cannot be undone</strong>.
+                                                        </p>
+
+                                                        <!-- Buttons -->
+                                                        <div class="modal-action flex justify-end gap-3 mt-6">
+
+                                                            <!-- Cancel -->
+                                                            <form method="dialog">
+                                                                <button class="btn px-5 rounded-xl border border-gray-300 bg-white hover:bg-gray-100">
+                                                                    Cancel
+                                                                </button>
+                                                            </form>
+
+                                                            <!-- Confirm Delete -->
+                                                            <form action="{{ route('classrooms.destroy', $classroom->id) }}" method="POST">
+                                                                @csrf
+                                                                @method('DELETE')
+                                                                <button type="submit"
+                                                                        class="btn px-5 rounded-xl bg-red-600 text-white hover:bg-red-700 shadow-sm">
+                                                                    Yes, Delete
+                                                                </button>
+                                                            </form>
+
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- Background overlay -->
+                                                    <form method="dialog" class="modal-backdrop bg-black/40 backdrop-blur-sm"></form>
+                                                </dialog>
                                             </td>
                                         </tr>
                                     @endforeach
