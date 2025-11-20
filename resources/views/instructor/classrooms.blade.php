@@ -1,5 +1,5 @@
  <x-layout>
-    <x-slot:title>Instructor Dashboard - CALLA</x-slot:title>
+    <x-slot:title>Instructor Classrooms - CALLA</x-slot:title>
 
     <!-- DASHBOARD CONTAINER -->
     <div class="flex flex-col lg:flex-row min-h-screen bg-white transition-all duration-300">

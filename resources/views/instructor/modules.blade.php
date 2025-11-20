@@ -1,84 +1,200 @@
 <x-layout>
-    <x-slot:title>{{ $module->name }} - Module Details</x-slot:title>
+    <x-slot:title>Instructor Modules - CALLA</x-slot:title>
 
-    <div class="flex flex-col lg:flex-row min-h-screen bg-white pt-15">
+    <div class="flex flex-col lg:flex-row min-h-screen bg-white transition-all duration-300">
 
         <!-- SIDEBAR -->
         <x-sidebar />
 
         <!-- MAIN CONTENT -->
-        <main class="flex-1 p-6 md:p-8 lg:ml-64 overflow-y-auto">
+        <main class="flex-1 p-4 sm:p-6 md:p-8 overflow-y-auto lg:ml-64 md:ml-56 sm:ml-0 transition-all duration-300">
 
-            <!-- BACK BUTTON -->
-            <a href="{{ route('modules.index') }}"
-               class="btn btn-sm mb-6 bg-gradient-to-r from-red-800 to-red-700 text-white hover:opacity-90">
-                ← Back to Modules
-            </a>
+            <!-- 📘 MODULE LIST -->
+            <section class="mb-10">
+                <div class="card bg-base-100 shadow-lg border">
+                    <div class="card-body">
 
-            <!-- MODULE DETAILS -->
-            <div class="card bg-base-100 shadow-lg border rounded-2xl p-6">
-                <div class="flex flex-col md:flex-row gap-6">
+                        <div class="flex items-center justify-between">
+                            <h3 class="card-title text-lg">My Modules</h3>
 
-                    <!-- Module Info -->
-                    <div class="flex-1">
-                        <h2 class="text-2xl font-bold text-gray-800">{{ $module->name }}</h2>
-                        <p class="text-gray-600 mt-2">{{ $module->description }}</p>
-
-                        <div class="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <div class="p-4 bg-gray-50 rounded-lg border">
-                                <p class="text-sm text-gray-500">Classroom</p>
-                                <p class="font-medium text-gray-700">{{ $module->classroom->name ?? 'N/A' }}</p>
-                            </div>
-
-                            <div class="p-4 bg-gray-50 rounded-lg border">
-                                <p class="text-sm text-gray-500">Number of Lessons</p>
-                                <p class="font-medium text-gray-700">{{ $module->lessons_count ?? 0 }}</p>
-                            </div>
-
-                            <div class="p-4 bg-gray-50 rounded-lg border">
-                                <p class="text-sm text-gray-500">Created At</p>
-                                <p class="font-medium text-gray-700">{{ $module->created_at->format('F d, Y') }}</p>
-                            </div>
-
-                            <div class="p-4 bg-gray-50 rounded-lg border">
-                                <p class="text-sm text-gray-500">Last Updated</p>
-                                <p class="font-medium text-gray-700">{{ $module->updated_at->format('F d, Y') }}</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- ACTIONS -->
-                    <div class="flex flex-col gap-3 justify-start">
-                        <a href="{{ route('modules.edit', $module->id) }}"
-                           class="btn btn-sm bg-red-700 hover:bg-red-600 text-white w-full">Edit Module</a>
-
-                        <form method="POST" action="{{ route('modules.destroy', $module->id) }}">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit"
-                                    class="btn btn-sm btn-outline border-red-700 text-red-700 hover:bg-red-100 w-full">
-                                Delete Module
+                            <!-- + NEW MODULE BUTTON -->
+                            <button onclick="newModuleModal.showModal()"
+                                class="bg-red-800 text-white px-4 py-2 rounded-lg text-sm hover:bg-red-700 transition">
+                                + New Module
                             </button>
-                        </form>
-                    </div>
 
+                            <!-- NEW MODULE MODAL -->
+                            <dialog id="newModuleModal" class="modal">
+                                <div class="modal-box max-w-lg bg-white/95 backdrop-blur-md rounded-2xl shadow-lg border border-gray-100">
+
+                                    <div class="flex justify-between items-center mb-4">
+                                        <h3 class="text-lg font-semibold text-gray-800 flex items-center gap-2">
+                                            <span class="text-red-800 text-xl">📘</span> New Module
+                                        </h3>
+
+                                        <form method="dialog">
+                                            <button class="btn btn-sm btn-circle btn-ghost text-gray-500 hover:text-red-700">✕</button>
+                                        </form>
+                                    </div>
+
+                                    <!-- FORM -->
+                                    <form method="POST" action="{{ route('modules.store') }}" class="space-y-4">
+                                        @csrf
+
+                                        <div class="form-control">
+                                            <label class="label">
+                                                <span class="label-text text-sm font-semibold text-gray-600">Module Name</span>
+                                            </label>
+                                            <input type="text" name="name" placeholder="Enter module name"
+                                                class="input input-bordered w-full focus:ring-2 focus:ring-red-700 rounded-lg" required>
+                                        </div>
+
+                                        <div class="form-control">
+                                            <label class="label">
+                                                <span class="label-text text-sm font-semibold text-gray-600">Description</span>
+                                            </label>
+                                            <textarea name="description"
+                                                class="textarea textarea-bordered w-full h-24 resize-none focus:ring-2 focus:ring-red-700 rounded-lg"
+                                                placeholder="Brief description of this module..."></textarea>
+                                        </div>
+
+                                        <!-- CLASSROOM DROPDOWN -->
+                                        <div class="form-control">
+                                            <label class="label">
+                                                <span class="label-text text-sm font-semibold text-gray-600">Classroom</span>
+                                            </label>
+                                            <select name="classroom_id"
+                                                class="select select-bordered w-full focus:ring-2 focus:ring-red-700 rounded-lg" required>
+                                                <option disabled selected>Select classroom</option>
+                                                @foreach($classrooms as $classroom)
+                                                    <option value="{{ $classroom->id }}">{{ $classroom->name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+
+                                        <div class="modal-action flex justify-end gap-3 mt-6">
+                                            <button type="button" class="btn btn-ghost text-gray-600 hover:bg-gray-100"
+                                                onclick="newModuleModal.close()">Cancel</button>
+
+                                            <button type="submit"
+                                                class="btn bg-gradient-to-r from-red-800 to-red-700 text-white hover:opacity-90 transition px-6">
+                                                Create Module
+                                            </button>
+                                        </div>
+
+                                    </form>
+                                </div>
+                            </dialog>
+                        </div>
+
+                        <!-- MODULE TABLE -->
+                        <div class="max-h-96 overflow-y-auto mt-4">
+                            <table class="table table-zebra text-center w-full">
+                                <thead>
+                                    <tr>
+                                        <th>Module</th>
+                                        <th>Description</th>
+                                        <th>Classroom</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    @foreach ($modules as $module)
+                                        <tr>
+                                            <td>{{ $module->name }}</td>
+
+                                            <td class="max-w-[150px] truncate">
+                                                {{ $module->description }}
+                                            </td>
+
+                                            <td>{{ $module->classroom->name ?? 'N/A' }}</td>
+
+                                            <td>
+                                                <a href="{{ route('modules.show', $module->id) }}"
+                                                   class="btn btn-link text-red-700 no-underline hover:underline">
+                                                    View
+                                                </a>
+
+                                                <button onclick="document.getElementById('editModuleModal-{{ $module->id }}').showModal()"
+                                                    class="btn btn-link text-blue-500 no-underline hover:underline">
+                                                    Edit
+                                                </button>
+
+                                                <!-- EDIT MODULE MODAL -->
+                                                <dialog id="editModuleModal-{{ $module->id }}" class="modal">
+                                                    <div class="modal-box max-w-lg bg-white/95 backdrop-blur-md rounded-2xl shadow-lg border border-gray-100">
+                                                        <div class="flex justify-between items-center mb-4">
+                                                            <h3 class="text-lg font-semibold text-gray-800 flex items-center gap-2">
+                                                                <span class="text-red-800 text-xl">✏️</span> Edit Module
+                                                            </h3>
+                                                            <form method="dialog">
+                                                                <button class="btn btn-sm btn-circle btn-ghost text-gray-500 hover:text-red-700">✕</button>
+                                                            </form>
+                                                        </div>
+
+                                                        <form method="POST" action="{{ route('modules.update', $module->id) }}"
+                                                            class="space-y-4">
+                                                            @csrf
+                                                            @method('PUT')
+
+                                                            <div class="form-control">
+                                                                <label class="label">
+                                                                    <span class="label-text font-semibold text-gray-600">Module Name</span>
+                                                                </label>
+                                                                <input type="text" name="name" value="{{ $module->name }}"
+                                                                    class="input input-bordered w-full focus:ring-2 focus:ring-red-700 rounded-lg" required>
+                                                            </div>
+
+                                                            <div class="form-control">
+                                                                <label class="label">
+                                                                    <span class="label-text font-semibold text-gray-600">Description</span>
+                                                                </label>
+                                                                <textarea name="description"
+                                                                    class="textarea textarea-bordered w-full h-24 resize-none focus:ring-2 focus:ring-red-700 rounded-lg">{{ $module->description }}</textarea>
+                                                            </div>
+
+                                                            <div class="form-control">
+                                                                <label class="label">
+                                                                    <span class="label-text font-semibold text-gray-600">Classroom</span>
+                                                                </label>
+                                                                <select name="classroom_id"
+                                                                    class="select select-bordered w-full focus:ring-2 focus:ring-red-700 rounded-lg">
+                                                                    @foreach($classrooms as $classroom)
+                                                                        <option value="{{ $classroom->id }}"
+                                                                            {{ $module->classroom_id == $classroom->id ? 'selected' : '' }}>
+                                                                            {{ $classroom->name }}
+                                                                        </option>
+                                                                    @endforeach
+                                                                </select>
+                                                            </div>
+
+                                                            <div class="modal-action flex justify-end gap-3 mt-6">
+                                                                <button type="button" class="btn btn-ghost text-gray-600 hover:bg-gray-100"
+                                                                    onclick="document.getElementById('editModuleModal-{{ $module->id }}').close()">Cancel</button>
+
+                                                                <button type="submit"
+                                                                    class="btn bg-gradient-to-r from-red-800 to-red-700 text-white hover:opacity-90 transition px-6">
+                                                                    Save Changes
+                                                                </button>
+                                                            </div>
+
+                                                        </form>
+                                                    </div>
+                                                </dialog>
+
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+
+                            </table>
+                        </div>
+
+                    </div>
                 </div>
+            </section>
 
-                <!-- LESSON LIST (Optional) -->
-                @if($module->lessons->count() > 0)
-                    <div class="mt-8">
-                        <h3 class="text-lg font-semibold text-gray-800 mb-3">Lessons</h3>
-                        <ul class="list-disc list-inside">
-                            @foreach ($module->lessons as $lesson)
-                                <li>
-                                    <span class="font-medium">{{ $lesson->title }}</span> -
-                                    <span class="text-gray-500 text-sm">{{ $lesson->created_at->format('M d, Y') }}</span>
-                                </li>
-                            @endforeach
-                        </ul>
-                    </div>
-                @endif
-            </div>
         </main>
     </div>
 </x-layout>
