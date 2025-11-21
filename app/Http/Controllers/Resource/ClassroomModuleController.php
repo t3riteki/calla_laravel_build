@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\ClassroomModule;
 use App\Http\Requests\StoreClassroomModuleRequest;
 use App\Http\Requests\UpdateClassroomModuleRequest;
-
+use App\Models\Module;
 use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Facades\Auth;
@@ -19,9 +19,7 @@ class ClassroomModuleController extends Controller
      */
     public function index()
     {
-        $user = Auth::user();
-        $role = $user->role;
-        return view($role.'.classroommodules');
+        //
     }
 
     /**
@@ -43,9 +41,15 @@ class ClassroomModuleController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(ClassroomModule $classroomModule)
+    public function show(ClassroomModule $classroommodule)
     {
-        //
+        $user = Auth::user();
+        $module = $classroommodule->module;
+
+        return view($user->role . '.module_view', [
+            'module' => $module,
+            'classroomModule' => $classroommodule
+        ]);
     }
 
     /**
@@ -59,7 +63,7 @@ class ClassroomModuleController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateClassroomModuleRequest $request, ClassroomModule $classroomModule)
+    public function update(UpdateClassroomModuleRequest $request, ClassroomModule $classroommodule)
     {
         //
     }

@@ -75,7 +75,7 @@ class EnrolledUserController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(EnrolledUser $enrolledUser)
+    public function show(EnrolledUser $enrolleduser)
     {
         //
     }
@@ -83,7 +83,7 @@ class EnrolledUserController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(EnrolledUser $enrolledUser)
+    public function edit(EnrolledUser $enrolleduser)
     {
         //
     }
@@ -91,7 +91,7 @@ class EnrolledUserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateEnrolledUserRequest $request, EnrolledUser $enrolledUser)
+    public function update(UpdateEnrolledUserRequest $request, EnrolledUser $enrolleduser)
     {
         //
     }

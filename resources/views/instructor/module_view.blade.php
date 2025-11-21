@@ -1,7 +1,7 @@
 <x-layout>
     <x-slot:title>{{ $module->name }} - Module Details</x-slot:title>
 
-    <div class="flex flex-col lg:flex-row min-h-screen bg-white pt-15">
+    <div class="flex flex-col lg:flex-row min-h-screen bg-white">
 
         <!-- SIDEBAR -->
         <x-sidebar />
@@ -25,14 +25,22 @@
                         <p class="text-gray-600 mt-2">{{ $module->description }}</p>
 
                         <div class="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <div class="p-4 bg-gray-50 rounded-lg border">
-                                <p class="text-sm text-gray-500">Classroom</p>
-                                <p class="font-medium text-gray-700">{{ $module->classroom->name ?? 'N/A' }}</p>
-                            </div>
+                            @isset($classroomModule)
+                                <div class="p-4 bg-gray-50 rounded-lg border">
+                                    <p class="text-sm text-gray-500">Classroom</p>
+                                    <p class="font-medium text-gray-700">{{ $classroomModule->classroom->name ?? 'N/A' }}</p>
+                                </div>
+                            @else
+                                <div class="p-4 bg-gray-50 rounded-lg border">
+                                    <p class="text-sm text-gray-500">Classrooms</p>
+                                    <p class="font-medium text-gray-700"> {{ $module->classroomModule->pluck('classroom.name')->join(', ') ?? 'N/A' }}</p>
+                                </div>
+                            @endisset
+
 
                             <div class="p-4 bg-gray-50 rounded-lg border">
                                 <p class="text-sm text-gray-500">Number of Lessons</p>
-                                <p class="font-medium text-gray-700">{{ $module->lessons_count ?? 0 }}</p>
+                                <p class="font-medium text-gray-700">{{ $module->lesson->count() ?? 0 }}</p>
                             </div>
 
                             <div class="p-4 bg-gray-50 rounded-lg border">
@@ -69,13 +77,13 @@
                 </div>
 
                 <!-- LESSON LIST (Optional) -->
-                @if($module->lessons->count() > 0)
+                @if($module->lesson->count() > 0)
                     <div class="mt-8">
                         <h3 class="text-lg font-semibold text-gray-800 mb-3">Lessons</h3>
                         <ul class="list-disc list-inside">
-                            @foreach ($module->lessons as $lesson)
+                            @foreach ($module->lesson as $lesson)
                                 <li>
-                                    <span class="font-medium">{{ $lesson->title }}</span> -
+                                    <span class="font-medium">{{ $lesson->name }}</span> -
                                     <span class="text-gray-500 text-sm">{{ $lesson->created_at->format('M d, Y') }}</span>
                                 </li>
                             @endforeach

@@ -144,7 +144,7 @@
                                             <td class="max-w-[200px] truncate">{{ $classmodule->module->description }}</td>
                                             <td>{{ $classmodule->module->created_at->format('M d, Y') }}</td>
                                             <td class="space-x-2 flex justify-center">
-                                                <a href="{{ route('modules.show',[$classmodule->module->id]) }}" class="text-red-700 hover:underline">View</a>
+                                                <a href="{{ route('classroommodule.show',$classmodule->id) }}" class="text-red-700 hover:underline">View</a>
                                                 <form method="POST" action="{{ route('classroommodule.destroy', $classmodule->id) }}">
                                                     @csrf
                                                     @method('DELETE')

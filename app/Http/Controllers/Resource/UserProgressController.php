@@ -40,7 +40,7 @@ class UserProgressController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(UserProgress $userProgress)
+    public function show(UserProgress $userprogress)
     {
         //
     }
@@ -48,7 +48,7 @@ class UserProgressController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(UserProgress $userProgress)
+    public function edit(UserProgress $userprogress)
     {
         //
     }
@@ -56,7 +56,7 @@ class UserProgressController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateUserProgressRequest $request, UserProgress $userProgress)
+    public function update(UpdateUserProgressRequest $request, UserProgress $userprogress)
     {
         //
     }
@@ -64,7 +64,7 @@ class UserProgressController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(UserProgress $userProgress)
+    public function destroy(UserProgress $userprogress)
     {
         //
     }
