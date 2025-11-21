@@ -19,7 +19,7 @@ class ClassroomModuleSeeder extends Seeder
                 $ownerid = $classroom->owner_id;
                 $modules = $classroom->User->Module;
                 foreach($modules as $module){
-                    ClassroomModule::factory(5)->create([
+                    ClassroomModule::factory(1)->create([
                         'classroom_id'=>$classroom->id,
                         'module_id'=>$module->id,
                         'added_by'=>$ownerid
