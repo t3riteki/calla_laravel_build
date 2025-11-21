@@ -66,7 +66,7 @@
                                             <select name="classroom_id"
                                                 class="select select-bordered w-full focus:ring-2 focus:ring-red-700 rounded-lg" required>
                                                 <option disabled selected>Select classroom</option>
-                                                @foreach($classrooms as $classroom)
+                                                @foreach(auth()->user()->classroom as $classroom)
                                                     <option value="{{ $classroom->id }}">{{ $classroom->name }}</option>
                                                 @endforeach
                                             </select>
@@ -89,12 +89,12 @@
 
                         <!-- MODULE TABLE -->
                         <div class="max-h-96 overflow-y-auto mt-4">
-                            <table class="table table-zebra text-center w-full">
+                            <table class="table table-zebra text-center table-fixed w-full">
                                 <thead>
                                     <tr>
                                         <th>Module</th>
                                         <th>Description</th>
-                                        <th>Classroom</th>
+                                        <th>Classrooms</th>
                                         <th>Actions</th>
                                     </tr>
                                 </thead>
@@ -108,7 +108,9 @@
                                                 {{ $module->description }}
                                             </td>
 
-                                            <td>{{ $module->classroom->name ?? 'N/A' }}</td>
+                                            <td>
+                                                {{ $module->classroomModule->pluck('classroom.name')->join(', ') ?? 'N/A' }}
+                                            </td>
 
                                             <td>
                                                 <a href="{{ route('modules.show', $module->id) }}"
@@ -160,7 +162,7 @@
                                                                 </label>
                                                                 <select name="classroom_id"
                                                                     class="select select-bordered w-full focus:ring-2 focus:ring-red-700 rounded-lg">
-                                                                    @foreach($classrooms as $classroom)
+                                                                    @foreach(auth()->user()->classroom as $classroom)
                                                                         <option value="{{ $classroom->id }}"
                                                                             {{ $module->classroom_id == $classroom->id ? 'selected' : '' }}>
                                                                             {{ $classroom->name }}

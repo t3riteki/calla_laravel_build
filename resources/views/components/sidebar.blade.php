@@ -21,14 +21,19 @@
                 @break
 
             @case('instructor')
-                <div class="flex flex-wrap md:flex-col justify-center md:justify-start gap-2 md:gap-0">
-                    <a href="/dashboard" class="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-red-50 hover:text-red-800 transition">
-                        <i class="ri-dashboard-line text-lg"></i> Dashboard
+                <div class="flex flex-wrap md:flex-col justify-center md:justify-start gap-2 md:gap-0 ">
+                    <a href="/dashboard" class="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-red-90 hover:text-red-800 transition
+                        {{ request()->is('dashboard') ? 'text-red-800 bg-red-100' : 'text-gray-700 bg-white' }}">
+                        <i class="ri-dashboard-line text-lg ac"></i> Dashboard
                     </a>
-                    <a href="/classrooms" class="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-red-50 hover:text-red-800 transition">
+
+                    <a href="/classrooms" class="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-red-90 hover:text-red-800 transition
+                        {{ request()->is('classrooms*') ? 'text-red-800 bg-red-100' : 'text-gray-700 bg-white' }}">
                         <i class="ri-graduation-cap-line text-lg"></i> Classrooms
                     </a>
-                    <a href="/modules" class="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-red-50 hover:text-red-800 transition">
+
+                    <a href="/modules" class="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-red-90 hover:text-red-800 transition
+                        {{ request()->is('modules*') ? 'text-red-800 bg-red-100' : 'text-gray-700 bg-white' }}">
                         <i class="ri-book-2-line text-lg"></i> Modules
                     </a>
                 </div>
@@ -44,9 +49,6 @@
                     </a>
                     <a href="/modules" class="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-red-50 hover:text-red-800 transition">
                         <i class="ri-book-2-line text-lg"></i> Modules
-                    </a>
-                    <a href="/dashboard" class="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-red-50 hover:text-red-800 transition">
-                        <i class="ri-restaurant-line text-lg"></i> Saging Delata
                     </a>
                 </div>
                 @break

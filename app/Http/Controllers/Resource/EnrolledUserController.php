@@ -6,9 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Models\EnrolledUser;
 use App\Http\Requests\StoreEnrolledUserRequest;
 use App\Http\Requests\UpdateEnrolledUserRequest;
-
+use App\Models\User;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class EnrolledUserController extends Controller
 {
@@ -36,14 +37,39 @@ class EnrolledUserController extends Controller
      */
     public function store(StoreEnrolledUserRequest $request)
     {
-        $user = Auth::User();
-        $this->authorize('create',$user);
-        $validated = $request->validated();
+        try {
+            $validated = $request->validated();
 
-        $enrollment = $user->EnrolledUser()->create($validated);
+            //check if empty ang user_id og naa ang email
+            if(!isset($validated['user_id']) && isset($validated['email'])){
+                $email = $validated['email'];
+                $userID = User::where('email',$email)->value('id');
 
-        return redirect($user->role.'.dashboard');
+                if(!$userID){
+                    Log::error('No User with Email:'.$email);
+                    return back()->with('error','No such User');
+                }
 
+                $validated['user_id']=$userID;
+            }
+
+            EnrolledUser::create([
+                'user_id' => $validated['user_id'],
+                'classroom_id' =>$validated['classroom_id']
+            ]);
+
+            return back()->with('success','Learner Enrolled!');
+
+        } catch (\Throwable $e) {
+            Log::error('Enrollment process failed', [
+                'error' => $e->getMessage(),
+                'line' => $e->getLine(),
+                'file' => $e->getFile(),
+                'payload' => $request->all()
+            ]);
+
+            return back()->withErrors(['error' => 'Something went wrong. Check logs.']);
+        }
     }
 
     /**

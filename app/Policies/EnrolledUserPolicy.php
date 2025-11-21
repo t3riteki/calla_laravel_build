@@ -30,7 +30,7 @@ class EnrolledUserPolicy
      */
     public function create(User $user): bool
     {
-        return in_array($user->role,['instructor','student'],true);
+        return in_array($user->role,['instructor','learner']);
     }
 
     /**

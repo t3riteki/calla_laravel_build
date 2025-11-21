@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Log;
 
 class StoreEnrolledUserRequest extends FormRequest
 {
@@ -11,7 +12,7 @@ class StoreEnrolledUserRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -21,9 +22,13 @@ class StoreEnrolledUserRequest extends FormRequest
      */
     public function rules(): array
     {
+        Log::info('StoreEnrolledUserRequest validation triggered', [
+            'input' => $this->all()
+        ]);
         return [
-            'user_id'=>'required|exists|string',
-            'classroom_id'=>'required|exists|string'
+            'user_id'      => 'nullable|integer|exists:users,id',
+            'email'        => 'nullable|email|exists:users,email',
+            'classroom_id' => 'required|integer|exists:classrooms,id',
         ];
     }
 }

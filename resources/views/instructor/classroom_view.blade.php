@@ -172,7 +172,9 @@
 
             <form method="POST" action="{{ route('enrolleduser.store', $classroom->id) }}" class="space-y-4">
                 @csrf
-                @method('put')
+
+                <input type="hidden" name="classroom_id" value="{{ $classroom->id }}">
+
                 <div class="form-control">
                     <label class="label"><span class="label-text">Student Email</span></label>
                     <input type="email" name="email" class="input input-bordered w-full" required>

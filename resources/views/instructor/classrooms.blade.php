@@ -1,5 +1,3 @@
- <link href="https://cdn.jsdelivr.net/npm/remixicon/fonts/remixicon.css" rel="stylesheet">
-
  <x-layout>
     <x-slot:title>Instructor Classrooms - CALLA</x-slot:title>
 
@@ -36,7 +34,6 @@
                                     <!-- FORM -->
                                     <form method="POST" action="{{ route('classrooms.store') }}" class="space-y-4">
                                         @csrf
-
                                         <!-- Class Name -->
                                         <div class="form-control">
                                             <label class="label">
