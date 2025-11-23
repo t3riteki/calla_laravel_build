@@ -50,7 +50,7 @@ class ModuleController extends Controller
 
         $module = $user->Module()->create($validated);
 
-        return redirect()->back();
+        return back()->with('success','Successfully created '.$module->name);
     }
 
     /**
@@ -81,7 +81,7 @@ class ModuleController extends Controller
         $validated= $request->validated();
         $module->update($validated);
 
-        return redirect()->back();
+        return back()->with('success','Successfully updated '.$module->name);
     }
 
     /**
@@ -91,8 +91,9 @@ class ModuleController extends Controller
     {
         $user = Auth::user();
         $this->authorize('delete',$module);
+        $message = 'Successfully deleted '.$module->name;
         $module->delete();
 
-        return redirect()->back();
+        return back()->with('success',$message);
     }
 }

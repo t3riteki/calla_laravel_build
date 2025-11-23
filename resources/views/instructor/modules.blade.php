@@ -38,12 +38,12 @@
                                     </div>
 
                                     <!-- FORM -->
-                                    <form method="POST" action="/parse" class="space-y-4">
+                                    <form method="POST" action="/parse" enctype="multipart/form-data" class="space-y-4">
                                         @csrf
 
                                         <fieldset class="fieldset">
                                             <legend class="fieldset-legend">Pick a file</legend>
-                                            <input type="file" class="file-input" />
+                                            <input type="file" class="file-input" name="attachment" id="attachment"/>
                                             <label class="label">Max size 25MB</label>
                                         </fieldset>
 
@@ -97,6 +97,54 @@
                                                     class="btn btn-link text-blue-500 no-underline hover:underline">
                                                     Edit
                                                 </button>
+
+                                                <button onclick="document.getElementById('deleteConfirmModal-{{ $module->id }}').showModal()"
+                                                        class="btn btn-link text-red-500 no-underline hover:underline">
+                                                    Delete
+                                                </button>
+
+                                                <dialog id="deleteConfirmModal-{{ $module->id }}" class="modal">
+                                                    <div class="modal-box bg-white rounded-2xl shadow-xl border border-red-100">
+
+                                                        <!-- Modal Title -->
+                                                        <h3 class="text-xl font-semibold text-red-700 flex items-center gap-2">
+                                                            <i class="ri-error-warning-line text-2xl"></i>
+                                                            Confirm Delete
+                                                        </h3>
+
+                                                        <!-- Message -->
+                                                        <p class="mt-3 text-gray-600 leading-relaxed">
+                                                            You are about to delete the module
+                                                            <span class="font-semibold text-gray-800">"{{ $module->name }}"</span>.
+                                                            <br>This action <strong class="text-red-600">cannot be undone</strong>.
+                                                        </p>
+
+                                                        <!-- Buttons -->
+                                                        <div class="modal-action flex justify-end gap-3 mt-6">
+
+                                                            <!-- Cancel -->
+                                                            <form method="dialog">
+                                                                <button class="btn px-5 rounded-xl border border-gray-300 bg-white hover:bg-gray-100">
+                                                                    Cancel
+                                                                </button>
+                                                            </form>
+
+                                                            <!-- Confirm Delete -->
+                                                            <form action="{{ route('modules.destroy', $module->id) }}" method="POST">
+                                                                @csrf
+                                                                @method('DELETE')
+                                                                <button type="submit"
+                                                                        class="btn px-5 rounded-xl bg-red-600 text-white hover:bg-red-700 shadow-sm">
+                                                                    Yes, Delete
+                                                                </button>
+                                                            </form>
+
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- Background overlay -->
+                                                    <form method="dialog" class="modal-backdrop bg-black/40 backdrop-blur-sm"></form>
+                                                </dialog>
 
                                                 <!-- EDIT MODULE MODAL -->
                                                 <dialog id="editModuleModal-{{ $module->id }}" class="modal">

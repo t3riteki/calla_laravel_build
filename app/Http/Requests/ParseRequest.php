@@ -13,7 +13,7 @@ class ParseRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,6 +24,7 @@ class ParseRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'attachment' => 'required|file|max:25mb|mimes:pdf'];
+            'attachment' => 'required|file|mimes:pdf|max:25000'
+        ];
     }
 }

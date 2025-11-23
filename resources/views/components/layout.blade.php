@@ -19,8 +19,14 @@
 <body class="min-h-screen flex flex-col bg-base-200 font-sans">
     <x-navbar/>
 
-    @if(session('success'))
-        <x-toast :message="session('success')" />
+    @if (session('success'))
+        <x-toast :message="session('success')" type="success" />
+    @endif
+
+    @if ($errors->any())
+        @foreach ( $errors->all() as $error)
+            <x-toast :message="$errors->error" type="error" />
+        @endforeach
     @endif
 
     <div class="pt-16">

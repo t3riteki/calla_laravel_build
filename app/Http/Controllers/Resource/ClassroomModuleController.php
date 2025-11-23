@@ -79,9 +79,9 @@ class ClassroomModuleController extends Controller
     {
 
         $this->authorize('delete', $classroommodule);
-
+        $message = 'Successfully removed '.$classroommodule->module->name.' from '.$classroommodule->classroom->name;
         $classroommodule->delete();
 
-        return back()->with('success', 'Module removed successfully');
+        return back()->with('success', $message);
     }
 }

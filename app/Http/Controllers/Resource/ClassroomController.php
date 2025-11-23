@@ -59,7 +59,7 @@ class ClassroomController extends Controller
             'user_id' => $user->id,
         ]);
 
-        return redirect()->back();
+        return back()->with('success','Successfully created '.$classroom->name);;
     }
 
     /**
@@ -92,7 +92,7 @@ class ClassroomController extends Controller
         $validated= $request->validated();
         $classroom->update($validated);
 
-        return redirect()->back();
+        return back()->with('success','Successfully updated '.$classroom->name);;
     }
 
     /**
@@ -104,6 +104,6 @@ class ClassroomController extends Controller
         $this->authorize('delete',$classroom);
         $classroom->delete();
 
-        return redirect()->back();
+        return back()->with('success','Successfully deleted '.$classroom->name);
     }
 }

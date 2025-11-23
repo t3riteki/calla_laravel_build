@@ -53,12 +53,12 @@ class EnrolledUserController extends Controller
                 $validated['user_id']=$userID;
             }
 
-            EnrolledUser::create([
+            $enrolleduser = EnrolledUser::create([
                 'user_id' => $validated['user_id'],
                 'classroom_id' =>$validated['classroom_id']
             ]);
 
-            return back()->with('success','Learner Enrolled!');
+            return back()->with('success','Successfully added '.$enrolleduser->user->name.' to '.$enrolleduser->classroom->name);
 
         } catch (\Throwable $e) {
             Log::error('Enrollment process failed', [
@@ -68,7 +68,7 @@ class EnrolledUserController extends Controller
                 'payload' => $request->all()
             ]);
 
-            return back()->withErrors(['error' => 'Something went wrong. Check logs.']);
+            return back()->with('error');
         }
     }
 
@@ -105,6 +105,6 @@ class EnrolledUserController extends Controller
 
         $enrolleduser->delete();
 
-        return back()->with('success', 'Student removed successfully');
+        return back()->with('success','Successfully removed '.$enrolleduser->user->name.' from '.$enrolleduser->classroom->name);
     }
 }
