@@ -35,7 +35,11 @@ class ClassroomModuleController extends Controller
      */
     public function store(StoreClassroomModuleRequest $request)
     {
-        //
+        $user = Auth::user();
+        $validated = $request->validated();
+        $classroomModule = ClassroomModule::create($validated);
+
+        return back()->with('success', 'Successfully added '.$classroomModule->module->name.' to '.$classroomModule->classroom->name);
     }
 
     /**

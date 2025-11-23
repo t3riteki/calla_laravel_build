@@ -3,15 +3,17 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rules\File as RulesFile;
 
-class StoreClassroomModuleRequest extends FormRequest
+
+class ParseRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return true;
+        return false;
     }
 
     /**
@@ -22,9 +24,6 @@ class StoreClassroomModuleRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'classroom_id' => 'required|string|exists:classrooms,id',
-            'module_id' => 'required|string|exists:modules,id',
-            'added_by' => 'required|string|exists:users,id',
-        ];
+            'attachment' => 'required|file|max:25mb|mimes:pdf'];
     }
 }

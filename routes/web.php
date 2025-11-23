@@ -4,7 +4,7 @@ use App\Http\Controllers\Auth\Login;
 use App\Http\Controllers\Auth\Register;
 use App\Http\Controllers\Auth\Logout;
 use App\Http\Controllers\Auth\ProfileController;
-
+use App\Http\Controllers\ParseController;
 use App\Http\Controllers\Resource\ClassroomController;
 use App\Http\Controllers\Resource\ClassroomModuleController;
 use App\Http\Controllers\Resource\EnrolledUserController;
@@ -60,8 +60,6 @@ use Illuminate\Support\Facades\Route;
         Route::resource('/lessons', LessonController::class);
         Route::resource('/glossary', GlossaryController::class);
         Route::resource('/user', UserController::class);
-    });
 
-// If you don’t have these yet, you can comment them out
-// require __DIR__.'/settings.php';
-// require __DIR__.'/auth.php';
+        Route::post('/parse',[ParseController::class, 'parse']);
+    });

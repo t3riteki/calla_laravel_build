@@ -38,39 +38,14 @@
                                     </div>
 
                                     <!-- FORM -->
-                                    <form method="POST" action="{{ route('modules.store') }}" class="space-y-4">
+                                    <form method="POST" action="/parse" class="space-y-4">
                                         @csrf
 
-                                        <div class="form-control">
-                                            <label class="label">
-                                                <span class="label-text text-sm font-semibold text-gray-600">Module Name</span>
-                                            </label>
-                                            <input type="text" name="name" placeholder="Enter module name"
-                                                class="input input-bordered w-full focus:ring-2 focus:ring-red-700 rounded-lg" required>
-                                        </div>
-
-                                        <div class="form-control">
-                                            <label class="label">
-                                                <span class="label-text text-sm font-semibold text-gray-600">Description</span>
-                                            </label>
-                                            <textarea name="description"
-                                                class="textarea textarea-bordered w-full h-24 resize-none focus:ring-2 focus:ring-red-700 rounded-lg"
-                                                placeholder="Brief description of this module..."></textarea>
-                                        </div>
-
-                                        <!-- CLASSROOM DROPDOWN -->
-                                        <div class="form-control">
-                                            <label class="label">
-                                                <span class="label-text text-sm font-semibold text-gray-600">Classroom</span>
-                                            </label>
-                                            <select name="classroom_id"
-                                                class="select select-bordered w-full focus:ring-2 focus:ring-red-700 rounded-lg" required>
-                                                <option disabled selected>Select classroom</option>
-                                                @foreach(auth()->user()->classroom as $classroom)
-                                                    <option value="{{ $classroom->id }}">{{ $classroom->name }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
+                                        <fieldset class="fieldset">
+                                            <legend class="fieldset-legend">Pick a file</legend>
+                                            <input type="file" class="file-input" />
+                                            <label class="label">Max size 25MB</label>
+                                        </fieldset>
 
                                         <div class="modal-action flex justify-end gap-3 mt-6">
                                             <button type="button" class="btn btn-ghost text-gray-600 hover:bg-gray-100"
@@ -78,7 +53,7 @@
 
                                             <button type="submit"
                                                 class="btn bg-gradient-to-r from-red-800 to-red-700 text-white hover:opacity-90 transition px-6">
-                                                Create Module
+                                                Upload File
                                             </button>
                                         </div>
 
