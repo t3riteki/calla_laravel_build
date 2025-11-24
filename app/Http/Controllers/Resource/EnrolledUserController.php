@@ -77,7 +77,12 @@ class EnrolledUserController extends Controller
      */
     public function show(EnrolledUser $enrolleduser)
     {
-        //
+        $auth = Auth::user();
+        $user = $enrolleduser->user;
+        $classroom = $enrolleduser->classroom;
+        $progress = $enrolleduser->userProgress;
+
+        return view($auth->role.'.user_view', compact('user', 'progress', 'classroom'));
     }
 
     /**

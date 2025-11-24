@@ -94,9 +94,13 @@
                                             <td></td>
                                             <td>{{ $enrollment->user->created_at->format('M d, Y') }}</td>
                                             <td></td>
-                                            <td class="space-x-2">
-                                                <button class="text-red-700 hover:underline">View</button>
-                                                <button class="text-blue-500 hover:underline">Remove</button>
+                                            <td class="space-x-2 flex justify-center">
+                                                <a href="{{ route('user.show', $enrollment->user->id) }} class="text-red-700 hover:underline">View</a>
+                                                <form method="POST" action="{{ route('enrolleduser.destroy', $enrollment->id) }}">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button class="text-blue-500 hover:underline cursor-pointer" type="submit">Remove</button>
+                                                </form>
                                             </td>
                                         </tr>
                                     @endforeach
@@ -124,7 +128,7 @@
 
                         <!-- Table -->
                         <div class="overflow-x-auto mt-4">
-                            <table class="table table-zebra w-full text-sm sm:text-base">
+                            <table class="table text-center table-zebra w-full text-sm sm:text-base">
                                 <thead>
                                     <tr>
                                         <th>Title</th>
@@ -139,9 +143,13 @@
                                             <td>{{ $classmodule->module->name }}</td>
                                             <td class="max-w-[200px] truncate">{{ $classmodule->module->description }}</td>
                                             <td>{{ $classmodule->module->created_at->format('M d, Y') }}</td>
-                                            <td class="space-x-2">
-                                                <button class="text-red-700 hover:underline">View</button>
-                                                <button class="text-gray-500 hover:underline">Edit</button>
+                                            <td class="space-x-2 flex justify-center">
+                                                <a href="{{ route('classroommodule.show',$classmodule->id) }}" class="text-red-700 hover:underline">View</a>
+                                                <form method="POST" action="{{ route('classroommodule.destroy', $classmodule->id) }}">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button class="text-blue-500 hover:underline cursor-pointer" type="submit">Remove</button>
+                                                </form>
                                             </td>
                                         </tr>
                                     @endforeach
@@ -164,6 +172,8 @@
 
             <form method="POST" action="{{ route('enrolleduser.store', $classroom->id) }}" class="space-y-4">
                 @csrf
+
+                <input type="hidden" name="classroom_id" value="{{ $classroom->id }}">
 
                 <div class="form-control">
                     <label class="label"><span class="label-text">Student Email</span></label>

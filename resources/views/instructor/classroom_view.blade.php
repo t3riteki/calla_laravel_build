@@ -82,7 +82,6 @@
                                         <th>Email</th>
                                         <th>Status</th>
                                         <th>Joined</th>
-                                        <th>Progress</th>
                                         <th>Actions</th>
                                     </tr>
                                 </thead>
@@ -91,11 +90,10 @@
                                         <tr>
                                             <td>{{ $enrollment->user->name }}</td>
                                             <td>{{ $enrollment->user->email }}</td>
-                                            <td></td>
+                                            <td>TBA</td>
                                             <td>{{ $enrollment->user->created_at->format('M d, Y') }}</td>
-                                            <td></td>
                                             <td class="space-x-2 flex justify-center">
-                                                <a href="{{ route('user.show', $enrollment->user->id) }} class="text-red-700 hover:underline">View</a>
+                                                <a href="{{ route('enrolleduser.show', [$enrollment->id]) }}" class="text-red-700 hover:underline">View</a>
                                                 <form method="POST" action="{{ route('enrolleduser.destroy', $enrollment->id) }}">
                                                     @csrf
                                                     @method('DELETE')
