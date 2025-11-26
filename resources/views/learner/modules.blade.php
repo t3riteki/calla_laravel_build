@@ -1,84 +1,52 @@
 <x-layout>
-    <x-slot:title>{{ $module->name }} - Module Details</x-slot:title>
+    <x-slot:title>Learner Modules - CALLA</x-slot:title>
 
-    <div class="flex flex-col lg:flex-row min-h-screen bg-white pt-15">
+    <div class="flex min-h-screen bg-gray-50 transition-all duration-300">
 
         <!-- SIDEBAR -->
         <x-sidebar />
 
-        <!-- MAIN CONTENT -->
-        <main class="flex-1 p-6 md:p-8 lg:ml-64 overflow-y-auto">
+        <main class="flex-1 p-6 lg:ml-64 md:ml-56 sm:ml-0 overflow-y-auto transition-all duration-300">
 
-            <!-- BACK BUTTON -->
-            <a href="{{ route('modules.index') }}"
-               class="btn btn-sm mb-6 bg-gradient-to-r from-red-800 to-red-700 text-white hover:opacity-90">
-                ← Back to Modules
-            </a>
-
-            <!-- MODULE DETAILS -->
-            <div class="card bg-base-100 shadow-lg border rounded-2xl p-6">
-                <div class="flex flex-col md:flex-row gap-6">
-
-                    <!-- Module Info -->
-                    <div class="flex-1">
-                        <h2 class="text-2xl font-bold text-gray-800">{{ $module->name }}</h2>
-                        <p class="text-gray-600 mt-2">{{ $module->description }}</p>
-
-                        <div class="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <div class="p-4 bg-gray-50 rounded-lg border">
-                                <p class="text-sm text-gray-500">Classroom</p>
-                                <p class="font-medium text-gray-700">{{ $module->classroom->name ?? 'N/A' }}</p>
-                            </div>
-
-                            <div class="p-4 bg-gray-50 rounded-lg border">
-                                <p class="text-sm text-gray-500">Number of Lessons</p>
-                                <p class="font-medium text-gray-700">{{ $module->lessons_count ?? 0 }}</p>
-                            </div>
-
-                            <div class="p-4 bg-gray-50 rounded-lg border">
-                                <p class="text-sm text-gray-500">Created At</p>
-                                <p class="font-medium text-gray-700">{{ $module->created_at->format('F d, Y') }}</p>
-                            </div>
-
-                            <div class="p-4 bg-gray-50 rounded-lg border">
-                                <p class="text-sm text-gray-500">Last Updated</p>
-                                <p class="font-medium text-gray-700">{{ $module->updated_at->format('F d, Y') }}</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- ACTIONS -->
-                    <div class="flex flex-col gap-3 justify-start">
-                        <a href="{{ route('modules.edit', $module->id) }}"
-                           class="btn btn-sm bg-red-700 hover:bg-red-600 text-white w-full">Edit Module</a>
-
-                        <form method="POST" action="{{ route('modules.destroy', $module->id) }}">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit"
-                                    class="btn btn-sm btn-outline border-red-700 text-red-700 hover:bg-red-100 w-full">
-                                Delete Module
-                            </button>
-                        </form>
-                    </div>
-
+            <!-- 📚 Modules -->
+            <section class="mb-10">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-xl font-bold text-gray-800 flex items-center gap-2">📚 Modules</h3>
                 </div>
 
-                <!-- LESSON LIST (Optional) -->
-                @if($module->lessons->count() > 0)
-                    <div class="mt-8">
-                        <h3 class="text-lg font-semibold text-gray-800 mb-3">Lessons</h3>
-                        <ul class="list-disc list-inside">
-                            @foreach ($module->lessons as $lesson)
-                                <li>
-                                    <span class="font-medium">{{ $lesson->title }}</span> -
-                                    <span class="text-gray-500 text-sm">{{ $lesson->created_at->format('M d, Y') }}</span>
-                                </li>
-                            @endforeach
-                        </ul>
-                    </div>
-                @endif
-            </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-4">
+                    @foreach ($modules as $module)
+                        <div class="bg-white rounded-2xl shadow-lg p-5 hover:shadow-2xl transition-all duration-300 border border-gray-200 animate-fade-slide">
+                            <div class="flex items-center gap-3 mb-3">
+                                <div class="w-14 h-14 rounded-2xl bg-red-100 flex items-center justify-center text-3xl animate-bounce">
+                                    {{ $module->emoji ?? '📝' }}
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-lg text-gray-800">{{ $module->name }}</h4>
+                                    <p class="text-gray-500 text-xs truncate">{{ $module->description }}</p>
+                                </div>
+                            </div>
+                            <p class="text-gray-600 text-sm mb-4 line-clamp-2">
+                                {{ $module->short_intro ?? 'Start this module and have fun learning!' }}
+                            </p>
+                            <a href="{{ route('modules.show', $module->id) }}"
+                               class="btn w-full rounded-xl bg-gradient-to-r from-red-700 to-red-500 text-white hover:opacity-90 transition">
+                                Start Module
+                            </a>
+                        </div>
+                    @endforeach
+                </div>
+            </section>
+
         </main>
     </div>
+
+    <!-- Tailwind Animations -->
+    <style>
+        @keyframes fadeSlideUp {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-slide { animation: fadeSlideUp 0.8s ease forwards; }
+    </style>
 </x-layout>

@@ -137,7 +137,7 @@
 
                 </div>
 
-                <!-- LESSON LIST (Optional) -->
+                <!-- LESSON LIST  -->
                 @if($module->lesson->count() > 0)
                     <div x-data="{ selected: null }" class="mt-8">
                         <h3 class="text-lg font-semibold text-gray-800 mb-3">Lessons</h3>

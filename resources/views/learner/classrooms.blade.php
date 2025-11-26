@@ -1,222 +1,56 @@
- <x-layout>
-    <x-slot:title>Instructor Dashboard - CALLA</x-slot:title>
+<x-layout>
+    <x-slot:title>Learner Dashboard - CALLA</x-slot:title>
 
-    <!-- DASHBOARD CONTAINER -->
-    <div class="flex flex-col lg:flex-row min-h-screen bg-white transition-all duration-300">
+    <div class="flex min-h-screen bg-gray-50 transition-all duration-300">
 
         <!-- SIDEBAR -->
         <x-sidebar />
 
-        <main class="flex-1 p-4 sm:p-6 md:p-8 overflow-y-auto lg:ml-64 md:ml-56 sm:ml-0 transition-all duration-300">
-            <!-- 🏫 CLASS LIST -->
+        <main class="flex-1 p-6 lg:ml-64 md:ml-56 sm:ml-0 overflow-y-auto transition-all duration-300">
+
+            <!-- 🏫 Classrooms -->
             <section class="mb-10">
-                <div class="card bg-base-100 shadow-lg border">
-                    <div class="card-body">
-                        <div class="flex items-center justify-between">
-                            <h3 class="card-title text-lg">My Classes</h3>
-                            <!-- + New Class Button -->
-                            <button onclick="newClassModal.showModal()"
-                                class="bg-red-800 text-white px-4 py-2 rounded-lg text-sm hover:bg-red-700 transition">
-                                + New Class
-                            </button>
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-xl font-bold text-gray-800 flex items-center gap-2">🏫 Classrooms</h3>
+                </div>
 
-                            <dialog id="newClassModal" class="modal">
-                                <div class="modal-box max-w-lg bg-white/95 backdrop-blur-md rounded-2xl shadow-lg border border-gray-100">
-                                    <div class="flex justify-between items-center mb-4">
-                                        <h3 class="text-lg font-semibold text-gray-800 flex items-center gap-2">
-                                            <span class="text-red-800 text-xl">📚</span> New Class
-                                        </h3>
-                                        <form method="dialog">
-                                            <button class="btn btn-sm btn-circle btn-ghost text-gray-500 hover:text-red-700">✕</button>
-                                        </form>
-                                    </div>
-
-                                    <!-- FORM -->
-                                    <form method="POST" action="{{ route('classrooms.store') }}" class="space-y-4">
-                                        @csrf
-
-                                        <!-- Class Name -->
-                                        <div class="form-control">
-                                            <label class="label">
-                                                <span class="label-text text-sm font-semibold text-gray-600">Class Name</span>
-                                            </label>
-                                            <input type="text" name="name" placeholder="Enter class name"
-                                                class="input input-bordered w-full focus:ring-2 focus:ring-red-700 rounded-lg" required>
-                                        </div>
-
-                                        <!-- Description -->
-                                        <div class="form-control">
-                                            <label class="label">
-                                                <span class="label-text text-sm font-semibold text-gray-600">Description</span>
-                                            </label>
-                                            <textarea name="description"
-                                                class="textarea textarea-bordered w-full h-24 resize-none focus:ring-2 focus:ring-red-700 rounded-lg"
-                                                placeholder="Brief description about this class..."></textarea>
-                                        </div>
-
-                                        <!-- Class Code -->
-                                        <div class="form-control">
-                                            <label class="label">
-                                                <span class="label-text text-sm font-semibold text-gray-600">Class Code</span>
-                                            </label>
-
-                                            <div class="relative">
-                                                <!-- Input Field for Class Code -->
-                                                <input
-                                                    type="text"
-                                                    name="code"
-                                                    id="class_code"
-                                                    placeholder="Enter or auto-generate a code"
-                                                    class="input input-bordered w-full focus:ring-2 focus:ring-red-700 rounded-lg"
-                                                >
-
-                                                <!-- Auto Generate Button -->
-                                                <button
-                                                    type="button"
-                                                    id="generateClassCode"
-                                                    class="btn btn-sm bg-red-700 text-white hover:bg-red-600 absolute right-1 top-1/2
-                                                        transform -translate-y-1/2 rounded-full px-3 py-1 text-xs"
-                                                    onclick="generateCode()">
-                                                    Auto
-                                                </button>
-                                            </div>
-                                        </div>
-
-                                        <!-- ACTION BUTTONS -->
-                                        <div class="modal-action flex justify-end gap-3 mt-6">
-                                            <button type="button" class="btn btn-ghost text-gray-600 hover:bg-gray-100"
-                                                onclick="newClassModal.close()">Cancel</button>
-                                            <button type="submit"
-                                                class="btn bg-gradient-to-r from-red-800 to-red-700 text-white hover:opacity-90 transition px-6">
-                                                Create Class
-                                            </button>
-                                        </div>
-                                    </form>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-4">
+                    <!-- Placeholder Classroom Cards -->
+                    @foreach ($classrooms as $classroom)
+                        <div class="bg-white rounded-2xl shadow-lg p-5 hover:shadow-2xl transition-all duration-300 border border-gray-200 animate-fade-slide">
+                            <div class="flex items-center gap-3 mb-3">
+                                <div class="w-14 h-14 rounded-2xl bg-red-100 flex items-center justify-center text-3xl animate-bounce">
+                                    {{ $classroom->emoji ?? '📘' }}
                                 </div>
-                            </dialog>
+                                <div>
+                                    <h4 class="font-bold text-lg text-gray-800">{{ $classroom->name }}</h4>
+                                    <p class="text-gray-500 text-xs truncate">{{ $classroom->description }}</p>
+                                </div>
+                            </div>
+                            <p class="text-gray-600 text-sm mb-4 line-clamp-2">
+                                {{ $classroom->short_intro ?? 'Start learning and have fun!' }}
+                            </p>
+                            <div class="flex justify-between items-center mb-4">
+                                <span class="text-gray-700 font-semibold">👥 {{ $classroom->EnrolledUser->where('user.role','learner')->count() ?? 0 }} classmates</span>
+                            </div>
+                            <a href="{{ route('classrooms.show', $classroom->id) }}"
+                               class="btn w-full rounded-xl bg-gradient-to-r from-red-700 to-red-500 text-white hover:opacity-90 transition">
+                                View Classroom
+                            </a>
                         </div>
-
-                        <div class="max-h-96 overflow-y-auto mt-4">
-                            <table class="table table-zebra text-center w-full">
-                                <thead>
-                                    <tr>
-                                        <th>Class Name</th>
-                                        <th>Description</th>
-                                        <th>Students</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-
-                                <tbody>
-                                    @foreach ($classrooms as $classroom)
-                                        <tr>
-                                            <td>{{ $classroom->name }}</td>
-
-                                            {{-- Subject (truncate like your original) --}}
-                                            <td class="max-w-[150px] truncate">
-                                                {{ $classroom->description }}
-                                            </td>
-
-                                            {{-- Student Count --}}
-                                            <td>{{ $classroom->EnrolledUser->where('user.role','learner')->count() }}</td>
-
-                                            {{-- Actions --}}
-                                            <td>
-                                                <a href="{{ route('classrooms.show', $classroom->id) }}"
-                                                class="btn btn-link text-red-700 no-underline hover:underline">
-                                                    View
-                                                </a>
-
-                                                <!-- Edit Button triggers modal -->
-                                                <button onclick="document.getElementById('editClassModal-{{ $classroom->id }}').showModal()"
-                                                    class="btn btn-link text-blue-500 no-underline hover:underline">
-                                                    Edit
-                                                </button>
-
-                                                <!-- Edit Modal -->
-                                                <dialog id="editClassModal-{{ $classroom->id }}" class="modal">
-                                                    <div class="modal-box max-w-lg bg-white/95 backdrop-blur-md rounded-2xl shadow-lg border border-gray-100">
-                                                        <div class="flex justify-between items-center mb-4">
-                                                            <h3 class="text-lg font-semibold text-gray-800 flex items-center gap-2">
-                                                                <span class="text-red-800 text-xl">✏️</span> Edit Class
-                                                            </h3>
-                                                            <form method="dialog">
-                                                                <button class="btn btn-sm btn-circle btn-ghost text-gray-500 hover:text-red-700">✕</button>
-                                                            </form>
-                                                        </div>
-
-                                                        <!-- EDIT FORM -->
-                                                        <form method="POST" action="{{ route('classrooms.update', $classroom->id) }}" class="space-y-4">
-                                                            @csrf
-                                                            @method('PUT')
-
-                                                            <!-- Class Name -->
-                                                            <div class="form-control">
-                                                                <label class="label">
-                                                                    <span class="label-text text-sm font-semibold text-gray-600">Class Name</span>
-                                                                </label>
-                                                                <input type="text" name="name" value="{{ $classroom->name }}"
-                                                                    class="input input-bordered w-full focus:ring-2 focus:ring-red-700 rounded-lg" required>
-                                                            </div>
-
-                                                            <!-- Description -->
-                                                            <div class="form-control">
-                                                                <label class="label">
-                                                                    <span class="label-text text-sm font-semibold text-gray-600">Description</span>
-                                                                </label>
-                                                                <textarea name="description"
-                                                                    class="textarea textarea-bordered w-full h-24 resize-none focus:ring-2 focus:ring-red-700 rounded-lg"
-                                                                    required>{{ $classroom->description }}</textarea>
-                                                            </div>
-
-                                                            <!-- Class Code -->
-                                                            <div class="form-control">
-                                                                <label class="label">
-                                                                    <span class="label-text text-sm font-semibold text-gray-600">Class Code</span>
-                                                                </label>
-                                                                <div class="relative">
-                                                                    <input type="text" name="code" value="{{ $classroom->code }}"
-                                                                        class="input input-bordered w-full focus:ring-2 focus:ring-red-700 rounded-lg">
-
-                                                                    <button type="button"
-                                                                            class="btn btn-sm bg-red-700 text-white hover:bg-red-600 absolute right-1 top-1/2
-                                                                                transform -translate-y-1/2 rounded-full px-3 py-1 text-xs"
-                                                                            onclick="generateEditCode('{{ $classroom->id }}')">
-                                                                        Auto
-                                                                    </button>
-                                                                </div>
-                                                            </div>
-
-                                                            <!-- ACTION BUTTONS -->
-                                                            <div class="modal-action flex justify-end gap-3 mt-6">
-                                                                <button type="button" class="btn btn-ghost text-gray-600 hover:bg-gray-100"
-                                                                    onclick="document.getElementById('editClassModal-{{ $classroom->id }}').close()">Cancel</button>
-                                                                <button type="submit"
-                                                                    class="btn bg-gradient-to-r from-red-800 to-red-700 text-white hover:opacity-90 transition px-6">
-                                                                    Save Changes
-                                                                </button>
-                                                            </div>
-                                                        </form>
-                                                    </div>
-                                                </dialog>
-                                                </a>
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+                    @endforeach
                 </div>
             </section>
+
         </main>
     </div>
 
-    <script>
-    document.getElementById("generateClassCode").addEventListener("click", function () {
-        // You can customize this generator however you want
-        let code = "CLS-" + Math.random().toString(36).substring(2, 7).toUpperCase();
-        document.getElementById("class_code").value = code;
-    });
-    </script>
+    <!-- Tailwind Animations -->
+    <style>
+        @keyframes fadeSlideUp {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-slide { animation: fadeSlideUp 0.8s ease forwards; }
+    </style>
 </x-layout>
