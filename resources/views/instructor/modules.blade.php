@@ -93,11 +93,6 @@
                                                     View
                                                 </a>
 
-                                                <button onclick="document.getElementById('editModuleModal-{{ $module->id }}').showModal()"
-                                                    class="btn btn-link text-blue-500 no-underline hover:underline">
-                                                    Edit
-                                                </button>
-
                                                 <button onclick="document.getElementById('deleteConfirmModal-{{ $module->id }}').showModal()"
                                                         class="btn btn-link text-red-500 no-underline hover:underline">
                                                     Delete
@@ -145,69 +140,6 @@
                                                     <!-- Background overlay -->
                                                     <form method="dialog" class="modal-backdrop bg-black/40 backdrop-blur-sm"></form>
                                                 </dialog>
-
-                                                <!-- EDIT MODULE MODAL -->
-                                                <dialog id="editModuleModal-{{ $module->id }}" class="modal">
-                                                    <div class="modal-box max-w-lg bg-white/95 backdrop-blur-md rounded-2xl shadow-lg border border-gray-100">
-                                                        <div class="flex justify-between items-center mb-4">
-                                                            <h3 class="text-lg font-semibold text-gray-800 flex items-center gap-2">
-                                                                <span class="text-red-800 text-xl">✏️</span> Edit Module
-                                                            </h3>
-                                                            <form method="dialog">
-                                                                <button class="btn btn-sm btn-circle btn-ghost text-gray-500 hover:text-red-700">✕</button>
-                                                            </form>
-                                                        </div>
-
-                                                        <form method="POST" action="{{ route('modules.update', $module->id) }}"
-                                                            class="space-y-4">
-                                                            @csrf
-                                                            @method('PUT')
-
-                                                            <div class="form-control">
-                                                                <label class="label">
-                                                                    <span class="label-text font-semibold text-gray-600">Module Name</span>
-                                                                </label>
-                                                                <input type="text" name="name" value="{{ $module->name }}"
-                                                                    class="input input-bordered w-full focus:ring-2 focus:ring-red-700 rounded-lg" required>
-                                                            </div>
-
-                                                            <div class="form-control">
-                                                                <label class="label">
-                                                                    <span class="label-text font-semibold text-gray-600">Description</span>
-                                                                </label>
-                                                                <textarea name="description"
-                                                                    class="textarea textarea-bordered w-full h-24 resize-none focus:ring-2 focus:ring-red-700 rounded-lg">{{ $module->description }}</textarea>
-                                                            </div>
-
-                                                            <div class="form-control">
-                                                                <label class="label">
-                                                                    <span class="label-text font-semibold text-gray-600">Classroom</span>
-                                                                </label>
-                                                                <select name="classroom_id"
-                                                                    class="select select-bordered w-full focus:ring-2 focus:ring-red-700 rounded-lg">
-                                                                    @foreach(auth()->user()->classroom as $classroom)
-                                                                        <option value="{{ $classroom->id }}"
-                                                                            {{ $module->classroom_id == $classroom->id ? 'selected' : '' }}>
-                                                                            {{ $classroom->name }}
-                                                                        </option>
-                                                                    @endforeach
-                                                                </select>
-                                                            </div>
-
-                                                            <div class="modal-action flex justify-end gap-3 mt-6">
-                                                                <button type="button" class="btn btn-ghost text-gray-600 hover:bg-gray-100"
-                                                                    onclick="document.getElementById('editModuleModal-{{ $module->id }}').close()">Cancel</button>
-
-                                                                <button type="submit"
-                                                                    class="btn bg-gradient-to-r from-red-800 to-red-700 text-white hover:opacity-90 transition px-6">
-                                                                    Save Changes
-                                                                </button>
-                                                            </div>
-
-                                                        </form>
-                                                    </div>
-                                                </dialog>
-
                                             </td>
                                         </tr>
                                     @endforeach

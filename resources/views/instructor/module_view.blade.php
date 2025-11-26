@@ -139,18 +139,101 @@
 
                 <!-- LESSON LIST (Optional) -->
                 @if($module->lesson->count() > 0)
-                    <div class="mt-8">
+                    <div x-data="{ selected: null }" class="mt-8">
                         <h3 class="text-lg font-semibold text-gray-800 mb-3">Lessons</h3>
-                        <ul class="list-disc list-inside">
+
+                        <!-- Lessons list -->
+                        <ul class="space-y-2">
                             @foreach ($module->lesson as $lesson)
                                 <li>
-                                    <span class="font-medium">{{ $lesson->name }}</span> -
-                                    <span class="text-gray-500 text-sm">{{ $lesson->created_at->format('M d, Y') }}</span>
+                                    <button
+                                        @click="
+                                            selected = {{ $lesson->id }};
+                                            $nextTick(() => {
+                                                document.getElementById('lessonContentSection')
+                                                    .scrollIntoView({ behavior: 'smooth', block: 'start' });
+                                            });
+                                        "
+                                        class="w-full text-left px-4 py-2 bg-gray-50 hover:bg-gray-100 rounded-lg border transition"
+                                    >
+                                        <span class="font-medium">{{ $lesson->name }}</span>
+                                        <span class="text-gray-400 text-sm">
+                                            • {{ $lesson->created_at->format('M d, Y') }}
+                                        </span>
+                                    </button>
                                 </li>
                             @endforeach
                         </ul>
+
+                        <!-- Display lesson content -->
+                        <div id="lessonContentSection" class="mt-6 w-full flex justify-center">
+                            <div class="w-full max-w-3xl bg-white border border-gray-300 rounded-xl shadow-sm p-6">
+
+                                <!-- LESSON TITLE + DESCRIPTION -->
+                                <template x-if="selected">
+                                    <div>
+                                        @foreach ($module->lesson as $lesson)
+                                            <div x-show="selected === {{ $lesson->id }}">
+                                                <h3 class="text-xl font-bold text-gray-800 mb-1">
+                                                    {{ $lesson->name }}
+                                                </h3>
+                                                <p class="text-gray-600 mb-6">
+                                                    {{ $lesson->description }}
+                                                </p>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                </template>
+
+                                <!-- GLOSSARY TABLE -->
+                                <div class="border border-gray-400 rounded-xl overflow-hidden">
+                                    <table class="w-full">
+                                        <thead>
+                                            <tr class="bg-gray-100">
+                                                <th class="w-1/3 border-r border-gray-300 p-3 text-left font-semibold">
+                                                    Term
+                                                </th>
+                                                <th class="p-3 text-left font-semibold">
+                                                    Meaning
+                                                </th>
+                                            </tr>
+                                        </thead>
+
+                                        <tbody>
+                                            <tr class="border-t border-gray-300">
+                                                <td class="border-r border-gray-300 p-3">
+                                                    Placeholder Term 1
+                                                </td>
+                                                <td class="p-3">
+                                                    This is a placeholder meaning for term 1.
+                                                </td>
+                                            </tr>
+
+                                            <tr class="border-t border-gray-300 bg-gray-50">
+                                                <td class="border-r border-gray-300 p-3">
+                                                    Placeholder Term 2
+                                                </td>
+                                                <td class="p-3">
+                                                    This is a placeholder meaning for term 2.
+                                                </td>
+                                            </tr>
+
+                                            <tr class="border-t border-gray-300">
+                                                <td class="border-r border-gray-300 p-3">
+                                                    Placeholder Term 3
+                                                </td>
+                                                <td class="p-3">
+                                                    This is a placeholder meaning for term 3.
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 @endif
+
             </div>
         </main>
     </div>
