@@ -137,100 +137,57 @@
 
                 </div>
 
-                <!-- LESSON LIST  -->
+                <!-- LESSON CARDS  -->
                 @if($module->lesson->count() > 0)
-                    <div x-data="{ selected: null }" class="mt-8">
-                        <h3 class="text-lg font-semibold text-gray-800 mb-3">Lessons</h3>
+                    <div class="mt-8">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-6">Lessons</h3>
 
-                        <!-- Lessons list -->
-                        <ul class="space-y-2">
+                        <div class="flex flex-col col gap-1">
                             @foreach ($module->lesson as $lesson)
-                                <li>
-                                    <button
-                                        @click="
-                                            selected = {{ $lesson->id }};
-                                            $nextTick(() => {
-                                                document.getElementById('lessonContentSection')
-                                                    .scrollIntoView({ behavior: 'smooth', block: 'start' });
-                                            });
-                                        "
-                                        class="w-full text-left px-4 py-2 bg-gray-50 hover:bg-gray-100 rounded-lg border transition"
-                                    >
-                                        <span class="font-medium">{{ $lesson->name }}</span>
-                                        <span class="text-gray-400 text-sm">
-                                            • {{ $lesson->created_at->format('M d, Y') }}
-                                        </span>
-                                    </button>
-                                </li>
-                            @endforeach
-                        </ul>
+                                <div class="bg-gradient-to-br from-gray-50 to-white border border-gray-200 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 p-6 flex flex-col">
 
-                        <!-- Display lesson content -->
-                        <div id="lessonContentSection" class="mt-6 w-full flex justify-center">
-                            <div class="w-full max-w-3xl bg-white border border-gray-300 rounded-xl shadow-sm p-6">
-
-                                <!-- LESSON TITLE + DESCRIPTION -->
-                                <template x-if="selected">
-                                    <div>
-                                        @foreach ($module->lesson as $lesson)
-                                            <div x-show="selected === {{ $lesson->id }}">
-                                                <h3 class="text-xl font-bold text-gray-800 mb-1">
-                                                    {{ $lesson->name }}
-                                                </h3>
-                                                <p class="text-gray-600 mb-6">
-                                                    {{ $lesson->description }}
-                                                </p>
-                                            </div>
-                                        @endforeach
+                                    <!-- Lesson Header -->
+                                    <div class="mb-4">
+                                        <h4 class="text-xl font-bold text-gray-800">{{ $lesson->name }}</h4>
+                                        <p class="text-gray-500 text-sm">{{ $lesson->created_at->format('M d, Y') }}</p>
                                     </div>
-                                </template>
 
-                                <!-- GLOSSARY TABLE -->
-                                <div class="border border-gray-400 rounded-xl overflow-hidden">
-                                    <table class="w-full">
-                                        <thead>
-                                            <tr class="bg-gray-100">
-                                                <th class="w-1/3 border-r border-gray-300 p-3 text-left font-semibold">
-                                                    Term
-                                                </th>
-                                                <th class="p-3 text-left font-semibold">
-                                                    Meaning
-                                                </th>
-                                            </tr>
-                                        </thead>
+                                    <!-- Lesson Description -->
+                                    <p class="text-gray-600 mb-4 line-clamp-2">{{ $lesson->description }}</p>
+                                    <!-- Lesson Content Preview -->
+                                    <div class="prose prose-sm max-w-none mb-6 flex-grow">
+                                        <div class="overflow-x-auto border border-gray-200 rounded-lg max-h-48">
+                                            <table class="table table-compact w-full">
+                                                <thead>
+                                                    <tr class="bg-gray-100">
+                                                        <th class="w-1/3">Term</th>
+                                                        <th>Meaning</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach($lesson->glossary as $glossary)
+                                                        <tr>
+                                                            <td>{{ $glossary->term }}</td>
+                                                            <td>{{ $glossary->meaning }}</td>
+                                                        </tr>
+                                                    @endforeach
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
 
-                                        <tbody>
-                                            <tr class="border-t border-gray-300">
-                                                <td class="border-r border-gray-300 p-3">
-                                                    Placeholder Term 1
-                                                </td>
-                                                <td class="p-3">
-                                                    This is a placeholder meaning for term 1.
-                                                </td>
-                                            </tr>
-
-                                            <tr class="border-t border-gray-300 bg-gray-50">
-                                                <td class="border-r border-gray-300 p-3">
-                                                    Placeholder Term 2
-                                                </td>
-                                                <td class="p-3">
-                                                    This is a placeholder meaning for term 2.
-                                                </td>
-                                            </tr>
-
-                                            <tr class="border-t border-gray-300">
-                                                <td class="border-r border-gray-300 p-3">
-                                                    Placeholder Term 3
-                                                </td>
-                                                <td class="p-3">
-                                                    This is a placeholder meaning for term 3.
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
+                                    <!-- Start Lesson Button -->
+                                    <button onclick="toBeImplementedModal.showModal()"
+                                       class="btn bg-gradient-to-r from-red-700 to-red-500 text-white hover:opacity-90 transition self-start">
+                                        Start Lesson →
+                                    </button>
                                 </div>
-                            </div>
+                            @endforeach
                         </div>
+                    </div>
+                @else
+                    <div class="mt-8 text-center py-8 text-gray-500">
+                        <p>No lessons available for this module yet.</p>
                     </div>
                 @endif
 

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Classroom;
 use App\Models\Module;
 use App\Models\ClassroomModule;
+use App\Models\UserProgress;
 use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
@@ -67,21 +68,53 @@ class DashboardController extends Controller
         return $data;
     }
 
-    private function learnerData($user){
-        $enrolledClassrooms = $user->enrolledUser()->with('classroom')->take(5)->get()->pluck('classroom');
+    private function learnerData($user)
+    {
+        // Get classrooms the user joined
+        $enrolledClassrooms = $user->enrolledUser()
+            ->with('classroom')
+            ->take(5)
+            ->get()
+            ->pluck('classroom');
 
-        $classroommodules = ClassroomModule::whereIn('classroom_id', $enrolledClassrooms->pluck('id'))
-            ->with('module', 'classroom')
+        // Get modules from those classrooms
+        $classroomModules = ClassroomModule::whereIn(
+                'classroom_id',
+                $enrolledClassrooms->pluck('id')
+            )
+            ->with(['module.lesson', 'classroom'])
             ->latest()
             ->take(5)
             ->get();
 
-        $completedCount = 0; // Set based on your completion logic
+        // Compute completed modules
+        $completedModules = $classroomModules->filter(function ($classroomModule) use ($user) {
+
+            $module = $classroomModule->module;
+
+            $totalLessons = $module->lesson->count();
+
+            if ($totalLessons === 0) {
+                return false;
+            }
+
+            // Count user progress for this module
+            $completedLessons = UserProgress::where('user_id', $user->id)
+                ->where('module_id', $module->id)
+                ->where('is_completed', true)
+                ->count();
+
+            return $completedLessons >= $totalLessons;
+        });
 
         $data = [
             'joinedClassrooms' => $enrolledClassrooms,
-            'classroommodules' => $classroommodules,
-            'completedCount' => $completedCount];
+            'classroommodules' => $classroomModules,
+            'completedModules' => $completedModules,
+            'completedCount' => $completedModules->count(),
+        ];
+
         return $data;
     }
+
 }

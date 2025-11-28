@@ -56,4 +56,16 @@ class ClassroomModule extends Model
     public function userProgress():HasMany{
         return $this->hasMany(UserProgress::class);
     }
+
+    public function isCompleted($enrolledUserId)
+    {
+        $totalLessons = $this->lessons()->count();
+
+        $completedLessons = UserProgress::where('enrolled_user_id', $enrolledUserId)
+            ->where('classroom_module_id', $this->id)
+            ->where('is_done', true)
+            ->count();
+
+        return $totalLessons > 0 && $completedLessons === $totalLessons;
+    }
 }

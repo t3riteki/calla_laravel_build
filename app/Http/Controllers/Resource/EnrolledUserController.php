@@ -6,7 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Models\EnrolledUser;
 use App\Http\Requests\StoreEnrolledUserRequest;
 use App\Http\Requests\UpdateEnrolledUserRequest;
+use App\Models\Classroom;
+use App\Models\ClassroomModule;
 use App\Models\User;
+use App\Models\UserProgress;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -35,40 +38,76 @@ class EnrolledUserController extends Controller
     /**
      * Store a newly created resource in storage.
      */
+
     public function store(StoreEnrolledUserRequest $request)
     {
         try {
             $validated = $request->validated();
 
-            //check if empty ang user_id og naa ang email
-            if(!isset($validated['user_id']) && isset($validated['email'])){
+            // If user_id is empty but email exists, find user by email
+            if (!isset($validated['user_id']) && isset($validated['email'])) {
                 $email = $validated['email'];
-                $userID = User::where('email',$email)->value('id');
+                $userID = User::where('email', $email)->value('id');
 
-                if(!$userID){
-                    Log::error('No User with Email:'.$email);
-                    return back()->with('error','No such User');
+                if (!$userID) {
+                    return back()->withErrors(['email' => 'No user exists with that email.']);
                 }
 
-                $validated['user_id']=$userID;
+                $validated['user_id'] = $userID;
             }
 
+            // ✅ Check for duplicate enrollment BEFORE creating anything
+            $exists = EnrolledUser::where('user_id', $validated['user_id'])
+                ->where('classroom_id', $validated['classroom_id'])
+                ->exists();
+
+            if ($exists) {
+                return back()->withErrors([
+                    'duplicate' => 'This user is already enrolled in this classroom.'
+                ]);
+            }
+
+            // Create enrollment
             $enrolleduser = EnrolledUser::create([
                 'user_id' => $validated['user_id'],
-                'classroom_id' =>$validated['classroom_id']
+                'classroom_id' => $validated['classroom_id'],
             ]);
 
-            return back()->with('success','Successfully added '.$enrolleduser->user->name.' to '.$enrolleduser->classroom->name);
+            // Only generate progress for learners
+            if ($enrolleduser->user->role === 'learner') {
+                $this->generateProgress($enrolleduser->classroom, $enrolleduser->id);
+            }
+
+            return back()->with('success', 'Successfully added ' . $enrolleduser->user->name . ' to ' . $enrolleduser->classroom->name);
 
         } catch (\Throwable $e) {
+
             Log::error('Enrollment process failed', [
                 'error' => $e->getMessage(),
-                'line' => $e->getLine(),
-                'file' => $e->getFile(),
+                'line'  => $e->getLine(),
+                'file'  => $e->getFile(),
                 'payload' => $request->all()
             ]);
 
-            return back()->with('error');
+            return back()->withErrors([
+                'enroll' => 'Enrollment failed due to a server error.'
+            ]);
+        }
+    }
+
+
+    public function generateProgress(Classroom $classroom, $enrolled_user_id){
+        $classroomModules = $classroom->classroomModule;
+        foreach ($classroomModules as $classroomModule) {
+            Log::info('Lesson Pointer', [$classroomModule->lesson]);
+            foreach ($classroomModule->module->lesson as $lesson) {
+                UserProgress::create([
+                    'enrolled_user_id' => $enrolled_user_id,
+                    'classroom_module_id' => $classroomModule->id,
+                    'lesson_id' => $lesson->id,
+                    'is_done' => 0,
+                ]);
+            }
         }
     }
 
@@ -113,6 +152,6 @@ class EnrolledUserController extends Controller
 
         $enrolleduser->delete();
 
-        return redirect('/classrooms')->with('success','Successfully removed '.$enrolleduser->user->name.' from '.$enrolleduser->classroom->name);
+        return back()->with('success','Successfully removed '.$enrolleduser->user->name.' from '.$enrolleduser->classroom->name);
     }
 }

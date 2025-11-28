@@ -24,10 +24,11 @@
     @endif
 
     @if ($errors->any())
-        @foreach ( $errors->all() as $error)
-            <x-toast :message="$errors->error" type="error" />
+        @foreach ($errors->all() as $error)
+            <x-toast :message="$error" type="error" />
         @endforeach
     @endif
+
 
     <div class="pt-16">
         {{ $slot }}

@@ -118,10 +118,10 @@
                         <!-- Header -->
                         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                             <h3 class="card-title text-lg sm:text-xl">Class Modules</h3>
-                            <a href="/modules/create?class={{ $classroom->id }}"
+                            <button onclick="newClassroomModuleModal.showModal()"
                                class="btn btn-sm bg-red-800 hover:bg-red-700 text-white w-full sm:w-auto">
                                 + Add Module
-                            </a>
+                        </button>
                         </div>
 
                         <!-- Table -->
@@ -186,4 +186,56 @@
         </div>
     </dialog>
 
+    <dialog id="newClassroomModuleModal" class="modal">
+        <div class="modal-box max-w-lg bg-white/95 backdrop-blur-md rounded-2xl shadow-lg border border-gray-100">
+
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-lg font-semibold text-gray-800 flex items-center gap-2">
+                    <span class="text-red-800 text-xl">📘</span> Add Module to Classroom
+                </h3>
+
+                <form method="dialog">
+                    <button class="btn btn-sm btn-circle btn-ghost text-gray-500 hover:text-red-700">✕</button>
+                </form>
+            </div>
+
+            <!-- FORM -->
+            <form method="POST" action="{{ route('classroommodule.store',$classroom->id) }}" class="space-y-4">
+                @csrf
+
+                <!-- Correct: classroom_id is fixed -->
+                <input type="hidden" name="classroom_id" value="{{ $classroom->id }}"/>
+
+                <!-- added_by is correct -->
+                <input type="hidden" name="added_by" value="{{ auth()->user()->id }}"/>
+
+                <!-- Correct: module_id comes from dropdown -->
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text text-sm font-semibold text-gray-600">Module</span>
+                    </label>
+                    <select name="module_id"
+                        class="select select-bordered w-full focus:ring-2 focus:ring-red-700 rounded-lg" required>
+                        <option disabled selected>Select Module</option>
+
+                        @foreach(auth()->user()->module as $module)
+                            @if(!$classroom->classroomModule->where('module_id', $module->id)->count())
+                                <option value="{{ $module->id }}">{{ $module->name }}</option>
+                            @endif
+                        @endforeach
+                    </select>
+                </div>
+
+                <div class="modal-action flex justify-end gap-3 mt-6">
+                    <button type="button" class="btn btn-ghost text-gray-600 hover:bg-gray-100"
+                        onclick="newClassroomModuleModal.close()">Cancel</button>
+
+                    <button type="submit"
+                        class="btn bg-gradient-to-r from-red-800 to-red-700 text-white hover:opacity-90 transition px-6">
+                        Add Module
+                    </button>
+                </div>
+            </form>
+        </div>
+    </dialog>
 </x-layout>
