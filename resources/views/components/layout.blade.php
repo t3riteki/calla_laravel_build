@@ -13,7 +13,7 @@
     <link href="https://cdn.jsdelivr.net/npm/remixicon/fonts/remixicon.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Goudy+Bookletter+1911&family=Inter:wght@400;700&display=swap" rel="stylesheet">
 
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @vite(['resources/css/app.css', 'resources/js/app.tsx'])
 </head>
 
 <body class="min-h-screen flex flex-col bg-base-200 font-sans">
@@ -33,8 +33,41 @@
         {{ $slot }}
     </div>
 
+    <script>
+        console.log('Alpine exists?', window.Alpine);
+    </script>
 
-    <script src="{{ asset('js/app.tsx') }}"></script>
+    <script>
+        document.addEventListener('alpine:init', () => {
+            Alpine.data('searchComponent', () => ({
+                query: '',
+                results: [],
+                loading: false,
+                open: false,
+
+                search() {
+                    if (this.query.length < 2) {
+                        this.open = false;
+                        return;
+                    }
+
+                    this.loading = true;
+                    this.open = true;
+
+                    fetch(`/search?q=${encodeURIComponent(this.query)}`)
+                        .then(res => res.json())
+                        .then(data => {
+                            this.results = data;
+                        })
+                        .finally(() => {
+                            this.loading = false;
+                        });
+                }
+            }));
+        });
+    </script>
+
+
     @stack('scripts')
 </body>
 </html>

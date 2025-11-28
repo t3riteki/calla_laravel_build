@@ -104,12 +104,15 @@ class EnrolledUserController extends Controller
     /**
      * Remove the specified resource from storage.
      */
+
     public function destroy(EnrolledUser $enrolleduser)
     {
+        $enrolleduser->load('classroom');
+
         $this->authorize('delete', $enrolleduser);
 
         $enrolleduser->delete();
 
-        return back()->with('success','Successfully removed '.$enrolleduser->user->name.' from '.$enrolleduser->classroom->name);
+        return redirect('/classrooms')->with('success','Successfully removed '.$enrolleduser->user->name.' from '.$enrolleduser->classroom->name);
     }
 }

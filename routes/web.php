@@ -54,6 +54,9 @@ use Illuminate\Support\Facades\Route;
         Route::resource('/logs', LogController::class);
         Route::resource('/enrolleduser', EnrolledUserController::class);
         Route::resource('/classrooms', ClassroomController::class);
+        Route::post('/classrooms/{classroom}/join', [ClassroomController::class, 'join'])
+        ->name('classrooms.join');
+
         Route::resource('/classroommodule', ClassroomModuleController::class);
         Route::resource('/userprogress', UserProgressController::class);
         Route::resource('/modules', ModuleController::class);
@@ -62,4 +65,6 @@ use Illuminate\Support\Facades\Route;
         Route::resource('/user', UserController::class);
 
         Route::post('/parse',[ParseController::class, 'parse']);
+        Route::get('/search', [SearchController::class, 'search'])->name('search');
+
     });

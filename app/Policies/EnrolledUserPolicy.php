@@ -45,10 +45,18 @@ class EnrolledUserPolicy
      * Determine whether the user can delete the model.
      */
     public function delete(User $user, EnrolledUser $enrolledUser): bool
-    {
-        $classroom = $enrolledUser->classroom;
-        return ($user->id === $enrolledUser->user_id || $classroom->owner_id === $user->id);
+{
+    if ($user->id === $enrolledUser->user_id) {
+        return true;
     }
+
+    if ($user->role === 'instructor') {
+        return $enrolledUser->classroom->owner_id === $user->id;
+    }
+
+    // Admin can delete any enrollment
+    return $user->role === 'admin';
+}
 
     /**
      * Determine whether the user can restore the model.

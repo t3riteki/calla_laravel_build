@@ -21,7 +21,7 @@ class ClassroomPolicy
      */
     public function view(User $user, Classroom $classroom): bool
     {
-        return ($user->role === 'instructor'||$user->role === 'student');
+        return $classroom->enrolledUser()->where('user_id', $user->id)->exists();
     }
 
     /**

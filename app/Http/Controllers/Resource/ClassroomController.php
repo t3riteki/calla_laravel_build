@@ -7,6 +7,7 @@ use App\Models\Classroom;
 use App\Http\Requests\StoreClassroomRequest;
 use App\Http\Requests\UpdateClassroomRequest;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 
@@ -20,18 +21,38 @@ class ClassroomController extends Controller
     {
         $user = Auth::user();
 
-        // Get ALL classrooms owned by this instructor
-        $classrooms = Classroom::with('User')
-            ->where('owner_id', $user->id)
-            ->withCount([
-                'EnrolledUser as enrollee_count' => function ($query) {
-                    $query->where('role', 'learner');
-                }
-            ])
-            ->latest()
-            ->get();
+        $role = $user->role;
+        $classrooms = [];
+        switch($role){
+            case'admin':
+                $classrooms = Classroom::all();
+                break;
+            case'instructor':
+                // Get ALL classrooms owned by this instructor
+                $classrooms = Classroom::with('User')
+                    ->where('owner_id', $user->id)
+                    ->withCount([
+                        'EnrolledUser as enrollee_count' => function ($query) {
+                            $query->where('role', 'learner');
+                        }])
+                    ->latest()
+                    ->get();
+            break;
 
-        return view($user->role . '.classrooms', [
+            case 'learner':
+                $classrooms = [
+                    'JoinedClasses' => Classroom::whereHas('enrolledUser', function ($q) use ($user) {
+                        $q->where('user_id', $user->id);
+                    })->get(),
+
+                    'JoinableClasses' => Classroom::whereDoesntHave('enrolledUser', function ($q) use ($user) {
+                        $q->where('user_id', $user->id);
+                    })->get(),
+                ];
+            break;
+        }
+
+        return view($role . '.classrooms', [
             'classrooms' => $classrooms
         ]);
     }
@@ -59,8 +80,30 @@ class ClassroomController extends Controller
             'user_id' => $user->id,
         ]);
 
-        return back()->with('success','Successfully created '.$classroom->name);;
+        return back()->with('success','Successfully created '.$classroom->name);
     }
+
+    public function join(Classroom $classroom, Request $request)
+    {
+        $code = $request->code;
+
+        if ($classroom->code !== $code) {
+            return back()->with('error', 'Invalid Code');
+        }
+
+        $user = Auth::user();
+
+        if ($user->classroom()->where('classroom_id', $classroom->id)->exists()) {
+            return back()->with('error', 'You are already enrolled in this classroom.');
+        }
+
+        $user->enrolledUser()->create([
+            'classroom_id' => $classroom->id,
+        ]);
+
+        return back()->with('success', 'Successfully joined ' . $classroom->name);
+    }
+
 
     /**
      * Display the specified resource.

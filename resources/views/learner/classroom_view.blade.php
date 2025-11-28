@@ -23,9 +23,6 @@
                         <p class="py-4 text-sm sm:text-base opacity-80 max-w-xl">
                             {{ $classroom->description }}
                         </p>
-                        <p class="inline-block px-3 py-1 bg-red-100 text-red-700 rounded-lg text-sm font-medium">
-                            Code: {{ $classroom->code }}
-                        </p>
                     </div>
 
                     <!-- Stats & Back Button-->
@@ -35,6 +32,12 @@
                     class="btn btn-sm bg-gradient-to-r from-red-800 to-red-700 text-white hover:opacity-90">
                         ← Back to Classrooms
                     </a>
+
+                    <!-- Leave Button -->
+                    <button onclick="leaveClassroomModal.showModal()"
+                            class="btn btn-sm bg-gradient-to-r from-orange-600 to-orange-500 text-white hover:opacity-90">
+                        Leave Classroom
+                    </button>
 
                     <!-- Stats -->
                     <div class="stats stats-vertical sm:stats-horizontal shadow mt-4">
@@ -64,14 +67,7 @@
                     <div class="card-body">
 
                         <!-- Header -->
-                        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-                            <h3 class="card-title text-lg sm:text-xl">Enrolled Students</h3>
-
-                            <button onclick="addStudentModal.showModal()"
-                                class="btn btn-sm bg-red-800 hover:bg-red-700 text-white w-full sm:w-auto">
-                                + Add Student
-                            </button>
-                        </div>
+                        <h3 class="card-title text-lg sm:text-xl">Enrolled Students</h3>
 
                         <!-- Table -->
                         <div class="overflow-x-auto mt-4">
@@ -80,10 +76,7 @@
                                     <tr>
                                         <th>Student Name</th>
                                         <th>Email</th>
-                                        <th>Status</th>
                                         <th>Joined</th>
-                                        <th>Progress</th>
-                                        <th>Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -91,13 +84,7 @@
                                         <tr>
                                             <td>{{ $enrollment->user->name }}</td>
                                             <td>{{ $enrollment->user->email }}</td>
-                                            <td></td>
                                             <td>{{ $enrollment->user->created_at->format('M d, Y') }}</td>
-                                            <td></td>
-                                            <td class="space-x-2">
-                                                <button class="text-red-700 hover:underline">View</button>
-                                                <button class="text-blue-500 hover:underline">Remove</button>
-                                            </td>
                                         </tr>
                                     @endforeach
                                 </tbody>
@@ -114,13 +101,7 @@
                     <div class="card-body">
 
                         <!-- Header -->
-                        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-                            <h3 class="card-title text-lg sm:text-xl">Class Modules</h3>
-                            <a href="/modules/create?class={{ $classroom->id }}"
-                               class="btn btn-sm bg-red-800 hover:bg-red-700 text-white w-full sm:w-auto">
-                                + Add Module
-                            </a>
-                        </div>
+                        <h3 class="card-title text-lg sm:text-xl">Class Modules</h3>
 
                         <!-- Table -->
                         <div class="overflow-x-auto mt-4">
@@ -140,8 +121,8 @@
                                             <td class="max-w-[200px] truncate">{{ $classmodule->module->description }}</td>
                                             <td>{{ $classmodule->module->created_at->format('M d, Y') }}</td>
                                             <td class="space-x-2">
-                                                <button class="text-red-700 hover:underline">View</button>
-                                                <button class="text-gray-500 hover:underline">Edit</button>
+                                                <a href="{{ route('classroommodule.show', $classmodule->id) }}"
+                                                   class="text-red-700 hover:underline">View</a>
                                             </td>
                                         </tr>
                                     @endforeach
@@ -157,24 +138,20 @@
 
     </div>
 
-    <!-- ADD STUDENT MODAL -->
-    <dialog id="addStudentModal" class="modal">
+    <!-- LEAVE CLASSROOM MODAL -->
+    <dialog id="leaveClassroomModal" class="modal">
         <div class="modal-box max-w-md bg-white rounded-xl shadow-xl p-6">
-            <h3 class="font-bold text-lg mb-4">Add Student</h3>
+            <h3 class="font-bold text-lg mb-4">Leave Classroom</h3>
+            <p class="mb-6 text-gray-600">Are you sure you want to leave this classroom? You can rejoin later using the classroom code.</p>
 
-            <form method="POST" action="{{ route('enrolleduser.store', $classroom->id) }}" class="space-y-4">
-                @csrf
-
-                <div class="form-control">
-                    <label class="label"><span class="label-text">Student Email</span></label>
-                    <input type="email" name="email" class="input input-bordered w-full" required>
-                </div>
-
-                <div class="modal-action">
-                    <button type="button" class="btn" onclick="addStudentModal.close()">Cancel</button>
-                    <button type="submit" class="btn bg-red-800 text-white hover:bg-red-700">Add</button>
-                </div>
-            </form>
+            <div class="modal-action">
+                <button type="button" class="btn" onclick="leaveClassroomModal.close()">Cancel</button>
+                <form method="POST" action="{{ route('enrolleduser.destroy', Auth::user()->enrolledUser()->where('classroom_id', $classroom->id)->first()->id) }}" style="display: inline;">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn bg-orange-600 text-white hover:bg-orange-700">Leave</button>
+                </form>
+            </div>
         </div>
     </dialog>
 

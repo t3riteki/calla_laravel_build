@@ -19,7 +19,38 @@ class ClassroomModuleController extends Controller
      */
     public function index()
     {
-        //
+        $user = Auth::user();
+        $role = $user->role;
+        $classroommodules = [];
+        switch($role){
+            case'admin':
+                $classroommodules = ClassroomModule::all();
+                break;
+            case'instructor':
+                $classroomids = $user->classroom()->pluck('id');
+                $classroommodules = ClassroomModule::with('classroom')
+                    ->whereIn('classroom_id', $classroomids)
+                    ->latest()
+                    ->get();
+                break;
+
+            case'learner':
+                $classroomids = $user->enrolledUser()->pluck('classroom_id');
+                $classroommodules = ClassroomModule::with('classroom')
+                    ->whereIn('classroom_id', $classroomids)
+                    ->withCount([
+                        'enrolledUser as enrollee_count' => function ($query) {
+                            $query->where('role', 'learner');
+                        }
+                    ])
+                    ->latest()
+                    ->get();
+                break;
+        }
+
+        return view($role . '.modules', [
+            'classroommodules' => $classroommodules
+        ]);
     }
 
     /**
