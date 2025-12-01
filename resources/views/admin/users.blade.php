@@ -52,12 +52,12 @@
                                         <td>{{ $user->created_at->format('M d, Y') }}</td>
 
                                         <td class="space-x-2 flex justify-center">
-                                            <a href="{{ route('users.show', $user->id) }}"
+                                            <a href="{{ route('user.show', $user->id) }}"
                                                 class="text-red-700 hover:underline">
                                                 View
                                             </a>
 
-                                            <a href="{{ route('users.edit', $user->id) }}"
+                                            <a href="{{ route('user.edit', $user->id) }}"
                                                 class="text-blue-500 hover:underline">
                                                 Edit
                                             </a>

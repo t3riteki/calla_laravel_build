@@ -103,10 +103,10 @@
                                         </td>
                                         <td>{{ $user->created_at->format('M d, Y') }}</td>
                                         <td>
-                                            <a href="{{ route('users.show', $user->id) }}"
+                                            <a href="{{ route('user.show', $user->id) }}"
                                             class="text-red-600 hover:underline">View</a>
                                             |
-                                            <a href="{{ route('users.edit', $user->id) }}"
+                                            <a href="{{ route('user.edit', $user->id) }}"
                                             class="text-blue-600 hover:underline">Edit</a>
                                         </td>
                                     </tr>

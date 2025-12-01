@@ -19,13 +19,37 @@ class ModuleController extends Controller
     public function index()
     {
         $user = Auth::user();
-        $modules = Module::with('User')
-            ->where('owner_id', $user->id)
-            ->withCount('ClassroomModule')
-            ->latest()
-            ->get();
+        $role = $user->role;
+        $modules = [];
 
-        return view($user->role . '.modules', [
+        switch ($role) {
+            case 'admin':
+                // Admin sees ALL modules in the system
+                $modules = Module::with('User')
+                    ->withCount('ClassroomModule') // Optional: keeps track of usage
+                    ->latest()
+                    ->get();
+                break;
+
+            case 'instructor':
+                // Instructor sees ONLY the modules they created (Management View)
+                $modules = Module::with('User')
+                    ->where('owner_id', $user->id)
+                    ->withCount('ClassroomModule')
+                    ->latest()
+                    ->get();
+                break;
+
+            case 'learner':
+                // Learner sees ALL modules (Library View)
+                // Removed the "ClassroomModule" filter so they see everything
+                $modules = Module::with('User')
+                    ->latest()
+                    ->get();
+                break;
+        }
+
+        return view($role . '.modules', [
             'modules' => $modules
         ]);
     }

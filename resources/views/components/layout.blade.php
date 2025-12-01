@@ -35,10 +35,6 @@
     </div>
 
     <script>
-        console.log('Alpine exists?', window.Alpine);
-    </script>
-
-    <script>
         document.addEventListener('alpine:init', () => {
             Alpine.data('searchComponent', () => ({
                 query: '',

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Classroom;
 use App\Models\Module;
 use App\Models\ClassroomModule;
+use App\Models\User;
 use App\Models\UserProgress;
 use Illuminate\Support\Facades\Auth;
 
@@ -33,8 +34,47 @@ class DashboardController extends Controller
         return view($role. '.dashboard', ['data' => $data]);
     }
 
-    private function adminData(){
-        return [];
+    private function adminData()
+    {
+        // 1. Get Counts for the "Quick Metrics" and "Stat Cards"
+        $classroom_count = Classroom::count();
+        $module_count = Module::count();
+        $learner_count = User::where('role', 'learner')->count();
+        $instructor_count = User::where('role', 'instructor')->count();
+
+        // 2. Get Recent Users for "User Overview" table
+        // We take the latest 5 to fit the table UI
+        $users = User::latest()
+            ->take(5)
+            ->get();
+
+        // 3. Get Recent Classrooms for "Classroom Overview" table
+        // We eager load 'EnrolledUser.user' because your blade view performs a
+        // filter on the collection: $classroom->EnrolledUser->where('user.role', 'learner')
+        $classrooms = Classroom::with('EnrolledUser.user')
+            ->latest()
+            ->take(5)
+            ->get();
+
+        // 4. Get Recent Modules for "Module Overview" table
+        // We eager load 'ClassroomModule' so the view can count instances
+        $modules = Module::with('ClassroomModule')
+            ->latest()
+            ->take(5)
+            ->get();
+
+        // 5. Compile into the $data array expected by the view
+        $data = [
+            'classroom_count'  => $classroom_count,
+            'module_count'     => $module_count,
+            'learner_count'    => $learner_count,
+            'instructor_count' => $instructor_count,
+            'users'            => $users,
+            'classrooms'       => $classrooms,
+            'modules'          => $modules,
+        ];
+
+        return $data;
     }
 
     private function instructorData($user){
