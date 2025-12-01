@@ -1,214 +1,243 @@
-<x-layout>
-    <x-slot:title>Instructor Dashboard - CALLA</x-slot:title>
+ <x-layout>
+    <x-slot:title>Admin Dashboard - CALLA</x-slot:title>
 
-    <!-- DASHBOARD CONTAINER -->
-    <div class="flex flex-col lg:flex-row min-h-screen bg-white transition-all duration-300">
+    <div class="flex min-h-screen bg-gray-100">
 
         <!-- SIDEBAR -->
         <x-sidebar />
 
         <!-- MAIN CONTENT -->
-        <main
-            class="flex-1 p-4 sm:p-6 md:p-8 overflow-y-auto
-                   lg:ml-64 md:ml-56 sm:ml-0 transition-all duration-300">
+        <main class="flex-1 p-6 lg:ml-64 md:ml-56 sm:ml-0 transition-all duration-300">
 
-            <!-- 📊 DASHBOARD OVERVIEW -->
+            <!-- 🔥 HEADER / HERO -->
             <section class="mb-10">
-                <div class="hero rounded-2xl bg-gradient-to-r from-red-900 via-red-700 to-red-600 text-white p-6 sm:p-8 md:p-10">
-                    <div class="hero-content flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 lg:gap-16 w-full">
+                <div class="rounded-3xl bg-gradient-to-r from-red-900 via-red-700 to-red-500
+                            p-8 text-white shadow-xl relative overflow-hidden">
+
+                    <!-- Decorative Blobs -->
+                    <div class="absolute top-0 right-0 w-60 h-60 bg-white/10 rounded-full blur-3xl"></div>
+                    <div class="absolute bottom-0 left-0 w-56 h-56 bg-black/10 rounded-full blur-2xl"></div>
+
+                    <div class="relative z-10 flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
+
                         <div>
-                            <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold">Dashboard Overview</h2>
-                            <p class="py-4 text-sm sm:text-base opacity-80">
-                                Welcome {{ auth()->user()->role }}, here's everything so far ^_^
+                            <h1 class="text-4xl lg:text-5xl font-extrabold">Admin Dashboard</h1>
+                            <p class="text-gray-200 mt-2 text-sm">
+                                Welcome back Admin, here’s your updated overview and activity summary.
                             </p>
                         </div>
 
-                        <!-- DaisyUI Stats -->
-                        <div class="stats stats-vertical sm:stats-horizontal shadow mt-4 lg:mt-0 flex-shrink-0">
-                            <div class="stat bg-white/10 text-white backdrop-blur-md">
-                                <div class="stat-title text-gray-200">Total Classes</div>
-                                <div class="stat-value text-white text-2xl sm:text-3xl">
-                                    {{ $data['classroom_count'] }}
-                                </div>
+                        <!-- STAT CARDS -->
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="p-4 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 shadow">
+                                <p class="text-gray-200 text-xs">Total Classrooms</p>
+                                <h3 class="text-3xl font-bold">{{ $data['classroom_count'] }}</h3>
                             </div>
 
-                            <div class="stat bg-white/10 text-white backdrop-blur-md">
-                                <div class="stat-title text-gray-200">Total Modules</div>
-                                <div class="stat-value text-white text-2xl sm:text-3xl">
-                                    {{ $data['module_count'] }}
-                                </div>
+                            <div class="p-4 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 shadow">
+                                <p class="text-gray-200 text-xs">Total Modules</p>
+                                <h3 class="text-3xl font-bold">{{ $data['module_count'] }}</h3>
                             </div>
                         </div>
+
                     </div>
                 </div>
             </section>
 
-            <!-- 🏫 CLASS LIST -->
+            <!-- 📊 QUICK METRICS -->
             <section class="mb-10">
-                <div class="card bg-base-100 shadow-lg border">
-                    <div class="card-body">
-                        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-                            <h3 class="card-title text-lg sm:text-xl">My Classrooms</h3>
-                            <a class="btn btn-sm bg-red-800 hover:bg-red-700 text-white w-full sm:w-auto" href="/classrooms">
-                                View All
-                            </a>
-                        </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 
-                        <div class="overflow-x-auto mt-4">
-                            <table class="table table-zebra w-full text-center text-sm sm:text-base">
-                                <thead>
+                    <div class="bg-white p-6 rounded-2xl shadow hover:shadow-lg transition">
+                        <h4 class="text-gray-600 text-sm">Total Learners</h4>
+                        <p class="text-4xl font-bold text-red-700 mt-2">{{ $data['learner_count'] ?? 0 }}</p>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-2xl shadow hover:shadow-lg transition">
+                        <h4 class="text-gray-600 text-sm">Total Instructors</h4>
+                        <p class="text-4xl font-bold text-red-700 mt-2">{{ $data['instructor_count'] ?? 0 }}</p>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-2xl shadow hover:shadow-lg transition">
+                        <h4 class="text-gray-600 text-sm">System Activity</h4>
+                        <p class="text-sm text-gray-500 mt-2">Everything is running smoothly ✓</p>
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- 👥 USER MANAGEMENT -->
+            <section class="mt-10">
+                <div class="bg-white rounded-2xl p-6 shadow-lg border">
+
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-xl font-semibold">User Overview</h3>
+                        <a href="/users" class="btn btn-sm bg-red-700 hover:bg-red-600 text-white">View All</a>
+                    </div>
+
+                    <div class="overflow-x-auto">
+                        <table class="table table-zebra w-full text-sm text-center">
+                            <thead class="bg-gray-100">
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Role</th>
+                                    <th>Date Joined</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                @foreach ($data['users'] as $user)
                                     <tr>
-                                        <th>Class Name</th>
-                                        <th>Class Description</th>
-                                        <th>Enrollees</th>
-                                        <th>Date Added</th>
-                                        <th>Actions</th>
+                                        <td class="font-medium">{{ $user->name }}</td>
+                                        <td class="text-gray-600">{{ $user->email }}</td>
+                                        <td class="capitalize">
+                                            @if ($user->role === 'admin')
+                                                <span class="text-red-700 font-semibold">Admin</span>
+                                            @elseif ($user->role === 'instructor')
+                                                <span class="text-blue-700 font-semibold">Instructor</span>
+                                            @else
+                                                <span class="text-green-700 font-semibold">Learner</span>
+                                            @endif
+                                        </td>
+                                        <td>{{ $user->created_at->format('M d, Y') }}</td>
+                                        <td>
+                                            <a href="{{ route('users.show', $user->id) }}"
+                                            class="text-red-600 hover:underline">View</a>
+                                            |
+                                            <a href="{{ route('users.edit', $user->id) }}"
+                                            class="text-blue-600 hover:underline">Edit</a>
+                                        </td>
                                     </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach ($data['classrooms'] as $classroom)
-                                        <tr>
-                                            <td>{{ $classroom->name }}</td>
-                                            <td class="max-w-[150px] truncate">{{ $classroom->description }}</td>
-                                            <td>{{ $classroom->EnrolledUser->where('user.role','learner')->count() }}</td>
-                                            <td>{{ $classroom->created_at }}</td>
-                                            <td class="py-3 px-4 space-x-2">
-                                                <a href="{{ route('classrooms.show', $classroom->id) }}"
-                                                class="btn btn-link text-red-700 no-underline hover:underline">
-                                                    View
-                                                </a>
+                                @endforeach
+                            </tbody>
 
-                                                <!-- Edit Button triggers modal -->
-                                                <button onclick="document.getElementById('editClassModal-{{ $classroom->id }}').showModal()"
-                                                    class="btn btn-link text-blue-500 no-underline hover:underline">
-                                                    Edit
-                                                </button>
+                        </table>
+                    </div>
 
-                                                <!-- Edit Modal -->
-                                                <dialog id="editClassModal-{{ $classroom->id }}" class="modal">
-                                                    <div class="modal-box max-w-lg bg-white/95 backdrop-blur-md rounded-2xl shadow-lg border border-gray-100">
-                                                        <div class="flex justify-between items-center mb-4">
-                                                            <h3 class="text-lg font-semibold text-gray-800 flex items-center gap-2">
-                                                                <span class="text-red-800 text-xl">✏️</span> Edit Class
-                                                            </h3>
-                                                            <form method="dialog">
-                                                                <button class="btn btn-sm btn-circle btn-ghost text-gray-500 hover:text-red-700">✕</button>
-                                                            </form>
-                                                        </div>
+                </div>
+            </section>
 
-                                                        <!-- EDIT FORM -->
-                                                        <form method="POST" action="{{ route('classrooms.update', $classroom->id) }}" class="space-y-4">
-                                                            @csrf
-                                                            @method('PUT')
+            <!-- 🏫 CLASSROOM MANAGEMENT -->
+            <section class="mb-10">
+                <div class="bg-white rounded-2xl p-6 shadow-lg border">
 
-                                                            <!-- Class Name -->
-                                                            <div class="form-control">
-                                                                <label class="label">
-                                                                    <span class="label-text text-sm font-semibold text-gray-600">Class Name</span>
-                                                                </label>
-                                                                <input type="text" name="name" value="{{ $classroom->name }}"
-                                                                    class="input input-bordered w-full focus:ring-2 focus:ring-red-700 rounded-lg" required>
-                                                            </div>
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-xl font-semibold">Classroom Overview</h3>
+                        <a href="/classrooms" class="btn btn-sm bg-red-700 hover:bg-red-600 text-white">View All</a>
+                    </div>
 
-                                                            <!-- Description -->
-                                                            <div class="form-control">
-                                                                <label class="label">
-                                                                    <span class="label-text text-sm font-semibold text-gray-600">Description</span>
-                                                                </label>
-                                                                <textarea name="description"
-                                                                    class="textarea textarea-bordered w-full h-24 resize-none focus:ring-2 focus:ring-red-700 rounded-lg"
-                                                                    required>{{ $classroom->description }}</textarea>
-                                                            </div>
+                    <div class="overflow-x-auto">
+                        <table class="table table-zebra w-full text-sm text-center">
+                            <thead class="bg-gray-100">
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Description</th>
+                                    <th>Learners</th>
+                                    <th>Created</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
 
-                                                            <!-- Class Code -->
-                                                            <div class="form-control">
-                                                                <label class="label">
-                                                                    <span class="label-text text-sm font-semibold text-gray-600">Class Code</span>
-                                                                </label>
-                                                                <div class="relative">
-                                                                    <input type="text" name="code" value="{{ $classroom->code }}"
-                                                                        class="input input-bordered w-full focus:ring-2 focus:ring-red-700 rounded-lg">
+                            <tbody>
+                                @foreach ($data['classrooms'] as $classroom)
+                                    <tr>
+                                        <td class="font-medium">{{ $classroom->name }}</td>
+                                        <td class="max-w-[200px] truncate">{{ $classroom->description }}</td>
+                                        <td>{{ $classroom->EnrolledUser->where('user.role', 'learner')->count() }}</td>
+                                        <td>{{ $classroom->created_at->format('M d, Y') }}</td>
+                                        <td>
+                                            <a href="{{ route('classrooms.show', $classroom->id) }}"
+                                               class="text-red-600 hover:underline">View</a>
+                                            |
+                                            <a onclick="document.getElementById('editClassModal-{{ $classroom->id }}').showModal()"
+                                               class="text-blue-600 hover:underline cursor-pointer">Edit</a>
+                                        </td>
+                                    </tr>
 
-                                                                    <button type="button"
-                                                                            class="btn btn-sm bg-red-700 text-white hover:bg-red-600 absolute right-1 top-1/2
-                                                                                transform -translate-y-1/2 rounded-full px-3 py-1 text-xs"
-                                                                            onclick="generateEditCode('{{ $classroom->id }}')">
-                                                                        Auto
-                                                                    </button>
-                                                                </div>
-                                                            </div>
+                                    <!-- EDIT MODAL -->
+                                    <dialog id="editClassModal-{{ $classroom->id }}" class="modal">
+                                        <div class="modal-box rounded-xl p-6">
+                                            <h3 class="text-lg font-bold mb-4">Edit Classroom</h3>
 
-                                                            <!-- ACTION BUTTONS -->
-                                                            <div class="modal-action flex justify-end gap-3 mt-6">
-                                                                <button type="button" class="btn btn-ghost text-gray-600 hover:bg-gray-100"
-                                                                    onclick="document.getElementById('editClassModal-{{ $classroom->id }}').close()">Cancel</button>
-                                                                <button type="submit"
-                                                                    class="btn bg-gradient-to-r from-red-800 to-red-700 text-white hover:opacity-90 transition px-6">
-                                                                    Save Changes
-                                                                </button>
-                                                            </div>
-                                                        </form>
-                                                    </div>
-                                                </dialog>
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
+                                            <form method="POST" action="{{ route('classrooms.update', $classroom->id) }}" class="space-y-3">
+                                                @csrf
+                                                @method('PUT')
 
-                            </table>
-                        </div>
+                                                <input type="text" name="name" value="{{ $classroom->name }}"
+                                                    class="input input-bordered w-full rounded-lg" required>
+
+                                                <textarea name="description" class="textarea textarea-bordered w-full rounded-lg" required>{{ $classroom->description }}</textarea>
+
+                                                <div class="flex justify-end gap-3 mt-4">
+                                                    <button type="button" class="btn" onclick="document.getElementById('editClassModal-{{ $classroom->id }}').close()">Cancel</button>
+                                                    <button class="btn bg-red-700 text-white hover:bg-red-600">Save</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </dialog>
+                                @endforeach
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </section>
 
             <!-- 📚 MODULE MANAGEMENT -->
             <section>
-                <div class="card bg-base-100 shadow-lg border">
-                    <div class="card-body">
-                        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-                            <h3 class="card-title text-lg sm:text-xl">My Modules</h3>
-                            <a class="btn btn-sm bg-red-800 hover:bg-red-700 text-white w-full sm:w-auto" href="/modules">
-                                View All
-                            </a>
-                        </div>
+                <div class="bg-white rounded-2xl p-6 shadow-lg border">
 
-                        <div class="overflow-x-auto mt-4">
-                            <table class="table table-zebra w-full text-center text-sm sm:text-base">
-                                <thead>
-                                    <tr>
-                                        <th>Module Title</th>
-                                        <th>Module Description</th>
-                                        <th>Instance Count</th>
-                                        <th>Date Added</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach ($data['modules'] as $module)
-                                        <tr class="align-center">
-                                            <td>{{ $module->name }}</td>
-                                            <td class="max-w-[150px] truncate">{{ $module->description }}</td>
-                                            <td>{{ $module->ClassroomModule->count() }}</td>
-                                            <td>{{ $module->created_at }}</td>
-                                            <td class="py-3 px-4 space-x-2">
-                                                <a href="{{ route('modules.show', $module->id) }}"
-                                                class="btn btn-link text-red-700 no-underline hover:underline">
-                                                    View
-                                                </a>
-                                                <a href="{{ route('modules.edit', $module->id) }}"
-                                                class="btn btn-link text-blue-500 no-underline hover:underline">
-                                                    Edit
-                                                </a>
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-xl font-semibold">Module Overview</h3>
+                        <a href="/modules" class="btn btn-sm bg-red-700 hover:bg-red-600 text-white">View All</a>
                     </div>
+
+                    <div class="overflow-x-auto">
+                        <table class="table table-zebra w-full text-sm text-center">
+                            <thead class="bg-gray-100">
+                                <tr>
+                                    <th>Module</th>
+                                    <th>Description</th>
+                                    <th>Instances</th>
+                                    <th>Date Added</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                @foreach ($data['modules'] as $module)
+                                    <tr>
+                                        <td class="font-medium">{{ $module->name }}</td>
+                                        <td class="max-w-[200px] truncate">{{ $module->description }}</td>
+                                        <td>{{ $module->ClassroomModule->count() }}</td>
+                                        <td>{{ $module->created_at->format('M d, Y') }}</td>
+                                        <td>
+                                            <a href="{{ route('modules.show', $module->id) }}"
+                                               class="text-red-600 hover:underline">View</a>
+                                            |
+                                            <a href="{{ route('modules.edit', $module->id) }}"
+                                               class="text-blue-600 hover:underline">Edit</a>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+
+                        </table>
+                    </div>
+
                 </div>
             </section>
 
         </main>
     </div>
+
+    <style>
+        @keyframes fadeSlideUp {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-slide { animation: fadeSlideUp 0.7s ease forwards; }
+    </style>
+
 </x-layout>

@@ -1,106 +1,96 @@
 <x-layout>
-    <x-slot:title>{{ $classroom->name }} - Classroom View</x-slot:title>
+    <x-slot:title>{{ $classroom->name }} - Classroom</x-slot:title>
 
-    <div class="flex flex-col lg:flex-row min-h-screen bg-white transition-all duration-300">
+    <div class="flex flex-col lg:flex-row min-h-screen bg-gray-50">
 
         <!-- SIDEBAR -->
         <x-sidebar />
 
         <!-- MAIN CONTENT -->
-        <main
-            class="flex-1 p-4 sm:p-6 md:p-8 overflow-y-auto
-                   lg:ml-64 md:ml-56 sm:ml-0 transition-all duration-300">
+        <main class="flex-1 p-6 lg:ml-64 md:ml-56">
 
-            <!-- 🏫 CLASSROOM HEADER -->
+            <!-- HEADER -->
             <section class="mb-10">
-            <div class="hero rounded-2xl bg-gradient-to-r from-red-900 via-red-700 to-red-600 text-white p-6 sm:p-8 md:p-10">
-                <div class="hero-content flex flex-col lg:flex-row lg:items-center lg:justify-between w-full gap-6">
+                <div class="rounded-2xl bg-gradient-to-r from-red-900 via-red-700 to-red-600 text-white p-8 shadow-lg">
+                    <div class="flex flex-col lg:flex-row justify-between gap-6">
 
-                    <div>
-                        <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold">
-                            {{ $classroom->name }}
-                        </h2>
-                        <p class="py-4 text-sm sm:text-base opacity-80 max-w-xl">
-                            {{ $classroom->description }}
-                        </p>
-                        <p class="inline-block px-3 py-1 bg-red-100 text-red-700 rounded-lg text-sm font-medium">
-                            Code: {{ $classroom->code }}
-                        </p>
-                    </div>
+                        <!-- Title + Description -->
+                        <div>
+                            <h2 class="text-4xl font-bold">{{ $classroom->name }}</h2>
+                            <p class="opacity-80 mt-3 max-w-xl">{{ $classroom->description }}</p>
 
-                    <!-- Stats & Back Button-->
-                        <div class="flex flex-col gap-4">
-                    <!-- Back Button above stats -->
-                    <a href="{{ route('classrooms.index') }}"
-                    class="btn btn-sm bg-gradient-to-r from-red-800 to-red-700 text-white hover:opacity-90">
-                        ← Back to Classrooms
-                    </a>
+                            <p class="mt-3 inline-block px-3 py-1 bg-red-100 text-red-800 rounded-lg text-sm font-medium">
+                                Code: {{ $classroom->code }}
+                            </p>
+                        </div>
 
-                    <!-- Stats -->
-                    <div class="stats stats-vertical sm:stats-horizontal shadow mt-4">
-                        <div class="stat bg-white/10 text-white backdrop-blur-md">
-                            <div class="stat-title text-gray-200">Students</div>
-                            <div class="stat-value text-white text-3xl">
-                                {{ $classroom->EnrolledUser->where('user.role','learner')->count() }}
+                        <!-- Stats + Back -->
+                        <div class="flex flex-col items-start gap-4">
+                            <a href="{{ route('classrooms.index') }}"
+                               class="btn btn-sm bg-white/20 text-white hover:bg-white/30">
+                                ← Back to Classrooms
+                            </a>
+
+                            <div class="stats stats-vertical sm:stats-horizontal shadow-lg">
+                                <div class="stat bg-white/10 backdrop-blur-md text-white">
+                                    <div class="stat-title text-gray-200">Students</div>
+                                    <div class="stat-value">{{ $classroom->EnrolledUser->where('user.role','learner')->count() }}</div>
+                                </div>
+
+                                <div class="stat bg-white/10 backdrop-blur-md text-white">
+                                    <div class="stat-title text-gray-200">Modules</div>
+                                    <div class="stat-value">{{ $classroom->ClassroomModule->count() }}</div>
+                                </div>
                             </div>
                         </div>
 
-                        <div class="stat bg-white/10 text-white backdrop-blur-md">
-                            <div class="stat-title text-gray-200">Modules</div>
-                            <div class="stat-value text-white text-3xl">
-                                {{ $classroom->ClassroomModule->count() }}
-                            </div>
-                        </div>
                     </div>
                 </div>
+            </section>
 
-                </div>
-            </div>
-        </section>
-
-            <!-- 👨‍🎓 STUDENT LIST -->
+            <!-- STUDENT LIST -->
             <section class="mb-10">
-                <div class="card bg-base-100 shadow-lg border">
+                <div class="card bg-white shadow-lg border rounded-xl">
                     <div class="card-body">
 
-                        <!-- Header -->
-                        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-                            <h3 class="card-title text-lg sm:text-xl">Enrolled Students</h3>
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-lg font-semibold">Enrolled Students</h3>
 
-                            <button onclick="addStudentModal.showModal()"
-                                class="btn btn-sm bg-red-800 hover:bg-red-700 text-white w-full sm:w-auto">
+                            <button class="btn btn-sm bg-red-800 text-white hover:bg-red-700"
+                                onclick="addStudentModal.showModal()">
                                 + Add Student
                             </button>
                         </div>
 
-                        <!-- Table -->
-                        <div class="overflow-x-auto mt-4">
-                            <table class="table text-center table-zebra w-full text-sm sm:text-base">
-                                <thead>
+                        <div class="overflow-x-auto">
+                            <table class="table table-zebra text-center w-full">
+                                <thead class="bg-gray-100">
                                     <tr>
-                                        <th>Student Name</th>
+                                        <th>Name</th>
                                         <th>Email</th>
                                         <th>Status</th>
                                         <th>Joined</th>
-                                        <th>Progress</th>
                                         <th>Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                   @foreach ($classroom->EnrolledUser->where('user.role','learner') as $enrollment)
+                                   @foreach ($classroom->EnrolledUser->where('user.role','learner') as $enroll)
                                         <tr>
-                                            <td>{{ $enrollment->user->name }}</td>
-                                            <td>{{ $enrollment->user->email }}</td>
-                                            <td></td>
-                                            <td>{{ $enrollment->user->created_at->format('M d, Y') }}</td>
-                                            <td></td>
-                                            <td class="space-x-2 flex justify-center">
-                                                <a href="{{ route('user.show', $enrollment->user->id) }} class="text-red-700 hover:underline">View</a>
-                                                <form method="POST" action="{{ route('enrolleduser.destroy', $enrollment->id) }}">
+                                            <td>{{ $enroll->user->name }}</td>
+                                            <td>{{ $enroll->user->email }}</td>
+                                            <td>Active</td>
+                                            <td>{{ $enroll->created_at->format('M d, Y') }}</td>
+                                            <td class="flex justify-center gap-3">
+
+                                                <a href="{{ route('enrolleduser.show', $enroll->id) }}"
+                                                   class="text-red-700 hover:underline">View</a>
+
+                                                <form method="POST" action="{{ route('enrolleduser.destroy',$enroll->id) }}">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <button class="text-blue-500 hover:underline cursor-pointer" type="submit">Remove</button>
+                                                    <button class="text-blue-600 hover:underline">Remove</button>
                                                 </form>
+
                                             </td>
                                         </tr>
                                     @endforeach
@@ -112,24 +102,23 @@
                 </div>
             </section>
 
-            <!-- 📚 MODULE LIST -->
-            <section>
-                <div class="card bg-base-100 shadow-lg border">
+            <!-- MODULE LIST -->
+            <section class="mb-10">
+                <div class="card bg-white shadow-lg border rounded-xl">
                     <div class="card-body">
 
-                        <!-- Header -->
-                        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-                            <h3 class="card-title text-lg sm:text-xl">Class Modules</h3>
-                            <a href="/modules/create?class={{ $classroom->id }}"
-                               class="btn btn-sm bg-red-800 hover:bg-red-700 text-white w-full sm:w-auto">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-lg font-semibold">Class Modules</h3>
+
+                            <button onclick="moduleModal.showModal()"
+                               class="btn btn-sm bg-red-800 text-white hover:bg-red-700">
                                 + Add Module
-                            </a>
+                            </button>
                         </div>
 
-                        <!-- Table -->
-                        <div class="overflow-x-auto mt-4">
-                            <table class="table text-center table-zebra w-full text-sm sm:text-base">
-                                <thead>
+                        <div class="overflow-x-auto">
+                            <table class="table table-zebra text-center w-full">
+                                <thead class="bg-gray-100">
                                     <tr>
                                         <th>Title</th>
                                         <th>Description</th>
@@ -138,17 +127,20 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($classroom->ClassroomModule as $classmodule)
+                                    @foreach ($classroom->ClassroomModule as $mod)
                                         <tr>
-                                            <td>{{ $classmodule->module->name }}</td>
-                                            <td class="max-w-[200px] truncate">{{ $classmodule->module->description }}</td>
-                                            <td>{{ $classmodule->module->created_at->format('M d, Y') }}</td>
-                                            <td class="space-x-2 flex justify-center">
-                                                <a href="{{ route('classroommodule.show',$classmodule->id) }}" class="text-red-700 hover:underline">View</a>
-                                                <form method="POST" action="{{ route('classroommodule.destroy', $classmodule->id) }}">
+                                            <td>{{ $mod->module->name }}</td>
+                                            <td class="max-w-[250px] truncate">{{ $mod->module->description }}</td>
+                                            <td>{{ $mod->module->created_at->format('M d, Y') }}</td>
+
+                                            <td class="flex justify-center gap-3">
+                                                <a href="{{ route('classroommodule.show',$mod->id) }}"
+                                                   class="text-red-700 hover:underline">View</a>
+
+                                                <form method="POST" action="{{ route('classroommodule.destroy', $mod->id) }}">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <button class="text-blue-500 hover:underline cursor-pointer" type="submit">Remove</button>
+                                                    <button class="text-blue-600 hover:underline">Remove</button>
                                                 </form>
                                             </td>
                                         </tr>
@@ -162,29 +154,64 @@
             </section>
 
         </main>
-
     </div>
 
-    <!-- ADD STUDENT MODAL -->
+    <!-- MODAL: ADD STUDENT -->
     <dialog id="addStudentModal" class="modal">
-        <div class="modal-box max-w-md bg-white rounded-xl shadow-xl p-6">
+        <div class="modal-box rounded-xl shadow-xl bg-white">
             <h3 class="font-bold text-lg mb-4">Add Student</h3>
 
             <form method="POST" action="{{ route('enrolleduser.store', $classroom->id) }}" class="space-y-4">
                 @csrf
-
                 <input type="hidden" name="classroom_id" value="{{ $classroom->id }}">
 
-                <div class="form-control">
-                    <label class="label"><span class="label-text">Student Email</span></label>
+                <div>
+                    <label class="label-text">Student Email</label>
                     <input type="email" name="email" class="input input-bordered w-full" required>
                 </div>
 
                 <div class="modal-action">
                     <button type="button" class="btn" onclick="addStudentModal.close()">Cancel</button>
-                    <button type="submit" class="btn bg-red-800 text-white hover:bg-red-700">Add</button>
+                    <button class="btn bg-red-800 text-white hover:bg-red-700">Add</button>
                 </div>
             </form>
+        </div>
+    </dialog>
+
+    <!-- MODAL: ADD MODULE -->
+    <dialog id="moduleModal" class="modal">
+        <div class="modal-box rounded-xl shadow-xl bg-white max-w-lg">
+
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="font-semibold text-lg">Add Module</h3>
+                <button onclick="moduleModal.close()" class="btn btn-sm btn-ghost">✕</button>
+            </div>
+
+            <form method="POST" action="{{ route('classroommodule.store', $classroom->id) }}" class="space-y-4">
+                @csrf
+
+                <input type="hidden" name="classroom_id" value="{{ $classroom->id }}">
+                <input type="hidden" name="added_by" value="{{ auth()->id() }}">
+
+                <div>
+                    <label class="label-text">Module</label>
+                    <select name="module_id" class="select select-bordered w-full" required>
+                        <option disabled selected>Select Module</option>
+
+                        @foreach(auth()->user()->module as $module)
+                            @if(!$classroom->ClassroomModule->where('module_id', $module->id)->count())
+                                <option value="{{ $module->id }}">{{ $module->name }}</option>
+                            @endif
+                        @endforeach
+                    </select>
+                </div>
+
+                <div class="modal-action">
+                    <button type="button" class="btn" onclick="moduleModal.close()">Cancel</button>
+                    <button class="btn bg-red-800 text-white hover:bg-red-700">Add Module</button>
+                </div>
+            </form>
+
         </div>
     </dialog>
 

@@ -1,5 +1,5 @@
 <x-layout>
-    <x-slot:title>All Modules - CALLA</x-slot:title>
+    <x-slot:title>Admin Modules - CALLA</x-slot:title>
 
     <div class="flex flex-col lg:flex-row min-h-screen bg-white transition-all duration-300">
 
@@ -9,13 +9,19 @@
         <!-- MAIN CONTENT -->
         <main class="flex-1 p-4 sm:p-6 md:p-8 overflow-y-auto lg:ml-64 md:ml-56 sm:ml-0 transition-all duration-300">
 
-            <!-- 📘 MODULE LIST -->
+            <!-- 📘 MODULE LIST (ADMIN VERSION) -->
             <section class="mb-10">
                 <div class="card bg-base-100 shadow-lg border">
                     <div class="card-body">
 
                         <div class="flex items-center justify-between">
                             <h3 class="card-title text-lg">All Modules</h3>
+
+                            <!-- + NEW MODULE BUTTON -->
+                            <a href="{{ route('modules.create') }}"
+                                class="bg-red-800 text-white px-4 py-2 rounded-lg text-sm hover:bg-red-700 transition">
+                                + Add Module
+                            </a>
                         </div>
 
                         <!-- MODULE TABLE -->
@@ -25,7 +31,8 @@
                                     <tr>
                                         <th>Module</th>
                                         <th>Description</th>
-                                        <th>Classrooms</th>
+                                        <th>Used In Classes</th>
+                                        <th>Created By</th>
                                         <th>Actions</th>
                                     </tr>
                                 </thead>
@@ -40,47 +47,53 @@
                                             </td>
 
                                             <td>
-                                                {{ $module->classroomModule->pluck('classroom.name')->join(', ') ?? 'N/A' }}
+                                                {{ $module->classroomModule->pluck('classroom.name')->join(', ') ?: 'None' }}
                                             </td>
 
                                             <td>
+                                                {{ $module->user->name ?? 'Unknown' }}
+                                            </td>
+
+                                            <td class="flex justify-center gap-2">
+
+                                                <!-- View -->
                                                 <a href="{{ route('modules.show', $module->id) }}"
-                                                   class="btn btn-link text-red-700 no-underline hover:underline">
+                                                   class="text-red-700 hover:underline text-sm">
                                                     View
                                                 </a>
 
-                                                <button onclick="document.getElementById('editModuleModal-{{ $module->id }}').showModal()"
-                                                    class="btn btn-link text-blue-500 no-underline hover:underline">
+                                                <!-- Edit -->
+                                                <a href="{{ route('modules.edit', $module->id) }}"
+                                                   class="text-blue-600 hover:underline text-sm">
                                                     Edit
-                                                </button>
+                                                </a>
 
-                                                <button onclick="document.getElementById('deleteConfirmModal-{{ $module->id }}').showModal()"
-                                                        class="btn btn-link text-red-500 no-underline hover:underline">
+                                                <!-- Delete -->
+                                                <button onclick="document.getElementById('deleteModal-{{ $module->id }}').showModal()"
+                                                    class="text-red-500 hover:underline text-sm">
                                                     Delete
                                                 </button>
 
-                                                <dialog id="deleteConfirmModal-{{ $module->id }}" class="modal">
+                                                <!-- DELETE MODAL -->
+                                                <dialog id="deleteModal-{{ $module->id }}" class="modal">
                                                     <div class="modal-box bg-white rounded-2xl shadow-xl border border-red-100">
 
-                                                        <!-- Modal Title -->
-                                                        <h3 class="text-xl font-semibold text-red-700 flex items-center gap-2">
-                                                            <i class="ri-error-warning-line text-2xl"></i>
+                                                        <h3 class="text-xl font-semibold text-red-700">
                                                             Confirm Delete
                                                         </h3>
 
-                                                        <!-- Message -->
-                                                        <p class="mt-3 text-gray-600 leading-relaxed">
-                                                            You are about to delete the module
-                                                            <span class="font-semibold text-gray-800">"{{ $module->name }}"</span>.
-                                                            <br>This action <strong class="text-red-600">cannot be undone</strong>.
+                                                        <p class="mt-3 text-gray-600">
+                                                            Are you sure you want to delete
+                                                            <span class="font-semibold">{{ $module->name }}</span>?
+                                                            <br>
+                                                            This action <strong class="text-red-600">cannot be undone.</strong>
                                                         </p>
 
-                                                        <!-- Buttons -->
-                                                        <div class="modal-action flex justify-end gap-3 mt-6">
+                                                        <div class="modal-action">
 
                                                             <!-- Cancel -->
                                                             <form method="dialog">
-                                                                <button class="btn px-5 rounded-xl border border-gray-300 bg-white hover:bg-gray-100">
+                                                                <button class="btn bg-gray-200 hover:bg-gray-300">
                                                                     Cancel
                                                                 </button>
                                                             </form>
@@ -90,81 +103,18 @@
                                                                 @csrf
                                                                 @method('DELETE')
                                                                 <button type="submit"
-                                                                        class="btn px-5 rounded-xl bg-red-600 text-white hover:bg-red-700 shadow-sm">
-                                                                    Yes, Delete
+                                                                    class="btn bg-red-600 text-white hover:bg-red-700">
+                                                                    Delete
                                                                 </button>
                                                             </form>
-
                                                         </div>
                                                     </div>
 
-                                                    <!-- Background overlay -->
-                                                    <form method="dialog" class="modal-backdrop bg-black/40 backdrop-blur-sm"></form>
-                                                </dialog>
-
-                                                <!-- EDIT MODULE MODAL -->
-                                                <dialog id="editModuleModal-{{ $module->id }}" class="modal">
-                                                    <div class="modal-box max-w-lg bg-white/95 backdrop-blur-md rounded-2xl shadow-lg border border-gray-100">
-                                                        <div class="flex justify-between items-center mb-4">
-                                                            <h3 class="text-lg font-semibold text-gray-800 flex items-center gap-2">
-                                                                <span class="text-red-800 text-xl">✏️</span> Edit Module
-                                                            </h3>
-                                                            <form method="dialog">
-                                                                <button class="btn btn-sm btn-circle btn-ghost text-gray-500 hover:text-red-700">✕</button>
-                                                            </form>
-                                                        </div>
-
-                                                        <form method="POST" action="{{ route('modules.update', $module->id) }}"
-                                                            class="space-y-4">
-                                                            @csrf
-                                                            @method('PUT')
-
-                                                            <div class="form-control">
-                                                                <label class="label">
-                                                                    <span class="label-text font-semibold text-gray-600">Module Name</span>
-                                                                </label>
-                                                                <input type="text" name="name" value="{{ $module->name }}"
-                                                                    class="input input-bordered w-full focus:ring-2 focus:ring-red-700 rounded-lg" required>
-                                                            </div>
-
-                                                            <div class="form-control">
-                                                                <label class="label">
-                                                                    <span class="label-text font-semibold text-gray-600">Description</span>
-                                                                </label>
-                                                                <textarea name="description"
-                                                                    class="textarea textarea-bordered w-full h-24 resize-none focus:ring-2 focus:ring-red-700 rounded-lg">{{ $module->description }}</textarea>
-                                                            </div>
-
-                                                            <div class="form-control">
-                                                                <label class="label">
-                                                                    <span class="label-text font-semibold text-gray-600">Classroom</span>
-                                                                </label>
-                                                                <select name="classroom_id"
-                                                                    class="select select-bordered w-full focus:ring-2 focus:ring-red-700 rounded-lg">
-                                                                    @foreach(auth()->user()->classroom as $classroom)
-                                                                        <option value="{{ $classroom->id }}"
-                                                                            {{ $module->classroom_id == $classroom->id ? 'selected' : '' }}>
-                                                                            {{ $classroom->name }}
-                                                                        </option>
-                                                                    @endforeach
-                                                                </select>
-                                                            </div>
-
-                                                            <div class="modal-action flex justify-end gap-3 mt-6">
-                                                                <button type="button" class="btn btn-ghost text-gray-600 hover:bg-gray-100"
-                                                                    onclick="document.getElementById('editModuleModal-{{ $module->id }}').close()">Cancel</button>
-
-                                                                <button type="submit"
-                                                                    class="btn bg-gradient-to-r from-red-800 to-red-700 text-white hover:opacity-90 transition px-6">
-                                                                    Save Changes
-                                                                </button>
-                                                            </div>
-
-                                                        </form>
-                                                    </div>
+                                                    <form method="dialog" class="modal-backdrop bg-black/40"></form>
                                                 </dialog>
 
                                             </td>
+
                                         </tr>
                                     @endforeach
                                 </tbody>
