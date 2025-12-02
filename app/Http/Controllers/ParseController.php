@@ -13,9 +13,9 @@ use Spatie\PdfToText\Pdf;
 class ParseController extends Controller{
     public function parse(ParseRequest $request){
         try{
-            $user = Auth::user();
+            $auth = Auth::user();
 
-            $request->validated();
+            $validated = $request->validated();
 
             // Check if file exists
             if (!$request->hasFile('attachment')) {
@@ -61,7 +61,7 @@ class ParseController extends Controller{
             }
 
             $currentModule = Module::create([
-                'owner_id' => $user->id,
+                'owner_id' => $auth->id,
                 'name' => $parsedStructure['module']['name'],
                 'description' => $parsedStructure['module']['description'],
             ]);
@@ -85,8 +85,12 @@ class ParseController extends Controller{
             // Clean up
             Storage::delete($path);
 
-            Log::info('Module created successfully with ID: ' . $currentModule->id);
-            return back()->with('success', 'Module Uploaded Successfully');
+            $sysMsg = 'Successfully uploaded module ' . $validated['attachment']->getClientOriginalName();
+            Log::create([
+                'user_id' => $auth->id,
+                'action' => $sysMsg
+            ]);
+            return back()->with('success',$sysMsg);
         }
         catch(Exception $e){
             Log::error('Parse controller error: ' . $e->getMessage());

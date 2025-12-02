@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Resource;
 
 use App\Models\User;
 use App\Http\Controllers\Controller;
+use App\Models\Log;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -98,6 +99,15 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
+        $auth = Auth::user();
+        $this->authorize('delete',$user);
+        $user->delete();
 
+        $sysMsg = 'Successfully deleted '.$user->name;
+        Log::create([
+            'user_id' => $auth->id,
+            'action' => $sysMsg
+        ]);
+        return back()->with('success',$sysMsg);
     }
 }

@@ -34,7 +34,8 @@ class LogController extends Controller
      */
     public function store(StoreLogRequest $request)
     {
-        //
+        $validated = $request;
+
     }
 
     /**

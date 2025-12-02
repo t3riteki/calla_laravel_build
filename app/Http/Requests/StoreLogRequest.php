@@ -11,7 +11,7 @@ class StoreLogRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,8 @@ class StoreLogRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'user_id'=>'required|exists:user,id',
+            'action'=>'required|string|max:255'
         ];
     }
 }

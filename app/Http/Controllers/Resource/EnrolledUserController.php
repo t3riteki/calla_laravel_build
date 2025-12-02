@@ -8,6 +8,7 @@ use App\Http\Requests\StoreEnrolledUserRequest;
 use App\Http\Requests\UpdateEnrolledUserRequest;
 use App\Models\Classroom;
 use App\Models\ClassroomModule;
+use App\Models\Log as ModelsLog;
 use App\Models\User;
 use App\Models\UserProgress;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -44,7 +45,6 @@ class EnrolledUserController extends Controller
         try {
             $validated = $request->validated();
 
-            // If user_id is empty but email exists, find user by email
             if (!isset($validated['user_id']) && isset($validated['email'])) {
                 $email = $validated['email'];
                 $userID = User::where('email', $email)->value('id');
@@ -56,7 +56,6 @@ class EnrolledUserController extends Controller
                 $validated['user_id'] = $userID;
             }
 
-            // ✅ Check for duplicate enrollment BEFORE creating anything
             $exists = EnrolledUser::where('user_id', $validated['user_id'])
                 ->where('classroom_id', $validated['classroom_id'])
                 ->exists();
@@ -78,7 +77,14 @@ class EnrolledUserController extends Controller
                 $this->generateProgress($enrolleduser->classroom, $enrolleduser->id);
             }
 
-            return back()->with('success', 'Successfully added ' . $enrolleduser->user->name . ' to ' . $enrolleduser->classroom->name);
+            $sysMsg = 'Successfully added ' . $enrolleduser->user->name . ' to ' . $enrolleduser->classroom->name;
+
+            Log::create([
+            'user_id' => Auth::user()->id,
+            'action' => $sysMsg
+            ]);
+
+            return back()->with('success', $sysMsg);
 
         } catch (\Throwable $e) {
 
@@ -146,12 +152,19 @@ class EnrolledUserController extends Controller
 
     public function destroy(EnrolledUser $enrolleduser)
     {
-        $enrolleduser->load('classroom');
+        $enrolleduser->classroom;
 
         $this->authorize('delete', $enrolleduser);
 
         $enrolleduser->delete();
 
-        return back()->with('success','Successfully removed '.$enrolleduser->user->name.' from '.$enrolleduser->classroom->name);
+        $sysMsg = 'Successfully removed '.$enrolleduser->user->name.' from '.$enrolleduser->classroom->name;
+
+        Log::create([
+            'user_id'=>Auth::user()->id,
+            'action'=> $sysMsg
+        ]);
+
+        return back()->with('success',$sysMsg);
     }
 }

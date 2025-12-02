@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\ClassroomModule;
 use App\Http\Requests\StoreClassroomModuleRequest;
 use App\Http\Requests\UpdateClassroomModuleRequest;
+use App\Models\Log;
 use App\Models\Module;
 use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -19,15 +20,15 @@ class ClassroomModuleController extends Controller
      */
     public function index()
     {
-        $user = Auth::user();
-        $role = $user->role;
+        $auth = Auth::user();
+        $role = $auth->role;
         $classroommodules = [];
         switch($role){
             case'admin':
                 $classroommodules = ClassroomModule::all();
                 break;
             case'instructor':
-                $classroomids = $user->classroom()->pluck('id');
+                $classroomids = $auth->classroom()->pluck('id');
                 $classroommodules = ClassroomModule::with('classroom')
                     ->whereIn('classroom_id', $classroomids)
                     ->latest()
@@ -35,7 +36,7 @@ class ClassroomModuleController extends Controller
                 break;
 
             case'learner':
-                $classroomids = $user->enrolledUser()->pluck('classroom_id');
+                $classroomids = $auth->enrolledUser()->pluck('classroom_id');
                 $classroommodules = ClassroomModule::with('classroom')
                     ->whereIn('classroom_id', $classroomids)
                     ->withCount([
@@ -66,11 +67,16 @@ class ClassroomModuleController extends Controller
      */
     public function store(StoreClassroomModuleRequest $request)
     {
-        $user = Auth::user();
+        $auth = Auth::user();
         $validated = $request->validated();
-        $classroomModule = ClassroomModule::create($validated);
+        $classroommodule = ClassroomModule::create($validated);
 
-        return back()->with('success', 'Successfully added '.$classroomModule->module->name.' to '.$classroomModule->classroom->name);
+        $sysMsg = 'Successfully added module'.$classroommodule->module->name.' from classroom'.$classroommodule->classroom->name;
+        Log::create([
+            'user_id'=>$auth->id,
+            'action'=>$sysMsg
+        ]);
+        return back()->with('success',$sysMsg);
     }
 
     /**
@@ -78,10 +84,10 @@ class ClassroomModuleController extends Controller
      */
     public function show(ClassroomModule $classroommodule)
     {
-        $user = Auth::user();
+        $auth = Auth::user();
         $module = $classroommodule->module;
 
-        return view($user->role . '.module_view', [
+        return view($auth->role . '.module_view', [
             'module' => $module,
             'classroomModule' => $classroommodule
         ]);
@@ -108,11 +114,15 @@ class ClassroomModuleController extends Controller
      */
     public function destroy(ClassroomModule $classroommodule)
     {
-
+        $auth = Auth::user();
         $this->authorize('delete', $classroommodule);
-        $message = 'Successfully removed '.$classroommodule->module->name.' from '.$classroommodule->classroom->name;
         $classroommodule->delete();
 
-        return back()->with('success', $message);
+        $sysMsg = 'Successfully removed module'.$classroommodule->module->name.' from classroom'.$classroommodule->classroom->name;
+        Log::create([
+            'user_id'=>$auth->id,
+            'action'=>$sysMsg
+        ]);
+        return back()->with('success',$sysMsg);
     }
 }

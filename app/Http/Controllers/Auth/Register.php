@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Auth;
 
-use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\RegisterRequest;
+use App\Models\Log;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
@@ -18,8 +18,6 @@ class Register extends Controller
     {
         $validated = $request->validated();
 
-        Log::info('Registration data validated', $validated);
-
         $user = User::create([
             'name' => $validated['name'],
             'email' => $validated['email'],
@@ -27,10 +25,12 @@ class Register extends Controller
             'role' => $validated['role'],
         ]);
 
-        Log::info('User created successfully', ['id' => $user->id, 'email' => $user->email]);
+        Log::create([
+            'user_id' => $user->id,
+            'action' => 'Regsitered an account'
+        ]);
 
         Auth::login($user);
-
         return redirect('/dashboard')->with('success', 'Welcome to Calla');
     }
 }

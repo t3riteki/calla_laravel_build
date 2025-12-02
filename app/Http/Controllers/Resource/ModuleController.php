@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Module;
 use App\Http\Requests\StoreModuleRequest;
 use App\Http\Requests\UpdateModuleRequest;
-
+use App\Models\Log;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Facades\Auth;
 
@@ -18,8 +18,8 @@ class ModuleController extends Controller
      */
     public function index()
     {
-        $user = Auth::user();
-        $role = $user->role;
+        $auth = Auth::user();
+        $role = $auth->role;
         $modules = [];
 
         switch ($role) {
@@ -34,7 +34,7 @@ class ModuleController extends Controller
             case 'instructor':
                 // Instructor sees ONLY the modules they created (Management View)
                 $modules = Module::with('User')
-                    ->where('owner_id', $user->id)
+                    ->where('owner_id', $auth->id)
                     ->withCount('ClassroomModule')
                     ->latest()
                     ->get();
@@ -67,14 +67,19 @@ class ModuleController extends Controller
      */
     public function store(StoreModuleRequest $request)
     {
-        $user = Auth::User();
+        $auth = Auth::User();
         $this->authorize('create', Module::class);
         $validated = $request->validated();
-        $validated['owner_id'] = $user->id;
+        $validated['owner_id'] = $auth->id;
 
-        $module = $user->Module()->create($validated);
+        $module = $auth->Module()->create($validated);
 
-        return back()->with('success','Successfully created '.$module->name);
+        $sysMsg = 'Successfully created '.$module->name;
+        Log::create([
+            'user_id' => $auth->id,
+            'action' => $sysMsg
+        ]);
+        return back()->with('success',$sysMsg);
     }
 
     /**
@@ -82,9 +87,9 @@ class ModuleController extends Controller
      */
     public function show(Module $module)
     {
-        $user = Auth::user();
+        $auth = Auth::user();
         $this->authorize('view',$module);
-        return view($user->role.'.module_view',compact('module'));
+        return view($auth->role.'.module_view',compact('module'));
     }
 
     /**
@@ -100,12 +105,17 @@ class ModuleController extends Controller
      */
     public function update(UpdateModuleRequest $request, Module $module)
     {
-        $user = Auth::user();
+        $auth = Auth::user();
         $this->authorize('update',$module);
         $validated= $request->validated();
         $module->update($validated);
 
-        return back()->with('success','Successfully updated '.$module->name);
+        $sysMsg = 'Successfully updated '.$module->name;
+        Log::create([
+            'user_id' => $auth->id,
+            'action' => $sysMsg
+        ]);
+        return back()->with('success',$sysMsg);
     }
 
     /**
@@ -113,11 +123,15 @@ class ModuleController extends Controller
      */
     public function destroy(Module $module)
     {
-        $user = Auth::user();
+        $auth = Auth::user();
         $this->authorize('delete',$module);
-        $message = 'Successfully deleted '.$module->name;
         $module->delete();
 
-        return back()->with('success',$message);
+        $sysMsg = 'Successfully deleted '.$module->name;
+        Log::create([
+            'user_id' => $auth->id,
+            'action' => $sysMsg
+        ]);
+        return back()->with('success',$sysMsg);
     }
 }
