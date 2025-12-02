@@ -28,7 +28,7 @@ class UserController extends Controller
         switch ($role) {
             case 'admin':
                 // Admin sees ALL users in the database
-                $users = User::latest()->get();
+                $users = User::whereIn('role',['instructor','learner'])->latest()->get();
                 break;
 
             case 'instructor':
@@ -36,11 +36,6 @@ class UserController extends Controller
                 $users = User::where('role', 'learner')
                     ->latest()
                     ->get();
-
-                // OR: If they should only see their own enrolled students:
-                // $users = User::whereHas('enrolledUser.classroom', function($q) use ($user){
-                //      $q->where('owner_id', $user->id);
-                // })->get();
                 break;
 
             case 'learner':
@@ -77,8 +72,9 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        $this->authorize('view',$user);
-        return view($user->role.'.user_view',compact('user'));
+        $auth = Auth::user();
+        $this->authorize('view',$auth);
+        return view($auth->role.'.user_view',compact('user'));
     }
 
     /**
