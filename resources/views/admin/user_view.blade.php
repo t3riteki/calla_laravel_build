@@ -116,17 +116,8 @@
                                         </td>
                                         <td>{{ $entry->updated_at->format('M d, Y') }}</td>
                                         <td>
-                                            <a href="{{ route('user.show', $user->id) }}"
+                                            <a href="{{ route('classroommodule.show', $entry->classroomModule->id) }}"
                                                 class="text-red-600 hover:underline">View</a>
-                                            |
-                                            <a href="{{ route('user.edit', $user->id) }}"
-                                                class="text-blue-600 hover:underline">Edit</a>
-                                            |
-                                            <form action="{{ route('user.destroy',$user->id) }}" method="POST"
-                                                class="inline">
-                                                @csrf @method('DELETE')
-                                                <button class="text-red-700 hover:underline">Delete</button>
-                                            </form>
                                         </td>
                                     </tr>
                                 @endforeach

@@ -34,7 +34,6 @@
                                 <div class="p-4 bg-gray-50 rounded-lg border">
                                     <div class="flex justify-between">
                                         <span class="text-sm text-gray-500">Classrooms</span>
-                                        <button class="btn btn-ghost btn-xs text-xs text-red-300" onclick="newClassroomModuleModal.showModal()">Add to Classroom</button>
                                     </div>
 
 
@@ -65,56 +64,6 @@
                             </div>
                         </div>
                     </div>
-
-                    <!-- ADD TO CLASSROOM MODAL -->
-                    <dialog id="newClassroomModuleModal" class="modal">
-                        <div class="modal-box max-w-lg bg-white/95 backdrop-blur-md rounded-2xl shadow-lg border border-gray-100">
-
-                            <div class="flex justify-between items-center mb-4">
-                                <h3 class="text-lg font-semibold text-gray-800 flex items-center gap-2">
-                                    <span class="text-red-800 text-xl">📘</span> Add to Classroom
-                                </h3>
-
-                                <form method="dialog">
-                                    <button class="btn btn-sm btn-circle btn-ghost text-gray-500 hover:text-red-700">✕</button>
-                                </form>
-                            </div>
-
-                            <!-- FORM -->
-                            <form method="POST" action="{{ route('classroommodule.store',$module->id) }}" class="space-y-4">
-                                @csrf
-                                <input type="hidden" name="added_by" value="{{ auth()->user()->id }}"/>
-                                <input type="hidden" name="module_id" value="{{ $module->id }}"/>
-
-                                <!-- CLASSROOM DROPDOWN -->
-                                <div class="form-control">
-                                    <label class="label">
-                                        <span class="label-text text-sm font-semibold text-gray-600">Classroom</span>
-                                    </label>
-                                    <select name="classroom_id"
-                                        class="select select-bordered w-full focus:ring-2 focus:ring-red-700 rounded-lg" required>
-                                        <option disabled selected>Select classroom</option>
-                                        @foreach(auth()->user()->classroom as $classroom)
-                                            @if(!$classroom->classroomModule->where('module_id', $module->id)->count())
-                                                <option value="{{ $classroom->id }}">{{ $classroom->name }}</option>
-                                            @endif
-                                        @endforeach
-                                    </select>
-                                </div>
-
-                                <div class="modal-action flex justify-end gap-3 mt-6">
-                                    <button type="button" class="btn btn-ghost text-gray-600 hover:bg-gray-100"
-                                        onclick="newClassroomModuleModal.close()">Cancel</button>
-
-                                    <button type="submit"
-                                        class="btn bg-gradient-to-r from-red-800 to-red-700 text-white hover:opacity-90 transition px-6">
-                                        Add Module
-                                    </button>
-                                </div>
-                            </form>
-                        </div>
-                    </dialog>
-
 
                     <!-- ACTIONS -->
                     <div class="flex flex-col gap-3 md:w-48 w-full">
