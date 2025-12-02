@@ -1,18 +1,20 @@
- <x-layout>
+<x-layout>
     <x-slot:title>Admin Dashboard - CALLA</x-slot:title>
 
-    <div class="flex min-h-screen bg-gray-100">
+    <!-- DASHBOARD CONTAINER -->
+    <div class="flex flex-col lg:flex-row min-h-screen bg-gray-100 transition-all duration-300">
 
         <!-- SIDEBAR -->
         <x-sidebar />
 
         <!-- MAIN CONTENT -->
-        <main class="flex-1 p-6 lg:ml-64 md:ml-56 sm:ml-0 transition-all duration-300">
+        <main
+            class="flex-1 p-4 sm:p-6 md:p-8 overflow-y-auto
+                   lg:ml-64 md:ml-56 sm:ml-0 transition-all duration-300">
 
-            <!-- 🔥 HEADER / HERO -->
+            <!-- HEADER / HERO -->
             <section class="mb-10">
-                <div class="rounded-3xl bg-gradient-to-r from-red-900 via-red-700 to-red-500
-                            p-8 text-white shadow-xl relative overflow-hidden">
+                <div class="rounded-3xl bg-gradient-to-r from-red-900 via-red-700 to-red-500 p-8 text-white shadow-xl relative overflow-hidden">
 
                     <!-- Decorative Blobs -->
                     <div class="absolute top-0 right-0 w-60 h-60 bg-white/10 rounded-full blur-3xl"></div>
@@ -44,21 +46,21 @@
                 </div>
             </section>
 
-            <!-- 📊 QUICK METRICS -->
+            <!-- QUICK METRICS -->
             <section class="mb-10">
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 
-                    <div class="bg-white p-6 rounded-2xl shadow hover:shadow-lg transition">
+                    <div class="bg-white p-6 rounded-2xl shadow border">
                         <h4 class="text-gray-600 text-sm">Total Learners</h4>
                         <p class="text-4xl font-bold text-red-700 mt-2">{{ $data['learner_count'] ?? 0 }}</p>
                     </div>
 
-                    <div class="bg-white p-6 rounded-2xl shadow hover:shadow-lg transition">
+                    <div class="bg-white p-6 rounded-2xl shadow border">
                         <h4 class="text-gray-600 text-sm">Total Instructors</h4>
                         <p class="text-4xl font-bold text-red-700 mt-2">{{ $data['instructor_count'] ?? 0 }}</p>
                     </div>
 
-                    <div class="bg-white p-6 rounded-2xl shadow hover:shadow-lg transition">
+                    <div class="bg-white p-6 rounded-2xl shadow border">
                         <h4 class="text-gray-600 text-sm">System Activity</h4>
                         <p class="text-sm text-gray-500 mt-2">Everything is running smoothly ✓</p>
                     </div>
@@ -66,9 +68,9 @@
                 </div>
             </section>
 
-            <!-- 👥 USER MANAGEMENT -->
-            <section class="mt-10">
-                <div class="bg-white rounded-2xl p-6 shadow-lg border">
+            <!-- USER MANAGEMENT -->
+            <section class="mb-10">
+                <div class="bg-white rounded-2xl p-6 shadow border">
 
                     <div class="flex justify-between items-center mb-4">
                         <h3 class="text-xl font-semibold">User Overview</h3>
@@ -103,11 +105,79 @@
                                         </td>
                                         <td>{{ $user->created_at->format('M d, Y') }}</td>
                                         <td>
-                                            <a href="{{ route('user.show', $user->id) }}"
-                                            class="text-red-600 hover:underline">View</a>
+                                            <a href="{{ route('user.show', $user->id) }}" class="text-red-600 hover:underline">View</a>
                                             |
-                                            <a href="{{ route('user.edit', $user->id) }}"
-                                            class="text-blue-600 hover:underline">Edit</a>
+                                            <!-- Edit Button triggers modal -->
+                                            <button onclick="document.getElementById('editUserModal-{{ $user->id }}').showModal()"
+                                                class="btn btn-link text-blue-500 no-underline hover:underline">
+                                                Edit
+                                            </button>
+
+                                             <!-- Edit User Modal -->
+                                            <dialog id="editUserModal-{{ $user->id }}" class="modal">
+                                                <div class="modal-box max-w-lg bg-white/95 backdrop-blur-md rounded-2xl shadow-lg border border-gray-100">
+
+                                                    <!-- Header -->
+                                                    <div class="flex justify-between items-center mb-4">
+                                                        <h3 class="text-lg font-semibold text-gray-800 flex items-center gap-2">
+                                                            <span class="text-blue-700 text-xl">🧑‍💼</span> Edit User
+                                                        </h3>
+
+                                                        <form method="dialog">
+                                                            <button class="btn btn-sm btn-circle btn-ghost text-gray-500 hover:text-red-700">✕</button>
+                                                        </form>
+                                                    </div>
+
+                                                    <!-- USER EDIT FORM -->
+                                                    <form method="POST" action="{{ route('user.update', $user->id) }}" class="space-y-4">
+                                                        @csrf
+                                                        @method('PUT')
+
+                                                        <!-- NAME -->
+                                                        <div class="form-control">
+                                                            <label class="label">
+                                                                <span class="label-text text-sm font-semibold text-gray-600">Name</span>
+                                                            </label>
+                                                            <input type="text" name="name" value="{{ $user->name }}"
+                                                                class="input input-bordered w-full focus:ring-2 focus:ring-red-700 rounded-lg" required>
+                                                        </div>
+
+                                                        <!-- EMAIL -->
+                                                        <div class="form-control">
+                                                            <label class="label">
+                                                                <span class="label-text text-sm font-semibold text-gray-600">Email</span>
+                                                            </label>
+                                                            <input type="email" name="email" value="{{ $user->email }}"
+                                                                class="input input-bordered w-full focus:ring-2 focus:ring-red-700 rounded-lg" required>
+                                                        </div>
+
+                                                         <!-- PASSWORD -->
+                                                        <div class="form-control">
+                                                            <label class="label">
+                                                                <span class="label-text text-sm font-semibold text-gray-600">Password</span>
+                                                            </label>
+                                                            <input type="password" name="password"
+                                                                placeholder="Enter new password (leave blank to keep current)"
+                                                                class="input input-bordered w-full focus:ring-2 focus:ring-red-700 rounded-lg">
+                                                        </div>
+
+                                                        <!-- ACTION BUTTONS -->
+                                                        <div class="modal-action flex justify-end gap-3 mt-6">
+                                                            <button type="button"
+                                                                class="btn btn-ghost text-gray-600 hover:bg-gray-100"
+                                                                onclick="document.getElementById('editUserModal-{{ $user->id }}').close()">
+                                                                Cancel
+                                                            </button>
+
+                                                            <button type="submit"
+                                                                class="btn bg-gradient-to-r from-red-800 to-red-700 text-white hover:opacity-90 transition px-6">
+                                                                Save Changes
+                                                            </button>
+                                                        </div>
+
+                                                    </form>
+                                                </div>
+                                            </dialog>
                                         </td>
                                     </tr>
                                 @endforeach
@@ -119,9 +189,9 @@
                 </div>
             </section>
 
-            <!-- 🏫 CLASSROOM MANAGEMENT -->
+            <!-- CLASSROOM MANAGEMENT -->
             <section class="mb-10">
-                <div class="bg-white rounded-2xl p-6 shadow-lg border">
+                <div class="bg-white rounded-2xl p-6 shadow border">
 
                     <div class="flex justify-between items-center mb-4">
                         <h3 class="text-xl font-semibold">Classroom Overview</h3>
@@ -134,7 +204,7 @@
                                 <tr>
                                     <th>Name</th>
                                     <th>Description</th>
-                                    <th>Learners</th>
+                                    <th>Lners</th>
                                     <th>Created</th>
                                     <th>Actions</th>
                                 </tr>
@@ -148,45 +218,70 @@
                                         <td>{{ $classroom->EnrolledUser->where('user.role', 'learner')->count() }}</td>
                                         <td>{{ $classroom->created_at->format('M d, Y') }}</td>
                                         <td>
-                                            <a href="{{ route('classrooms.show', $classroom->id) }}"
-                                               class="text-red-600 hover:underline">View</a>
+                                            <a href="{{ route('classrooms.show', $classroom->id) }}" class="text-red-600 hover:underline">View</a>
                                             |
-                                            <a onclick="document.getElementById('editClassModal-{{ $classroom->id }}').showModal()"
-                                               class="text-blue-600 hover:underline cursor-pointer">Edit</a>
+                                            <button onclick="document.getElementById('editClassModal-{{ $classroom->id }}').showModal()"
+                                                class="btn btn-link text-blue-500 no-underline hover:underline">
+                                                Edit
+                                            </button>
                                         </td>
                                     </tr>
 
-                                    <!-- EDIT MODAL -->
+                                    <!-- Edit Modal -->
                                     <dialog id="editClassModal-{{ $classroom->id }}" class="modal">
-                                        <div class="modal-box rounded-xl p-6">
-                                            <h3 class="text-lg font-bold mb-4">Edit Classroom</h3>
+                                        <div class="modal-box max-w-lg bg-white rounded-2xl shadow border">
 
-                                            <form method="POST" action="{{ route('classrooms.update', $classroom->id) }}" class="space-y-3">
+                                            <div class="flex justify-between items-center mb-4">
+                                                <h3 class="text-lg font-semibold text-gray-800">Edit Classroom</h3>
+
+                                                <form method="dialog">
+                                                    <button class="btn btn-sm btn-circle btn-ghost text-gray-500">✕</button>
+                                                </form>
+                                            </div>
+
+                                            <form method="POST" action="{{ route('classrooms.update', $classroom->id) }}" class="space-y-4">
                                                 @csrf
                                                 @method('PUT')
 
-                                                <input type="text" name="name" value="{{ $classroom->name }}"
-                                                    class="input input-bordered w-full rounded-lg" required>
+                                                <div class="form-control">
+                                                    <label class="label">
+                                                        <span class="label-text text-sm font-semibold">Class Name</span>
+                                                    </label>
+                                                    <input type="text" name="name" value="{{ $classroom->name }}" class="input input-bordered w-full rounded-lg" required>
+                                                </div>
 
-                                                <textarea name="description" class="textarea textarea-bordered w-full rounded-lg" required>{{ $classroom->description }}</textarea>
+                                                <div class="form-control">
+                                                    <label class="label">
+                                                        <span class="label-text text-sm font-semibold">Description</span>
+                                                    </label>
+                                                    <textarea name="description" class="textarea textarea-bordered w-full h-24 resize-none rounded-lg" required>{{ $classroom->description }}</textarea>
+                                                </div>
 
-                                                <div class="flex justify-end gap-3 mt-4">
-                                                    <button type="button" class="btn" onclick="document.getElementById('editClassModal-{{ $classroom->id }}').close()">Cancel</button>
-                                                    <button class="btn bg-red-700 text-white hover:bg-red-600">Save</button>
+                                                <div class="modal-action flex justify-end gap-3">
+                                                    <button type="button" class="btn btn-ghost" onclick="document.getElementById('editClassModal-{{ $classroom->id }}').close()">
+                                                        Cancel
+                                                    </button>
+
+                                                    <button class="btn bg-red-700 text-white hover:bg-red-600">
+                                                        Save Changes
+                                                    </button>
                                                 </div>
                                             </form>
                                         </div>
                                     </dialog>
+
                                 @endforeach
                             </tbody>
+
                         </table>
                     </div>
+
                 </div>
             </section>
 
-            <!-- 📚 MODULE MANAGEMENT -->
-            <section>
-                <div class="bg-white rounded-2xl p-6 shadow-lg border">
+            <!-- MODULE MANAGEMENT -->
+            <section class="mb-10">
+                <div class="bg-white rounded-2xl p-6 shadow border">
 
                     <div class="flex justify-between items-center mb-4">
                         <h3 class="text-xl font-semibold">Module Overview</h3>
@@ -213,11 +308,9 @@
                                         <td>{{ $module->ClassroomModule->count() }}</td>
                                         <td>{{ $module->created_at->format('M d, Y') }}</td>
                                         <td>
-                                            <a href="{{ route('modules.show', $module->id) }}"
-                                               class="text-red-600 hover:underline">View</a>
+                                            <a href="{{ route('modules.show', $module->id) }}" class="text-red-600 hover:underline">View</a>
                                             |
-                                            <a href="{{ route('modules.edit', $module->id) }}"
-                                               class="text-blue-600 hover:underline">Edit</a>
+                                            <a href="{{ route('modules.edit', $module->id) }}" class="text-blue-600 hover:underline">Edit</a>
                                         </td>
                                     </tr>
                                 @endforeach
@@ -231,13 +324,5 @@
 
         </main>
     </div>
-
-    <style>
-        @keyframes fadeSlideUp {
-            0% { opacity: 0; transform: translateY(20px); }
-            100% { opacity: 1; transform: translateY(0); }
-        }
-        .animate-fade-slide { animation: fadeSlideUp 0.7s ease forwards; }
-    </style>
 
 </x-layout>

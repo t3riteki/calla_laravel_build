@@ -23,7 +23,7 @@
                             </p>
                         </div>
 
-                        <!-- DaisyUI Stats -->
+                        <!-- Stats -->
                         <div class="stats stats-vertical sm:stats-horizontal shadow mt-4 lg:mt-0 flex-shrink-0">
                             <div class="stat bg-white/10 text-white backdrop-blur-md">
                                 <div class="stat-title text-gray-200">Total Classes</div>
@@ -43,7 +43,7 @@
                 </div>
             </section>
 
-            <!-- 🏫 CLASS LIST -->
+            <!-- 🏫 CLASSROOM LIST -->
             <section class="mb-10">
                 <div class="card bg-base-100 shadow-lg border">
                     <div class="card-body">
@@ -194,10 +194,6 @@
                                                 <a href="{{ route('modules.show', $module->id) }}"
                                                 class="btn btn-link text-red-700 no-underline hover:underline">
                                                     View
-                                                </a>
-                                                <a href="{{ route('modules.edit', $module->id) }}"
-                                                class="btn btn-link text-blue-500 no-underline hover:underline">
-                                                    Edit
                                                 </a>
                                             </td>
                                         </tr>

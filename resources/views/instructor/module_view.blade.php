@@ -7,7 +7,7 @@
         <x-sidebar />
 
         <!-- MAIN CONTENT -->
-        <main class="flex-1 p-6 md:p-8 lg:ml-64 overflow-y-auto">
+        <main class="flex-1 p-6 md:p-8 lg:ml-64 overflow-y-auto" x-data="{ editMode: false }">
 
             <!-- BACK BUTTON -->
             <a href="{{ route('modules.index') }}"
@@ -21,9 +21,46 @@
 
                     <!-- Module Info -->
                     <div class="flex-1">
-                        <h2 class="text-2xl font-bold text-gray-800">{{ $module->name }}</h2>
-                        <p class="text-gray-600 mt-2">{{ $module->description }}</p>
 
+                        <!-- VIEW MODE -->
+                        <div x-show="!editMode">
+                            <h2 class="text-2xl font-bold text-gray-800">{{ $module->name }}</h2>
+                            <p class="text-gray-600 mt-2">{{ $module->description }}</p>
+                        </div>
+
+                        <!-- EDIT MODE -->
+                        <form x-show="editMode"
+                              method="POST"
+                              action="{{ route('modules.update', $module->id) }}"
+                              class="space-y-3">
+                            @csrf
+                            @method('PUT')
+
+                            <input type="text"
+                                   name="name"
+                                   value="{{ $module->name }}"
+                                   class="input input-bordered w-full"/>
+
+                            <textarea
+                                name="description"
+                                rows="3"
+                                class="textarea textarea-bordered w-full">{{ $module->description }}</textarea>
+
+                            <div class="flex gap-3 mt-2">
+                                <button type="submit"
+                                        class="btn bg-red-800 hover:bg-red-700 text-white">
+                                    Save
+                                </button>
+
+                                <button type="button"
+                                        class="btn"
+                                        @click="editMode = false">
+                                    Cancel
+                                </button>
+                            </div>
+                        </form>
+
+                        <!-- Module Meta -->
                         <div class="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
                             @isset($classroomModule)
                                 <div class="p-4 bg-gray-50 rounded-lg border">
@@ -34,20 +71,17 @@
                                 <div class="p-4 bg-gray-50 rounded-lg border">
                                     <div class="flex justify-between">
                                         <span class="text-sm text-gray-500">Classrooms</span>
-                                        <button class="btn btn-ghost btn-xs text-xs text-red-300" onclick="newClassroomModuleModal.showModal()">Add to Classroom</button>
+                                        <button class="btn btn-ghost btn-xs text-xs text-red-300"
+                                            onclick="newClassroomModuleModal.showModal()">Add to Classroom</button>
                                     </div>
 
-
                                     @foreach ($module->classroomModule as $classModule)
-                                        <a href="{{ route('classrooms.show', $classModule->classroom->id) }}" class="link">{{ $classModule->classroom->name }}</a>
-                                        @if(! $loop->last)
-                                            ,
-                                        @endif
-
+                                        <a href="{{ route('classrooms.show', $classModule->classroom->id) }}"
+                                        class="link">{{ $classModule->classroom->name }}</a>
+                                        @if(! $loop->last) , @endif
                                     @endforeach
                                 </div>
                             @endisset
-
 
                             <div class="p-4 bg-gray-50 rounded-lg border">
                                 <p class="text-sm text-gray-500">Number of Lessons</p>
@@ -66,132 +100,139 @@
                         </div>
                     </div>
 
-                    <!-- ADD TO CLASSROOM MODAL -->
-                    <dialog id="newClassroomModuleModal" class="modal">
-                        <div class="modal-box max-w-lg bg-white/95 backdrop-blur-md rounded-2xl shadow-lg border border-gray-100">
+                    <!-- ACTION BUTTONS -->
+                    <div class="flex flex-col gap-3 md:w-48 w-full">
+                        <button @click="editMode = true"
+                                class="px-4 py-2 text-center bg-red-700 hover:bg-red-600 text-white rounded-lg transition">
+                            Edit Module
+                        </button>
 
-                            <div class="flex justify-between items-center mb-4">
-                                <h3 class="text-lg font-semibold text-gray-800 flex items-center gap-2">
-                                    <span class="text-red-800 text-xl">📘</span> Add to Classroom
+                        <!-- Delete Module Button -->
+                        <button type="button"
+                                class="w-full px-4 py-2 border border-red-700 text-red-700 hover:bg-red-50 rounded-lg transition"
+                                onclick="document.getElementById('deleteModuleModal-{{ $module->id }}').showModal()">
+                            Delete Module
+                        </button>
+
+                        <!-- Delete Confirmation Modal -->
+                        <dialog id="deleteModuleModal-{{ $module->id }}" class="modal">
+                            <div class="modal-box bg-white rounded-2xl shadow-xl border border-red-100">
+
+                                <!-- Modal Title -->
+                                <h3 class="text-xl font-semibold text-red-700 flex items-center gap-2">
+                                    <i class="ri-error-warning-line text-2xl"></i>
+                                    Confirm Delete
                                 </h3>
 
-                                <form method="dialog">
-                                    <button class="btn btn-sm btn-circle btn-ghost text-gray-500 hover:text-red-700">✕</button>
-                                </form>
+                                <!-- Message -->
+                                <p class="mt-3 text-gray-600 leading-relaxed">
+                                    You are about to delete the module
+                                    <span class="font-semibold text-gray-800">"{{ $module->name }}"</span>.
+                                    <br>This action <strong class="text-red-600">cannot be undone</strong>.
+                                </p>
+
+                                <!-- Buttons -->
+                                <div class="modal-action flex justify-end gap-3 mt-6">
+
+                                    <!-- Cancel -->
+                                    <button type="button"
+                                            class="btn px-5 rounded-xl border border-gray-300 bg-white hover:bg-gray-100"
+                                            onclick="document.getElementById('deleteModuleModal-{{ $module->id }}').close()">
+                                        Cancel
+                                    </button>
+
+                                    <!-- Confirm Delete -->
+                                    <form action="{{ route('modules.destroy', $module->id) }}" method="POST">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit"
+                                                class="btn px-5 rounded-xl bg-red-600 text-white hover:bg-red-700 shadow-sm">
+                                            Yes, Delete
+                                        </button>
+                                    </form>
+
+                                </div>
                             </div>
 
-                            <!-- FORM -->
-                            <form method="POST" action="{{ route('classroommodule.store',$module->id) }}" class="space-y-4">
-                                @csrf
-                                <input type="hidden" name="added_by" value="{{ auth()->user()->id }}"/>
-                                <input type="hidden" name="module_id" value="{{ $module->id }}"/>
-
-                                <!-- CLASSROOM DROPDOWN -->
-                                <div class="form-control">
-                                    <label class="label">
-                                        <span class="label-text text-sm font-semibold text-gray-600">Classroom</span>
-                                    </label>
-                                    <select name="classroom_id"
-                                        class="select select-bordered w-full focus:ring-2 focus:ring-red-700 rounded-lg" required>
-                                        <option disabled selected>Select classroom</option>
-                                        @foreach(auth()->user()->classroom as $classroom)
-                                            @if(!$classroom->classroomModule->where('module_id', $module->id)->count())
-                                                <option value="{{ $classroom->id }}">{{ $classroom->name }}</option>
-                                            @endif
-                                        @endforeach
-                                    </select>
-                                </div>
-
-                                <div class="modal-action flex justify-end gap-3 mt-6">
-                                    <button type="button" class="btn btn-ghost text-gray-600 hover:bg-gray-100"
-                                        onclick="newClassroomModuleModal.close()">Cancel</button>
-
-                                    <button type="submit"
-                                        class="btn bg-gradient-to-r from-red-800 to-red-700 text-white hover:opacity-90 transition px-6">
-                                        Add Module
-                                    </button>
-                                </div>
-                            </form>
-                        </div>
-                    </dialog>
-
-
-                    <!-- ACTIONS -->
-                    <div class="flex flex-col gap-3 md:w-48 w-full">
-
-                        <a href="{{ route('modules.edit', $module->id) }}"
-                        class="px-4 py-2 text-center bg-red-700 hover:bg-red-600 text-white rounded-lg transition">
-                            Edit Module
-                        </a>
-
-                        <form method="POST" action="{{ route('modules.destroy', $module->id) }}" onsubmit="return confirm('Delete this module?')">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit"
-                                    class="w-full px-4 py-2 border border-red-700 text-red-700 hover:bg-red-50 rounded-lg transition">
-                                Delete Module
-                            </button>
-                        </form>
-
+                            <!-- Background overlay -->
+                            <div class="modal-backdrop bg-black/40 backdrop-blur-sm" onclick="document.getElementById('deleteModuleModal-{{ $module->id }}').close()"></div>
+                        </dialog>
                     </div>
 
                 </div>
+            </div>
 
-                <!-- LESSON CARDS  -->
+            <!-- LESSON CARDS  -->
+            <div class="mt-8">
+                <h3 class="text-lg font-semibold text-gray-800 mb-6">Lessons</h3>
+
                 @if($module->lesson->count() > 0)
-                    <div class="mt-8">
-                        <h3 class="text-lg font-semibold text-gray-800 mb-6">Lessons</h3>
-
-                        <div class="flex flex-col col gap-1">
-                            @foreach ($module->lesson as $lesson)
-                                <div class="bg-gradient-to-br from-gray-50 to-white border border-gray-200 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 p-6 flex flex-col">
-
-                                    <!-- Lesson Header -->
-                                    <div class="mb-4">
+                    <div class="flex flex-col gap-4">
+                        @foreach ($module->lesson as $lesson)
+                            <div class="bg-gradient-to-br from-gray-50 to-white border border-gray-200 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 p-6 flex flex-col">
+                                <!-- Lesson Header -->
+                                <div class="mb-4 flex justify-between items-center">
+                                    <div>
                                         <h4 class="text-xl font-bold text-gray-800">{{ $lesson->name }}</h4>
                                         <p class="text-gray-500 text-sm">{{ $lesson->created_at->format('M d, Y') }}</p>
                                     </div>
 
-                                    <!-- Lesson Description -->
-                                    <p class="text-gray-600 mb-4 line-clamp-2">{{ $lesson->description }}</p>
-                                    <!-- Lesson Content Preview -->
-                                    <div class="prose prose-sm max-w-none mb-6 flex-grow">
-                                        <div class="overflow-x-auto border border-gray-200 rounded-lg max-h-48">
-                                            <table class="table table-compact w-full">
-                                                <thead>
-                                                    <tr class="bg-gray-100">
-                                                        <th class="w-1/3">Term</th>
-                                                        <th>Meaning</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    @foreach($lesson->glossary as $glossary)
-                                                        <tr>
-                                                            <td>{{ $glossary->term }}</td>
-                                                            <td>{{ $glossary->meaning }}</td>
-                                                        </tr>
-                                                    @endforeach
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-
-                                    <!-- Start Lesson Button -->
-                                    <button onclick="toBeImplementedModal.showModal()"
-                                       class="btn bg-gradient-to-r from-red-700 to-red-500 text-white hover:opacity-90 transition self-start">
-                                        Start Lesson →
-                                    </button>
+                                    <!-- REMOVE BUTTON (VISIBLE ONLY IN EDIT MODE) -->
+                                    <form method="POST"
+                                          action="{{ route('lessons.destroy', $lesson->id) }}"
+                                          onsubmit="return confirm('Remove this lesson?')"
+                                          x-show="editMode">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit"
+                                                class="btn btn-xs border border-red-600 text-red-600 hover:bg-red-50">
+                                            Remove
+                                        </button>
+                                    </form>
                                 </div>
-                            @endforeach
-                        </div>
+
+                                <!-- Description -->
+                                <p class="text-gray-600 mb-4 line-clamp-2">{{ $lesson->description }}</p>
+
+                                <!-- Content preview -->
+                                <div class="prose prose-sm max-w-none mb-6 flex-grow">
+                                    <div class="overflow-x-auto border border-gray-200 rounded-lg max-h-48">
+                                        <table class="table table-compact w-full">
+                                            <thead>
+                                                <tr class="bg-gray-100">
+                                                    <th class="w-1/3">Term</th>
+                                                    <th>Meaning</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach($lesson->glossary as $glossary)
+                                                    <tr>
+                                                        <td>{{ $glossary->term }}</td>
+                                                        <td>{{ $glossary->meaning }}</td>
+                                                    </tr>
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <!-- Start Lesson Button -->
+                                <button x-show="!editMode"
+                                        onclick="toBeImplementedModal.showModal()"
+                                        class="btn bg-gradient-to-r from-red-700 to-red-500 text-white hover:opacity-90 transition self-start">
+                                    Start Lesson →
+                                </button>
+
+                            </div>
+                        @endforeach
                     </div>
                 @else
                     <div class="mt-8 text-center py-8 text-gray-500">
                         <p>No lessons available for this module yet.</p>
                     </div>
                 @endif
-
             </div>
+
         </main>
     </div>
 </x-layout>

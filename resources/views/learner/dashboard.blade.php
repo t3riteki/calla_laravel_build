@@ -1,140 +1,147 @@
 <x-layout>
     <x-slot:title>Learner Dashboard - CALLA</x-slot:title>
 
-    <div class="flex min-h-screen bg-gray-50 transition-all duration-300">
+    <div class="flex flex-col lg:flex-row min-h-screen bg-white transition-all duration-300">
 
         <!-- SIDEBAR -->
         <x-sidebar />
 
         <!-- MAIN CONTENT -->
-        <main class="flex-1 p-6 lg:ml-64 md:ml-56 sm:ml-0 overflow-y-auto transition-all duration-300">
+        <main class="flex-1 p-4 sm:p-6 md:p-8 overflow-y-auto
+                lg:ml-64 md:ml-56 sm:ml-0 transition-all duration-300">
 
-            <!-- 🎉 Welcome Banner -->
-            <section class="mb-10 animate-fade-slide">
-                <div class="hero rounded-2xl bg-gradient-to-r from-red-900 via-red-700 to-red-600 text-white p-6 sm:p-8 md:p-10 shadow-lg animate-highlight-sweep">
-                    <div class="hero-content flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 lg:gap-16 w-full">
-                        <div>
-                            <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold animate-bounce relative">
+                <!-- 🎉 Welcome Banner (fixed proportions for stats) -->
+                <section class="mb-10 animate-fade-slide">
+                    <div class="hero rounded-2xl bg-gradient-to-r from-red-900 via-red-700 to-red-600 text-white p-6 sm:p-8 md:p-10 shadow-lg animate-highlight-sweep">
+                        <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8 w-full">
+
+                            <!-- LEFT: Welcome Text -->
+                            <div class="text-center lg:text-left flex-1">
+                                <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight">
                                 Welcome Back, {{ Auth::user()->name ?? 'Learner' }}! 🎓
                                 <span class="emoji-container inline-block relative w-10 h-10 ml-2"></span>
-                            </h2>
-                            <p class="py-4 text-sm sm:text-base opacity-80">
-                                Here's your learning progress and classrooms at a glance. Keep exploring and have fun!
-                            </p>
-                        </div>
+                                </h2>
 
-                        <div class="flex gap-4">
-                            <div class="stat bg-white/20 text-white backdrop-blur-md p-4 rounded-2xl shadow-md w-32 text-center animate-fade-slide delay-100">
-                                <div class="text-gray-200 font-semibold">Classes</div>
-                                <div class="text-2xl font-bold">
+                                <p class="py-4 text-sm sm:text-base opacity-80 max-w-lg mx-auto lg:mx-0">
+                                Here's your learning progress and classrooms at a glance. Keep exploring and have fun!
+                                </p>
+                            </div>
+
+                            <!-- RIGHT: Stats (equal-width, responsive) -->
+                            <div class="flex flex-wrap items-stretch gap-3 justify-center lg:justify-end w-full lg:w-auto">
+
+                                <!-- Stat card (reuse for each stat) -->
+                                <div class="stat-card flex-1 sm:flex-none min-w-[110px] md:min-w-[128px] rounded-xl bg-white/20 backdrop-blur-md p-3 sm:p-4 text-center shadow-md">
+                                <div class="text-gray-200 text-xs sm:text-sm font-semibold">Classes</div>
+                                <div class="text-2xl sm:text-2xl font-bold mt-1">
                                     {{ count($data['joinedClassrooms'] ?? []) }}
                                 </div>
-                            </div>
+                                </div>
 
-                            <div class="stat bg-white/20 text-white backdrop-blur-md p-4 rounded-2xl shadow-md w-32 text-center animate-fade-slide delay-200">
-                                <div class="text-gray-200 font-semibold">Modules</div>
-                                <div class="text-2xl font-bold">
+                                <div class="stat-card flex-1 sm:flex-none min-w-[110px] md:min-w-[128px] rounded-xl bg-white/20 backdrop-blur-md p-3 sm:p-4 text-center shadow-md">
+                                <div class="text-gray-200 text-xs sm:text-sm font-semibold">Modules</div>
+                                <div class="text-2xl sm:text-2xl font-bold mt-1">
                                     {{ count($data['classroommodules'] ?? []) }}
                                 </div>
-                            </div>
+                                </div>
 
-                            <div class="stat bg-white/20 text-white backdrop-blur-md p-4 rounded-2xl shadow-md w-32 text-center animate-fade-slide delay-300">
-                                <div class="text-gray-200 font-semibold">Completed</div>
-                                <div class="text-2xl font-bold">
+                                <div class="stat-card flex-1 sm:flex-none min-w-[110px] md:min-w-[128px] rounded-xl bg-white/20 backdrop-blur-md p-3 sm:p-4 text-center shadow-md">
+                                <div class="text-gray-200 text-xs sm:text-sm font-semibold">Completed</div>
+                                <div class="text-2xl sm:text-2xl font-bold mt-1">
                                     {{ $data['completedCount'] ?? 0 }}
                                 </div>
+                                </div>
+
                             </div>
                         </div>
-
                     </div>
-                </div>
-            </section>
+                </section>
 
-            <!-- 🏫 My Classrooms -->
-            <section class="mb-10">
-                <div class="flex items-center justify-between mb-4">
-                    <h3 class="text-xl font-bold text-gray-800 flex items-center gap-2">🏫 My Classrooms</h3>
-                    <a class="btn btn-sm bg-red-800 hover:bg-red-700 text-white w-full sm:w-auto" href="/classrooms">
-                        View All
-                    </a>
-                </div>
+                <!-- 🏫 My Classrooms -->
+                <section class="mb-10">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-xl font-bold text-gray-800 flex items-center gap-2">🏫 My Classrooms</h3>
+                        <a class="btn btn-sm bg-red-800 hover:bg-red-700 text-white w-fit" href="/classrooms">
+                            View All
+                        </a>
+                    </div>
 
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-4">
-                    @forelse($data['joinedClassrooms'] ?? [] as $classroom)
-                        <div class="bg-white rounded-2xl shadow-lg p-5 hover:shadow-2xl transition-all duration-300 border border-gray-200 animate-fade-slide">
-                            <div class="flex items-center gap-3 mb-3">
-                                <div class="w-14 h-14 rounded-2xl bg-red-100 flex items-center justify-center text-3xl animate-bounce">
-                                    {{ $classroom->emoji ?? '📘' }}
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-4">
+                        @forelse($data['joinedClassrooms'] ?? [] as $classroom)
+                            <div class="bg-white rounded-2xl shadow-lg p-5 hover:shadow-2xl transition-all duration-300 border border-gray-200 animate-fade-slide">
+                                <div class="flex items-center gap-3 mb-3">
+                                    <div class="w-14 h-14 rounded-2xl bg-red-100 flex items-center justify-center text-3xl animate-bounce">
+                                        {{ $classroom->emoji ?? '📘' }}
+                                    </div>
+                                    <div>
+                                        <h4 class="font-bold text-lg text-gray-800">{{ $classroom->name ?? 'Untitled Classroom' }}</h4>
+                                        <p class="text-gray-500 text-xs">{{ $classroom->description ?? 'No description' }}</p>
+                                    </div>
                                 </div>
-                                <div>
-                                    <h4 class="font-bold text-lg text-gray-800">{{ $classroom->name ?? 'Untitled Classroom' }}</h4>
-                                    <p class="text-gray-500 text-xs">{{ $classroom->description ?? 'No description' }}</p>
-                                </div>
-                            </div>
-                            <p class="text-gray-600 text-sm mb-4 line-clamp-2">
-                                {{ $classroom->short_intro ?? 'Start learning and have fun!' }}
-                            </p>
-                            <div class="flex justify-between items-center mb-4">
+                                <p class="text-gray-600 text-sm mb-4 line-clamp-2">
+                                    {{ $classroom->short_intro ?? 'Start learning and have fun!' }}
+                                </p>
+                                <div class="flex justify-between items-center mb-4">
                                 <span class="text-gray-700 font-semibold">
-                                    👥 {{ optional($classroom->enrolledUser)->count() ?? 0 }} members
-                                </span>
-                            </div>
-                            <a href="{{ route('classrooms.show', $classroom->id) }}"
-                               class="btn w-full rounded-xl bg-gradient-to-r from-red-700 to-red-500 text-white hover:opacity-90 transition">
-                                View Classroom
-                            </a>
-                        </div>
-                    @empty
-                        <div class="col-span-full text-center py-8 text-gray-500">
-                            <p>
-                                No classrooms joined yet.
-                                <a href="{{ route('classrooms.index') }}" class="text-red-600 font-semibold">Browse classrooms</a>
-                            </p>
-                        </div>
-                    @endforelse
-                </div>
-            </section>
-
-            <!-- 📚 My Modules -->
-            <section class="mb-10">
-                <div class="flex items-center justify-between mb-4">
-                    <h3 class="text-xl font-bold text-gray-800 flex items-center gap-2">📚 My Modules</h3>
-                    <a class="btn btn-sm bg-red-800 hover:bg-red-700 text-white w-full sm:w-auto" href="/classroommodule">
-                        View All
-                    </a>
-                </div>
-
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-4">
-                    @forelse($data['classroommodules'] ?? [] as $classroommodule)
-                        <div class="bg-white rounded-2xl shadow-lg p-5 hover:shadow-2xl transition-all duration-300 border border-gray-200 animate-fade-slide">
-                            <div class="flex items-center gap-3 mb-3">
-                                <div class="w-14 h-14 rounded-2xl bg-red-100 flex items-center justify-center text-3xl animate-bounce">
-                                    {{ optional($classroommodule->module)->emoji ?? '📝' }}
+                                        👥 {{ $classroom->enrolledUser->where('user.role', 'learner')->count() }} learners
+                                    </span>
                                 </div>
-                                <div>
-                                    <h4 class="font-bold text-lg text-gray-800">
-                                        {{ optional($classroommodule->module)->name ?? 'Untitled Module' }}
-                                    </h4>
-                                    <p class="text-gray-500 text-xs">
-                                        {{ optional($classroommodule->classroom)->name ?? 'Unknown Classroom' }}
-                                    </p>
-                                </div>
+                                <a href="{{ route('classrooms.show', $classroom->id) }}"
+                                class="btn w-full rounded-xl bg-gradient-to-r from-red-700 to-red-500 text-white hover:opacity-90 transition">
+                                    View Classroom
+                                </a>
                             </div>
-                            <p class="text-gray-600 text-sm mb-4 line-clamp-2">
-                                {{ optional($classroommodule->module)->short_intro ?? 'Start learning and have fun!' }}
-                            </p>
-                            <a href="{{ route('classroommodule.show', $classroommodule->id) }}"
-                               class="btn w-full rounded-xl bg-gradient-to-r from-red-700 to-red-500 text-white hover:opacity-90 transition">
-                                Start Module
-                            </a>
-                        </div>
-                    @empty
-                        <div class="col-span-full text-center py-8 text-gray-500">
-                            <p>No modules available yet.</p>
-                        </div>
-                    @endforelse
-                </div>
-            </section>
+                        @empty
+                            <div class="col-span-full text-center py-8 text-gray-500">
+                                <p>
+                                    No classrooms joined yet.
+                                    <a href="{{ route('classrooms.index') }}" class="text-red-600 font-semibold">Browse classrooms</a>
+                                </p>
+                            </div>
+                        @endforelse
+                    </div>
+                </section>
+
+                <!-- 📚 My Modules -->
+                <section class="mb-10">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-xl font-bold text-gray-800 flex items-center gap-2">📚 My Modules</h3>
+                        <a class="btn btn-sm bg-red-800 hover:bg-red-700 text-white w-fit" href="/modules">
+                            View All
+                        </a>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-4">
+                        @forelse($data['classroommodules'] ?? [] as $classroommodule)
+                            <div class="bg-white rounded-2xl shadow-lg p-5 hover:shadow-2xl transition-all duration-300 border border-gray-200 animate-fade-slide">
+                                <div class="flex items-center gap-3 mb-3">
+                                    <div class="w-14 h-14 rounded-2xl bg-red-100 flex items-center justify-center text-3xl animate-bounce">
+                                        {{ optional($classroommodule->module)->emoji ?? '📝' }}
+                                    </div>
+                                    <div>
+                                        <h4 class="font-bold text-lg text-gray-800">
+                                            {{ optional($classroommodule->module)->name ?? 'Untitled Module' }}
+                                        </h4>
+                                        <p class="text-gray-500 text-xs">
+                                            {{ optional($classroommodule->classroom)->name ?? 'Unknown Classroom' }}
+                                        </p>
+                                    </div>
+                                </div>
+                                <p class="text-gray-600 text-sm mb-4 line-clamp-2">
+                                    {{ optional($classroommodule->module)->short_intro ?? 'Start learning and have fun!' }}
+                                </p>
+                                <a href="{{ route('classroommodule.show', $classroommodule->id) }}"
+                                class="btn w-full rounded-xl bg-gradient-to-r from-red-700 to-red-500 text-white hover:opacity-90 transition">
+                                    Start Module
+                                </a>
+                            </div>
+                        @empty
+                            <div class="col-span-full text-center py-8 text-gray-500">
+                                <p>No modules available yet.</p>
+                            </div>
+                        @endforelse
+                    </div>
+                </section>
 
         </main>
     </div>
