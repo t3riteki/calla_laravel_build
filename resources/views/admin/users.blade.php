@@ -44,6 +44,8 @@
                                                 Instructor
                                             @elseif ($user->role === 'learner')
                                                 Learner
+                                            @elseif ($user->role === 'admin')
+                                                Administrator
                                             @else
                                                 Unknown
                                             @endif
