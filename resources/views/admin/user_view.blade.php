@@ -96,29 +96,23 @@
                         <table class="table table-zebra w-full">
                             <thead class="sticky top-0 bg-gray-100 z-10">
                                 <tr class="text-gray-700">
-                                    <th>Log Type</th>
-                                    <th>Description</th>
-                                    <th>Date</th>
+                                    <th>Action</th>
+                                    <th>Timestamp</th>
                                 </tr>
                             </thead>
 
                             <tbody>
-                                {{-- Placeholder log entries --}}
-                                @foreach (range(1,5) as $log)
+
+                                @foreach ($user->log as $log)
                                     <tr>
                                         <td>
-                                            @if($log % 2 == 0)
-                                                <span class="badge badge-info">Activity</span>
-                                            @else
-                                                <span class="badge badge-ghost">System</span>
-                                            @endif
+                                            {{ $log->action }}
                                         </td>
 
                                         <td>
-                                            Sample log entry #{{ $log }} — user performed an action.
+                                            {{ $log->created_at }}
                                         </td>
 
-                                        <td>{{ now()->subDays($log)->format('M d, Y h:i A') }}</td>
                                     </tr>
                                 @endforeach
                             </tbody>
