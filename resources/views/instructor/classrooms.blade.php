@@ -155,7 +155,7 @@
                                                                     <span class="label-text text-sm font-semibold text-gray-600">Class Name</span>
                                                                 </label>
                                                                 <input type="text" name="name" value="{{ $classroom->name }}"
-                                                                    class="input input-bordered w-full focus:ring-2 focus:ring-red-700 rounded-lg" required>
+                                                                    class="input input-bordered w-full focus:ring-2 focus:ring-red-700 rounded-lg text-black" required>
                                                             </div>
 
                                                             <!-- Description -->
@@ -164,8 +164,9 @@
                                                                     <span class="label-text text-sm font-semibold text-gray-600">Description</span>
                                                                 </label>
                                                                 <textarea name="description"
-                                                                    class="textarea textarea-bordered w-full h-24 resize-none focus:ring-2 focus:ring-red-700 rounded-lg"
-                                                                    required>{{ $classroom->description }}</textarea>
+                                                                    class="textarea textarea-bordered w-full h-24 resize-none focus:ring-2 focus:ring-red-700 rounded-lg text-black"
+                                                                    required>{{ $classroom->description }}
+                                                                </textarea>
                                                             </div>
 
                                                             <!-- Class Code -->
@@ -175,12 +176,13 @@
                                                                 </label>
                                                                 <div class="relative">
                                                                     <input type="text" name="code" value="{{ $classroom->code }}"
-                                                                        class="input input-bordered w-full focus:ring-2 focus:ring-red-700 rounded-lg">
+                                                                        id="edit_class_code_{{ $classroom->id }}"
+                                                                        class="input input-bordered w-full focus:ring-2 focus:ring-red-700 rounded-lg text-black">
 
                                                                     <button type="button"
-                                                                            class="btn btn-sm bg-red-700 text-white hover:bg-red-600 absolute right-1 top-1/2
-                                                                                transform -translate-y-1/2 rounded-full px-3 py-1 text-xs"
-                                                                            onclick="generateEditCode('{{ $classroom->id }}')">
+                                                                        class="btn btn-sm bg-red-700 text-white hover:bg-red-600 absolute right-2 top-1/2
+                                                                            transform -translate-y-1/2 z-10 px-4 py-2"
+                                                                        onclick="generateEditCode('{{ $classroom->id }}')">
                                                                         Auto
                                                                     </button>
                                                                 </div>
@@ -192,59 +194,11 @@
                                                                     onclick="document.getElementById('editClassModal-{{ $classroom->id }}').close()">Cancel</button>
                                                                 <button type="submit"
                                                                     class="btn bg-gradient-to-r from-red-800 to-red-700 text-white hover:opacity-90 transition px-6">
-                                                                    Save Changes
+                                                                        Save Changes
                                                                 </button>
                                                             </div>
                                                         </form>
                                                     </div>
-                                                </dialog>
-
-                                                <button onclick="document.getElementById('deleteConfirmModal-{{ $classroom->id }}').showModal()"
-                                                        class="btn btn-link text-red-500 no-underline hover:underline">
-                                                    Delete
-                                                </button>
-
-                                                <dialog id="deleteConfirmModal-{{ $classroom->id }}" class="modal">
-                                                    <div class="modal-box bg-white rounded-2xl shadow-xl border border-red-100">
-
-                                                        <!-- Modal Title -->
-                                                        <h3 class="text-xl font-semibold text-red-700 flex items-center gap-2">
-                                                            <i class="ri-error-warning-line text-2xl"></i>
-                                                            Confirm Delete
-                                                        </h3>
-
-                                                        <!-- Message -->
-                                                        <p class="mt-3 text-gray-600 leading-relaxed">
-                                                            You are about to delete the classroom
-                                                            <span class="font-semibold text-gray-800">"{{ $classroom->name }}"</span>.
-                                                            <br>This action <strong class="text-red-600">cannot be undone</strong>.
-                                                        </p>
-
-                                                        <!-- Buttons -->
-                                                        <div class="modal-action flex justify-end gap-3 mt-6">
-
-                                                            <!-- Cancel -->
-                                                            <form method="dialog">
-                                                                <button class="btn px-5 rounded-xl border border-gray-300 bg-white hover:bg-gray-100">
-                                                                    Cancel
-                                                                </button>
-                                                            </form>
-
-                                                            <!-- Confirm Delete -->
-                                                            <form action="{{ route('classrooms.destroy', $classroom->id) }}" method="POST">
-                                                                @csrf
-                                                                @method('DELETE')
-                                                                <button type="submit"
-                                                                        class="btn px-5 rounded-xl bg-red-600 text-white hover:bg-red-700 shadow-sm">
-                                                                    Yes, Delete
-                                                                </button>
-                                                            </form>
-
-                                                        </div>
-                                                    </div>
-
-                                                    <!-- Background overlay -->
-                                                    <form method="dialog" class="modal-backdrop bg-black/40 backdrop-blur-sm"></form>
                                                 </dialog>
                                             </td>
                                         </tr>
@@ -259,10 +213,9 @@
     </div>
 
     <script>
-    document.getElementById("generateClassCode").addEventListener("click", function () {
-        // You can customize this generator however you want
+    function generateEditCode(id) {
         let code = "CLS-" + Math.random().toString(36).substring(2, 7).toUpperCase();
-        document.getElementById("class_code").value = code;
-    });
+        document.getElementById(`edit_class_code_${id}`).value = code;
+    }
     </script>
 </x-layout>
