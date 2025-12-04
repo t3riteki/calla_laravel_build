@@ -28,7 +28,7 @@
                     <!-- Stats & Back Button-->
                         <div class="flex flex-col gap-4">
                     <!-- Back Button above stats -->
-                    <a href="{{ route('classrooms.index') }}"
+                    <a href="{{ url()->previous() }}"
                     class="btn btn-sm bg-gradient-to-r from-red-800 to-red-700 text-white hover:opacity-90">
                         ← Back to Classrooms
                     </a>

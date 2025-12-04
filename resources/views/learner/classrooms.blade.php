@@ -1,6 +1,6 @@
 <x-layout>
-    <x-slot:title>Learner Dashboard - CALLA</x-slot:title>
-    <div class="flex min-h-screen bg-gray-50 transition-all duration-300">
+    <x-slot:title>Classrooms - CALLA</x-slot:title>
+    <div class="flex min-h-[calc(100vh-64px)] bg-gray-50 transition-all duration-300">
 
         <!-- SIDEBAR -->
         <x-sidebar />

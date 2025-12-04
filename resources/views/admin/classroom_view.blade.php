@@ -26,7 +26,7 @@
 
                         <!-- Stats + Back -->
                         <div class="flex flex-col items-start gap-4">
-                            <a href="{{ route('classrooms.index') }}"
+                            <a href="{{ url()->previous() }}"
                                class="btn btn-sm bg-white/20 text-white hover:bg-white/30">
                                 ← Back to Classrooms
                             </a>

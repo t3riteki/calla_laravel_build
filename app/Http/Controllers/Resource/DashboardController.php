@@ -41,7 +41,7 @@ class DashboardController extends Controller
         $learner_count = User::where('role', 'learner')->count();
         $instructor_count = User::where('role', 'instructor')->count();
 
-        $users = User::latest()
+        $users = User::whereIn('role',['instructor','learner'])->latest()
             ->take(5)
             ->get();
 

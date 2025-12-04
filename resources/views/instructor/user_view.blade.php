@@ -6,7 +6,7 @@
 
         <main class="flex-1 p-6 md:p-8 lg:ml-64 overflow-y-auto">
 
-            <a href="{{ route('classrooms.show', $classroom->id) }}" class="btn btn-sm mb-6 bg-gradient-to-r from-red-800 to-red-700 text-white hover:opacity-90">
+            <a href="{{ url()->previous() }}" class="btn btn-sm mb-6 bg-gradient-to-r from-red-800 to-red-700 text-white hover:opacity-90">
                 ← Back to Classroom
             </a>
 

@@ -106,78 +106,6 @@
                                         <td>{{ $user->created_at->format('M d, Y') }}</td>
                                         <td>
                                             <a href="{{ route('user.show', $user->id) }}" class="text-red-600 hover:underline">View</a>
-                                            |
-                                            <!-- Edit Button triggers modal -->
-                                            <button onclick="document.getElementById('editUserModal-{{ $user->id }}').showModal()"
-                                                class="btn btn-link text-blue-500 no-underline hover:underline">
-                                                Edit
-                                            </button>
-
-                                             <!-- Edit User Modal -->
-                                            <dialog id="editUserModal-{{ $user->id }}" class="modal">
-                                                <div class="modal-box max-w-lg bg-white/95 backdrop-blur-md rounded-2xl shadow-lg border border-gray-100">
-
-                                                    <!-- Header -->
-                                                    <div class="flex justify-between items-center mb-4">
-                                                        <h3 class="text-lg font-semibold text-gray-800 flex items-center gap-2">
-                                                            <span class="text-blue-700 text-xl">🧑‍💼</span> Edit User
-                                                        </h3>
-
-                                                        <form method="dialog">
-                                                            <button class="btn btn-sm btn-circle btn-ghost text-gray-500 hover:text-red-700">✕</button>
-                                                        </form>
-                                                    </div>
-
-                                                    <!-- USER EDIT FORM -->
-                                                    <form method="POST" action="{{ route('user.update', $user->id) }}" class="space-y-4">
-                                                        @csrf
-                                                        @method('PUT')
-
-                                                        <!-- NAME -->
-                                                        <div class="form-control">
-                                                            <label class="label">
-                                                                <span class="label-text text-sm font-semibold text-gray-600">Name</span>
-                                                            </label>
-                                                            <input type="text" name="name" value="{{ $user->name }}"
-                                                                class="input input-bordered w-full focus:ring-2 focus:ring-red-700 rounded-lg" required>
-                                                        </div>
-
-                                                        <!-- EMAIL -->
-                                                        <div class="form-control">
-                                                            <label class="label">
-                                                                <span class="label-text text-sm font-semibold text-gray-600">Email</span>
-                                                            </label>
-                                                            <input type="email" name="email" value="{{ $user->email }}"
-                                                                class="input input-bordered w-full focus:ring-2 focus:ring-red-700 rounded-lg" required>
-                                                        </div>
-
-                                                         <!-- PASSWORD -->
-                                                        <div class="form-control">
-                                                            <label class="label">
-                                                                <span class="label-text text-sm font-semibold text-gray-600">Password</span>
-                                                            </label>
-                                                            <input type="password" name="password"
-                                                                placeholder="Enter new password (leave blank to keep current)"
-                                                                class="input input-bordered w-full focus:ring-2 focus:ring-red-700 rounded-lg">
-                                                        </div>
-
-                                                        <!-- ACTION BUTTONS -->
-                                                        <div class="modal-action flex justify-end gap-3 mt-6">
-                                                            <button type="button"
-                                                                class="btn btn-ghost text-gray-600 hover:bg-gray-100"
-                                                                onclick="document.getElementById('editUserModal-{{ $user->id }}').close()">
-                                                                Cancel
-                                                            </button>
-
-                                                            <button type="submit"
-                                                                class="btn bg-gradient-to-r from-red-800 to-red-700 text-white hover:opacity-90 transition px-6">
-                                                                Save Changes
-                                                            </button>
-                                                        </div>
-
-                                                    </form>
-                                                </div>
-                                            </dialog>
                                         </td>
                                     </tr>
                                 @endforeach
@@ -219,56 +147,8 @@
                                         <td>{{ $classroom->created_at->format('M d, Y') }}</td>
                                         <td>
                                             <a href="{{ route('classrooms.show', $classroom->id) }}" class="text-red-600 hover:underline">View</a>
-                                            |
-                                            <button onclick="document.getElementById('editClassModal-{{ $classroom->id }}').showModal()"
-                                                class="btn btn-link text-blue-500 no-underline hover:underline">
-                                                Edit
-                                            </button>
                                         </td>
                                     </tr>
-
-                                    <!-- Edit Modal -->
-                                    <dialog id="editClassModal-{{ $classroom->id }}" class="modal">
-                                        <div class="modal-box max-w-lg bg-white rounded-2xl shadow border">
-
-                                            <div class="flex justify-between items-center mb-4">
-                                                <h3 class="text-lg font-semibold text-gray-800">Edit Classroom</h3>
-
-                                                <form method="dialog">
-                                                    <button class="btn btn-sm btn-circle btn-ghost text-gray-500">✕</button>
-                                                </form>
-                                            </div>
-
-                                            <form method="POST" action="{{ route('classrooms.update', $classroom->id) }}" class="space-y-4">
-                                                @csrf
-                                                @method('PUT')
-
-                                                <div class="form-control">
-                                                    <label class="label">
-                                                        <span class="label-text text-sm font-semibold">Class Name</span>
-                                                    </label>
-                                                    <input type="text" name="name" value="{{ $classroom->name }}" class="input input-bordered w-full rounded-lg" required>
-                                                </div>
-
-                                                <div class="form-control">
-                                                    <label class="label">
-                                                        <span class="label-text text-sm font-semibold">Description</span>
-                                                    </label>
-                                                    <textarea name="description" class="textarea textarea-bordered w-full h-24 resize-none rounded-lg" required>{{ $classroom->description }}</textarea>
-                                                </div>
-
-                                                <div class="modal-action flex justify-end gap-3">
-                                                    <button type="button" class="btn btn-ghost" onclick="document.getElementById('editClassModal-{{ $classroom->id }}').close()">
-                                                        Cancel
-                                                    </button>
-
-                                                    <button class="btn bg-red-700 text-white hover:bg-red-600">
-                                                        Save Changes
-                                                    </button>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </dialog>
 
                                 @endforeach
                             </tbody>
@@ -309,8 +189,6 @@
                                         <td>{{ $module->created_at->format('M d, Y') }}</td>
                                         <td>
                                             <a href="{{ route('modules.show', $module->id) }}" class="text-red-600 hover:underline">View</a>
-                                            |
-                                            <a href="{{ route('modules.edit', $module->id) }}" class="text-blue-600 hover:underline">Edit</a>
                                         </td>
                                     </tr>
                                 @endforeach
