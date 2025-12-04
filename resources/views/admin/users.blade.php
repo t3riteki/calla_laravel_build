@@ -42,9 +42,12 @@
                                         <td>{{ $user->email }}</td>
 
                                         <td>
-                                            @if ($user->role === 'instructor') Instructor
-                                            @elseif ($user->role === 'learner') Learner
-                                            @elseif ($user->role === 'admin') Administrator
+                                            @if ($user->role === 'instructor')
+                                                <span class="text-blue-700 font-semibold">Instructor</span>
+                                            @elseif ($user->role === 'learner')
+                                                <span class="text-green-700 font-semibold">Learner</span>
+                                            @elseif ($user->role === 'admin')
+                                                <span class="text-red-700 font-semibold">Admin</span>
                                             @else Unknown
                                             @endif
                                         </td>
@@ -52,10 +55,13 @@
                                         <td>{{ $user->created_at->format('M d, Y') }}</td>
 
                                         <td class="space-x-2 flex justify-center">
-                                            <a href="{{ route('user.show', $user->id) }}" class="text-red-700 hover:underline">View</a>
+                                            <a href="{{ route('user.show', $user->id) }}"
+                                                class="btn btn-link text-red-700 no-underline hover:underline">
+                                                View
+                                            </a>
                                             <!-- Edit Button triggers modal -->
                                             <button onclick="document.getElementById('editUserModal-{{ $user->id }}').showModal()"
-                                                class="text-blue-500 no-underline hover:underline">
+                                                class="btn btn-link text-blue-500 no-underline hover:underline">
                                                 Edit
                                             </button>
 

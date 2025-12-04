@@ -72,15 +72,13 @@
 
                                             <td class="flex justify-center gap-2">
                                                 <a :href="module.view_url"
-                                                   class="text-red-700 hover:underline text-sm font-medium">
+                                                   class="btn btn-link text-red-700 no-underline hover:underline">
                                                     View
                                                 </a>
 
-                                                <span class="text-gray-300">|</span>
-
                                                 <button type="button"
                                                         @click="document.getElementById('deleteModal-' + module.id).showModal()"
-                                                        class="text-red-500 hover:underline text-sm">
+                                                        class="btn btn-link text-red-500 no-underline hover:underline">
                                                     Delete
                                                 </button>
 

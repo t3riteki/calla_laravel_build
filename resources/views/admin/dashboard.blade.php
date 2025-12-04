@@ -105,7 +105,10 @@
                                         </td>
                                         <td>{{ $user->created_at->format('M d, Y') }}</td>
                                         <td>
-                                            <a href="{{ route('user.show', $user->id) }}" class="text-red-600 hover:underline">View</a>
+                                            <a href="{{ route('user.show', $user->id) }}"
+                                                class="btn btn-link text-red-700 no-underline hover:underline">
+                                                View
+                                            </a>
                                         </td>
                                     </tr>
                                 @endforeach
@@ -146,7 +149,10 @@
                                         <td>{{ $classroom->EnrolledUser->where('user.role', 'learner')->count() }}</td>
                                         <td>{{ $classroom->created_at->format('M d, Y') }}</td>
                                         <td>
-                                            <a href="{{ route('classrooms.show', $classroom->id) }}" class="text-red-600 hover:underline">View</a>
+                                            <a href="{{ route('classrooms.show', $classroom->id) }}"
+                                                class="btn btn-link text-red-700 no-underline hover:underline">
+                                                View
+                                            </a>
                                         </td>
                                     </tr>
 
@@ -188,7 +194,10 @@
                                         <td>{{ $module->ClassroomModule->count() }}</td>
                                         <td>{{ $module->created_at->format('M d, Y') }}</td>
                                         <td>
-                                            <a href="{{ route('modules.show', $module->id) }}" class="text-red-600 hover:underline">View</a>
+                                            <a href="{{ route('modules.show', $module->id) }}"
+                                                class="btn btn-link text-red-700 no-underline hover:underline">
+                                                View
+                                            </a>
                                         </td>
                                     </tr>
                                 @endforeach
