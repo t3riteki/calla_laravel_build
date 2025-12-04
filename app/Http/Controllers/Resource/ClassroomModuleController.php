@@ -65,17 +65,45 @@ class ClassroomModuleController extends Controller
     /**
      * Store a newly created resource in storage.
      */
+    /**
+     * Store a newly created resource in storage.
+     */
     public function store(StoreClassroomModuleRequest $request)
     {
         $auth = Auth::user();
         $validated = $request->validated();
+
         $classroommodule = ClassroomModule::create($validated);
 
-        $sysMsg = 'Successfully added module'.$classroommodule->module->name.' from classroom'.$classroommodule->classroom->name;
+        $enrolledLearners = $classroommodule->classroom->enrolledUser()
+            ->whereHas('user', function($q) {
+                $q->where('role', 'learner');
+            })
+            ->get();
+
+        $lessons = $classroommodule->module->lesson;
+
+        if ($lessons->isNotEmpty()) {
+            foreach ($enrolledLearners as $enrolledUser) {
+                foreach ($lessons as $lesson) {
+                    // Create empty progress record
+                    \App\Models\UserProgress::create([
+                        'enrolled_user_id' => $enrolledUser->id,
+                        'classroom_module_id' => $classroommodule->id,
+                        'lesson_id' => $lesson->id,
+                        'is_done' => 0,
+                    ]);
+                }
+            }
+        }
+
+        $sysMsg = 'Successfully added module '.$classroommodule->module->name.' to classroom '.$classroommodule->classroom->name;
+
         Log::create([
             'user_id'=>$auth->id,
             'action'=>$sysMsg
         ]);
+
         return back()->with('success',$sysMsg);
     }
 

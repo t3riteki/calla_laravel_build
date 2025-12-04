@@ -132,7 +132,7 @@ class DashboardController extends Controller
             // Count user progress for this module
             $completedLessons = UserProgress::where('user_id', $user->id)
                 ->where('module_id', $module->id)
-                ->where('is_completed', true)
+                ->where('is_done', true)
                 ->count();
 
             return $completedLessons >= $totalLessons;
