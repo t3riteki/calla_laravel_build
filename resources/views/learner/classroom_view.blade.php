@@ -122,7 +122,7 @@
                                             <td>{{ $classmodule->module->created_at->format('M d, Y') }}</td>
                                             <td class="space-x-2">
                                                 <a href="{{ route('classroommodule.show', $classmodule->id) }}"
-                                                   class="text-red-700 hover:underline">View</a>
+                                                   class="btn btn-link text-red-700 no-underline hover:underline">View</a>
                                             </td>
                                         </tr>
                                     @endforeach
