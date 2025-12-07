@@ -63,9 +63,67 @@
         </div>
     </dialog>
 
+
+    <dialog id="changePasswordModal" class="modal">
+        <div class="modal-box max-w-md">
+            <h3 class="font-bold text-lg mb-4">Change Password</h3>
+
+            <form method="POST" action="{{ route('password.update') }}">
+                @csrf
+                @method('PUT')
+
+                <div class="form-control mb-3">
+                    <label class="label"><span class="label-text">Current Password</span></label>
+                    <input
+                        type="password"
+                        name="current_password"
+                        required
+                        class="input input-bordered w-full focus:ring-2 focus:ring-red-700"
+                    />
+                    @error('current_password')
+                        <span class="text-red-600 text-sm mt-1">{{ $message }}</span>
+                    @enderror
+                </div>
+
+                <div class="form-control mb-3">
+                    <label class="label"><span class="label-text">New Password</span></label>
+                    <input
+                        type="password"
+                        name="password"
+                        required
+                        class="input input-bordered w-full focus:ring-2 focus:ring-red-700"
+                    />
+                    @error('password')
+                        <span class="text-red-600 text-sm mt-1">{{ $message }}</span>
+                    @enderror
+                </div>
+
+                <div class="form-control mb-3">
+                    <label class="label"><span class="label-text">Confirm New Password</span></label>
+                    <input
+                        type="password"
+                        name="password_confirmation"
+                        required
+                        class="input input-bordered w-full focus:ring-2 focus:ring-red-700"
+                    />
+                </div>
+
+                <div class="modal-action">
+                    <button type="submit" class="btn bg-red-700 text-white hover:bg-red-800">Update Password</button>
+                    <button type="button" class="btn" onclick="changePasswordModal.close()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </dialog>
+
     <script>
         function openEditModal() {
             document.getElementById('editProfileModal').showModal();
+        }
+
+        // Add this new function
+        function openChangePasswordModal() {
+            document.getElementById('changePasswordModal').showModal();
         }
     </script>
 </x-layout>

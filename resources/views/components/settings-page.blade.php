@@ -1,4 +1,4 @@
-<div class="max-w-3xl mx-auto bg-white rounded-2xl shadow-lg border border-gray-100 p-8 relative">
+<div class="max-w-3xl mx-auto bg-white rounded-2xl shadow-lg border border-gray-100  relative">
     <a href="/dashboard"
        class="absolute top-6 right-6 btn btn-sm bg-gradient-to-r from-red-700 to-red-800 text-white border-none hover:opacity-90 transition">
         ← Back to Dashboard

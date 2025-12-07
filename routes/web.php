@@ -16,6 +16,7 @@ use App\Http\Controllers\Resource\UserProgressController;
 use App\Http\Controllers\Resource\DashboardController;
 use App\Http\Controllers\Resource\UserController;
 use App\Http\Controllers\SearchController;
+use App\Http\Controllers\SettingsController;
 use Illuminate\Support\Facades\Route;
 
     // Home route -> show login page
@@ -44,9 +45,7 @@ use Illuminate\Support\Facades\Route;
 
         Route::resource('/profile', ProfileController::class);
 
-        Route::post('/settings', function () {
-            return view(auth()->user()->role.'.settings');
-        });
+        Route::resource('/settings', SettingsController::class);
 
         // Resource Routes
         Route::resource('/logs', LogController::class);
