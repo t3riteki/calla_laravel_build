@@ -40,7 +40,7 @@
                     </a>
 
                     <a href="/modules" class="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-red-90 hover:text-red-800 transition
-                        {{ request()->is('cmodules*') ? 'text-red-800 bg-red-100' : 'text-gray-700 bg-white' }}">
+                        {{ request()->is('modules*') ? 'text-red-800 bg-red-100' : 'text-gray-700 bg-white' }}">
                         <i class="ri-book-2-line text-lg"></i> Modules
                     </a>
                 </div>
