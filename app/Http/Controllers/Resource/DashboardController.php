@@ -101,14 +101,12 @@ class DashboardController extends Controller
 
     private function learnerData($user)
     {
-        // Get classrooms the user joined
         $enrolledClassrooms = $user->enrolledUser()
             ->with('classroom')
             ->take(5)
             ->get()
             ->pluck('classroom');
 
-        // Get modules from those classrooms
         $classroomModules = ClassroomModule::whereIn(
                 'classroom_id',
                 $enrolledClassrooms->pluck('id')
@@ -118,7 +116,6 @@ class DashboardController extends Controller
             ->take(5)
             ->get();
 
-        // Compute completed modules
         $completedModules = $classroomModules->filter(function ($classroomModule) use ($user) {
 
             $module = $classroomModule->module;

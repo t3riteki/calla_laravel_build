@@ -29,7 +29,7 @@ class ClassroomController extends Controller
                 $classrooms = Classroom::all();
                 break;
             case'instructor':
-                // Get ALL classrooms owned by this instructor
+
                 $classrooms = Classroom::with('User')
                     ->where('owner_id', $auth->id)
                     ->withCount([
