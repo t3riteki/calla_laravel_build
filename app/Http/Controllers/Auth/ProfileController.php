@@ -33,8 +33,21 @@ class ProfileController extends Controller
         $validated = $request->validated();
         $user->update($validated);
 
-        // No redirect — just return control to the modal
         return redirect('/profile')->with('success', 'Profile updated successfully.');
+    }
+
+    public function updatePassword(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'current_password' => ['required', 'current_password'],
+            'password' => ['required', 'confirmed', 'min:8'],
+        ]);
+
+        $request->user()->update([
+            'password' => Hash::make($validated['password']),
+        ]);
+
+        return back()->with('success', 'Password updated successfully.');
     }
 
     /**

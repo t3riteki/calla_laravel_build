@@ -43,8 +43,9 @@ use Illuminate\Support\Facades\Route;
         Route::get('/logout', Logout::class);
         Route::get('/dashboard', [DashboardController::class, 'index']);
 
+        Route::put('/password', [ProfileController::class, 'updatePassword'])
+        ->name('password.update');
         Route::resource('/profile', ProfileController::class);
-
         Route::resource('/settings', SettingsController::class);
 
         // Resource Routes

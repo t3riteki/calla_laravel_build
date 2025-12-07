@@ -21,10 +21,10 @@
             <p class="mt-1 text-sm text-gray-500">{{ ucfirst($role ?? 'User') }}</p>
 
             <div class="mt-4 flex justify-center md:justify-start gap-3">
-                <button onclick="openEditModal()" class="btn btn-sm bg-red-700 text-white hover:bg-red-800 transition">
+                <button onclick="editProfileModal.showModal()" class="btn btn-sm bg-red-700 text-white hover:bg-red-800 transition">
                     Edit Profile
                 </button>
-                <button class="btn btn-sm btn-outline border-red-700 text-red-700 hover:bg-red-100">Change Password</button>
+                <button onclick="changePasswordModal.showModal()" class="btn btn-sm btn-outline border-red-700 text-red-700 hover:bg-red-100">Change Password</button>
             </div>
         </div>
     </div>
@@ -62,4 +62,100 @@
 
         </div>
     </div>
+    <dialog id="editProfileModal" class="modal">
+        <div class="modal-box max-w-md">
+            <h3 class="font-bold text-lg mb-4">Edit Profile</h3>
+            <form method="POST" action="/profile/{{auth()->user()->id}}">
+                @csrf
+                @method('PUT')
+                <div class="form-control mb-3">
+                    <label class="label"><span class="label-text">Full Name</span></label>
+                    <input
+                        type="text"
+                        name="name"
+                        value="{{ auth()->user()->name }}"
+                        class="input input-bordered w-full focus:ring-2 focus:ring-red-700"
+                    />
+                </div>
+                <div class="form-control mb-3">
+                    <label class="label"><span class="label-text">Birthdate</span></label>
+                    <input
+                        type="date"
+                        name="birthday"
+                        value="{{ auth()->user()->birthday}}"
+                        class="input input-bordered w-full focus:ring-2 focus:ring-red-700"
+                    />
+                </div>
+                <div class="form-control mb-3">
+                    <label class="label"><span class="label-text">Gender</span></label>
+                    <select
+                        name="gender"
+                        class="select select-bordered w-full focus:ring-2 focus:ring-red-700"
+                    >
+                        <option value="">Select Gender</option>
+                        <option value="male" @selected(auth()->user()->gender === 'male')>Male</option>
+                        <option value="female" @selected(auth()->user()->gender === 'female')>Female</option>
+                        <option value="other" @selected(auth()->user()->gender === 'other')>Other</option>
+                    </select>
+                </div>
+
+                <div class="modal-action">
+                    <button type="submit" class="btn bg-red-700 text-white hover:bg-red-800">Save</button>
+                    <button type="button" class="btn" onclick="editProfileModal.close()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </dialog>
+
+    <dialog id="changePasswordModal" class="modal">
+        <div class="modal-box max-w-md">
+            <h3 class="font-bold text-lg mb-4">Change Password</h3>
+
+            <form method="POST" action="{{ route('password.update') }}">
+                @csrf
+                @method('PUT')
+
+                <div class="form-control mb-3">
+                    <label class="label"><span class="label-text">Current Password</span></label>
+                    <input
+                        type="password"
+                        name="current_password"
+                        required
+                        class="input input-bordered w-full focus:ring-2 focus:ring-red-700"
+                    />
+                    @error('current_password')
+                        <span class="text-red-600 text-sm mt-1">{{ $message }}</span>
+                    @enderror
+                </div>
+
+                <div class="form-control mb-3">
+                    <label class="label"><span class="label-text">New Password</span></label>
+                    <input
+                        type="password"
+                        name="password"
+                        required
+                        class="input input-bordered w-full focus:ring-2 focus:ring-red-700"
+                    />
+                    @error('password')
+                        <span class="text-red-600 text-sm mt-1">{{ $message }}</span>
+                    @enderror
+                </div>
+
+                <div class="form-control mb-3">
+                    <label class="label"><span class="label-text">Confirm New Password</span></label>
+                    <input
+                        type="password"
+                        name="password_confirmation"
+                        required
+                        class="input input-bordered w-full focus:ring-2 focus:ring-red-700"
+                    />
+                </div>
+
+                <div class="modal-action">
+                    <button type="submit" class="btn bg-red-700 text-white hover:bg-red-800">Update Password</button>
+                    <button type="button" class="btn" onclick="changePasswordModal.close()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </dialog>
 </div>
