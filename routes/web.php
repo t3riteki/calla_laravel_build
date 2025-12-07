@@ -48,8 +48,6 @@ use Illuminate\Support\Facades\Route;
             return view(auth()->user()->role.'.settings');
         });
 
-        Route::post('/search', [SearchController::class, 'search']);
-
         // Resource Routes
         Route::resource('/logs', LogController::class);
         Route::resource('/enrolleduser', EnrolledUserController::class);
@@ -65,6 +63,5 @@ use Illuminate\Support\Facades\Route;
         Route::resource('/user', UserController::class);
 
         Route::post('/parse',[ParseController::class, 'parse']);
-        Route::get('/search', [SearchController::class, 'search'])->name('search');
 
     });

@@ -8,7 +8,7 @@
         <main class="flex-1 p-4 sm:p-6 md:p-8 overflow-y-auto lg:ml-64 md:ml-56 sm:ml-0 transition-all duration-300">
 
             <section class="mb-10" x-data="{ search: '' }">
-                <div class="card bg-base-100 shadow-lg border">
+                <div class="card bg-base-100 shadow-lg">
                     <div class="card-body">
 
                         <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
