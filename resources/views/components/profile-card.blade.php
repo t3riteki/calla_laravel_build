@@ -10,7 +10,7 @@
         <!-- Avatar -->
         <div class="avatar">
             <div class="w-32 rounded-full ring ring-red-700 ring-offset-base-100 ring-offset-2">
-                <img src="https://ui-avatars.com/api/?name={{ urlencode($name) }}&background=dc2626&color=fff" alt="Profile">
+                <img src="{{ asset('images/Profile-Picture_Placeholder.jpg') }}" alt="Profile" />
             </div>
         </div>
 
@@ -37,7 +37,6 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div class="p-4 bg-gray-50 rounded-lg border">
                 <p class="text-sm text-gray-500">Account Created</p>
-                {{-- Example static value — replace with dynamic value later --}}
                 <p class="font-medium text-gray-700">{{ auth()->user()->created_at}}</p>
             </div>
 
