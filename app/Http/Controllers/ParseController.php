@@ -7,6 +7,7 @@ use App\Models\Module;
 use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use App\Models\Log as LogModel;
 use Illuminate\Support\Facades\Storage;
 use Spatie\PdfToText\Pdf;
 
@@ -43,14 +44,10 @@ class ParseController extends Controller{
 
             Log::info('File exists, size: ' . filesize($fullPath) . ' bytes');
 
-            // ------------------------------------------
-            // 📌 Extract text using Spatie pdf-to-text
-            // ------------------------------------------
+
             $preParse = Pdf::getText($fullPath);
             Log::info('Extracted Text: ', [$preParse]);
-            // echo $preParse; // remove this in production
 
-            // Parse the structure
             $parsedStructure = $this->parsePdfStructure($preParse);
             Log::info('Parsing complete', $parsedStructure);
 
@@ -86,7 +83,7 @@ class ParseController extends Controller{
             Storage::delete($path);
 
             $sysMsg = 'Successfully uploaded module ' . $validated['attachment']->getClientOriginalName();
-            Log::create([
+            LogModel::create([
                 'user_id' => $auth->id,
                 'action' => $sysMsg
             ]);
