@@ -74,7 +74,7 @@
 
                     <div class="flex justify-between items-center mb-4">
                         <h3 class="text-xl font-semibold">User Overview</h3>
-                        <a href="/users" class="btn btn-sm bg-red-700 hover:bg-red-600 text-white">View All</a>
+                        <a href="/user" class="btn btn-sm bg-red-700 hover:bg-red-600 text-white">View All</a>
                     </div>
 
                     <div class="overflow-x-auto">
