@@ -10,7 +10,9 @@
     </a>
 
     @else
-    <div class="text-2xl font-bold text-red-900">CALLA</div>
+    <a href="/" class="flex flex-row ">
+        <div class="text-2xl font-bold text-red-900 transition-colors duration-300 hover:scale-105">CALLA</div>
+    </a>
     @endauth
 
   </div>
