@@ -106,7 +106,6 @@ class ModuleController extends Controller
     public function update(UpdateModuleRequest $request, Module $module)
     {
         $auth = Auth::user();
-        $this->authorize('update',$module);
         $validated= $request->validated();
         $module->update($validated);
 
