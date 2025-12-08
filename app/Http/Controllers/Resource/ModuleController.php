@@ -132,6 +132,6 @@ class ModuleController extends Controller
             'user_id' => $auth->id,
             'action' => $sysMsg
         ]);
-        return back()->with('success',$sysMsg);
+        return redirect('/dashboard')->with('success',$sysMsg);
     }
 }
