@@ -41,8 +41,6 @@ class ModuleController extends Controller
                 break;
 
             case 'learner':
-                // Learner sees ALL modules (Library View)
-                // Removed the "ClassroomModule" filter so they see everything
                 $modules = Module::with('User')
                     ->latest()
                     ->get();
