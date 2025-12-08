@@ -233,6 +233,99 @@
                 @endif
             </div>
 
+            <dialog id="newClassroomModuleModal" class="modal">
+                <div class="modal-box bg-white rounded-2xl shadow-xl border border-gray-100">
+
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-xl font-bold text-gray-800">Add Module to Classroom</h3>
+                        <form method="dialog">
+                            <button class="btn btn-sm btn-circle btn-ghost text-gray-500 hover:bg-gray-100">✕</button>
+                        </form>
+                    </div>
+
+                    <p class="text-gray-600 text-sm mb-6">
+                        Select a classroom to associate with <span class="font-semibold text-red-700">"{{ $module->name }}"</span>.
+                    </p>
+
+                    <form action="{{ route('classroommodule.store') }}" method="POST" class="space-y-4">
+                        @csrf
+
+                        <input type="hidden" name="module_id" value="{{ $module->id }}">
+                        <input type="hidden" name="added_by" value="{{ $module->owner_id }}">
+
+                        <div class="form-control">
+                            <label class="label">
+                                <span class="label-text font-medium text-gray-700">Select Classroom</span>
+                            </label>
+                            <select name="classroom_id" class="select select-bordered w-full bg-gray-50 focus:border-red-700 focus:ring-red-700" required>
+                                <option disabled selected value="">-- Choose a Classroom --</option>
+
+                                @if($module->user->classroom->count() > 0)
+                                    @foreach($module->user->classroom as $classroom)
+                                        @php
+                                            $isAlreadyAdded = $module->classroomModule->contains('classroom_id', $classroom->id);
+                                        @endphp
+
+                                        <option value="{{ $classroom->id }}" {{ $isAlreadyAdded ? 'disabled' : '' }}>
+                                            {{ $classroom->name }} {{ $isAlreadyAdded ? '(Already Added)' : '' }}
+                                        </option>
+                                    @endforeach
+                                @else
+                                    <option disabled>No classrooms found</option>
+                                @endif
+                            </select>
+                        </div>
+
+                        <div class="modal-action mt-6">
+                            <button type="button"
+                                    onclick="document.getElementById('newClassroomModuleModal').close()"
+                                    class="btn bg-white border-gray-300 text-gray-700 hover:bg-gray-50">
+                                Cancel
+                            </button>
+
+                            <button type="submit" class="btn bg-red-800 hover:bg-red-700 text-white border-none">
+                                Add to Classroom
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <form method="dialog" class="modal-backdrop bg-black/40 backdrop-blur-sm">
+                    <button>close</button>
+                </form>
+            </dialog>
+
+            <dialog id="toBeImplementedModal" class="modal modal-bottom sm:modal-middle">
+                <div class="modal-box bg-base-100 shadow-2xl rounded-2xl text-center">
+
+                    <!-- Icon -->
+                    <div class="flex justify-center mb-4">
+                        <div class="w-14 h-14 rounded-full bg-warning/20 flex items-center justify-center text-3xl">
+                            🚧
+                        </div>
+                    </div>
+
+                    <!-- Title -->
+                    <h3 class="font-bold text-xl text-gray-800 mb-2">
+                        Feature Coming Soon
+                    </h3>
+
+                    <!-- Subtitle -->
+                    <p class="text-gray-500 mb-6">
+                        This feature is not yet available and will be implemented in a future update.
+                    </p>
+
+                    <!-- Actions -->
+                    <div class="modal-action justify-center">
+                        <form method="dialog">
+                            <button class="btn btn-primary px-8 rounded-full">
+                                Got it
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </dialog>
+
         </main>
     </div>
 </x-layout>
