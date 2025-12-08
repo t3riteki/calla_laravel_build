@@ -128,6 +128,7 @@
                             <p class="label text-xs px-0.5">
                             Must be more than 8 characters, including
                             <br/>At least one number
+                            <br/>At least one special character
                             <br/>At least one lowercase letter
                             <br/>At least one uppercase letter
                             </p>
